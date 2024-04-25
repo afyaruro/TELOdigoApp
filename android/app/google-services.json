@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "800996248675",
+    "project_id": "telodigoapp-40501",
+    "storage_bucket": "telodigoapp-40501.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:800996248675:android:4e4911e5c95d5d8c297c56",
+        "android_client_info": {
+          "package_name": "com.lessynthon.telodigo.telodigo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCROcmt0iCPQNXXLuM0Td_AiRsq6hwLqzw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:800996248675:android:cf40d903c8c954c7297c56",
+        "android_client_info": {
+          "package_name": "com.telodigoapp.telodigoapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCROcmt0iCPQNXXLuM0Td_AiRsq6hwLqzw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
