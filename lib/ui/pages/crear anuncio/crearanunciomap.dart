@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_places_autocomplete_text_field/google_places_autocomplete_text_field.dart';
+import 'package:telodigo/data/controllers/negociocontroller.dart';
 import 'package:telodigo/ui/pages/crear%20anuncio/crearanuncioview4.dart';
 
 class CrearAnuncioMap extends StatefulWidget {
@@ -16,6 +18,7 @@ const kGoogleApiKey = "AIzaSyCnANhFGwttT-RM2rUhtDas13DRivPQO7Y";
 class _CrearAnuncioMapState extends State<CrearAnuncioMap> {
   late GoogleMapController googleMapController;
   LatLng? _selectedLocation;
+   static final NegocioController controllerhotel = Get.find();
 
   Set<Marker> marketList = {};
 
@@ -62,6 +65,7 @@ class _CrearAnuncioMapState extends State<CrearAnuncioMap> {
               onTap: (LatLng latLng) {
                 setState(() {
                   _selectedLocation = latLng;
+                  controllerhotel.EstablecerCoodenadas(_selectedLocation!.latitude, _selectedLocation!.longitude);
                 });
               },
             ),
@@ -89,6 +93,9 @@ class _CrearAnuncioMapState extends State<CrearAnuncioMap> {
                   setState(() {
                     double lat = double.parse(prediction.lat!);
                     double lng = double.parse(prediction.lng!);
+
+                    controllerhotel.EstablecerCoodenadas(lat, lng);
+                    
                     marketList = {};
                     marketList.add(Marker(
                         markerId: MarkerId("new"), position: LatLng(lat, lng)));

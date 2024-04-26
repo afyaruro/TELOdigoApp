@@ -88,31 +88,12 @@ class _CrearAnuncioView7State extends State<CrearAnuncioView7> {
                 margin: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
                 child: Column(
                   children: [
+                    
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          width: 80,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Yape",
-                                style: TextStyle(fontSize: 14),
-                              ),
-                              Checkbox(
-                                value: checkYape,
-                                onChanged: (newbool) {
-                                  setState(() {
-                                    checkYape = newbool!;
-                                  });
-                                },
-                              )
-                            ],
-                          ),
-                        ),
-                        Container(
-                          width: 170,
+                          width: 100,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -125,31 +106,6 @@ class _CrearAnuncioView7State extends State<CrearAnuncioView7> {
                                 onChanged: (newbool) {
                                   setState(() {
                                     checkEfectivo = newbool!;
-                                  });
-                                },
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width: 80,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Plin",
-                                style: TextStyle(fontSize: 14),
-                              ),
-                              Checkbox(
-                                value: checkPlin,
-                                onChanged: (newbool) {
-                                  setState(() {
-                                    checkPlin = newbool!;
                                   });
                                 },
                               )

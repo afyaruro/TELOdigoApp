@@ -20,6 +20,15 @@ class NegocioController extends GetxController {
 
   final Rx<dynamic> _horaCerrar = "".obs;
   String get horaCerrar => _horaCerrar.value;
+  
+  final Rx<dynamic> _direccion = "".obs;
+  String get direccion => _direccion.value;
+
+  final Rx<double> _latitud= 0.0.obs;
+  double get latitud => _latitud.value;
+
+  final Rx<double> _longitud = 0.0.obs;
+  double get longitud => _longitud.value;
 
   final Rxn<List<Habitaciones>> _habitaciones = Rxn<List<Habitaciones>>();
   List<Habitaciones>? get habitaciones => _habitaciones.value;
@@ -68,5 +77,16 @@ class NegocioController extends GetxController {
   Future<void> NewServicios(List<String> servicios) async {
     _servicios.value = [];
     _servicios.value = servicios;
+  }
+
+  Future<void> NewDireccion(String direccion) async {
+  
+    _direccion.value = direccion;
+  }
+
+  Future<void> EstablecerCoodenadas(double latitud, double longitud) async {
+  
+    _latitud.value = latitud;
+    _longitud.value = longitud;
   }
 }
