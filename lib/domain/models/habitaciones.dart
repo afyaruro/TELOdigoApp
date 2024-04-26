@@ -6,17 +6,13 @@ class Habitaciones {
   Habitaciones({
     required this.nombre,
   });
+
+    Map<String, dynamic> toJson() => {
+        "nombre": nombre,
+        "cantidad": cantidad,
+        "precios": precios.map((precio) => precio.toJson()).toList(),
+      };
 }
-
-// class Precios {
-//   final double precio = 0;
-//   final int tiempo = 0;
-
-//   Precios({
-//     required double precio,
-//     required int tiempo,
-//   });
-// }
 
 class Precios {
   double precio;
@@ -26,5 +22,10 @@ class Precios {
     required this.precio,
     required this.hora,
   });
+
+  Map<String, dynamic> toJson() => {
+        "precio": precio,
+        "hora": hora,
+      };
 }
 

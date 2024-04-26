@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:telodigo/data/controllers/negociocontroller.dart';
+import 'package:telodigo/data/controllers/usercontroller.dart';
+import 'package:telodigo/data/service/peticionnegocio.dart';
 import 'package:telodigo/ui/pages/crear%20anuncio/anunciocreado.dart';
 
 class CrearAnuncioView9 extends StatefulWidget {
@@ -21,6 +23,7 @@ class _CrearAnuncioView9State extends State<CrearAnuncioView9> {
   List<String> servicios = [];
 
   static final NegocioController controllerhotel = Get.find();
+  static final UserController controlleruser = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -171,7 +174,7 @@ class _CrearAnuncioView9State extends State<CrearAnuncioView9> {
             style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.symmetric(vertical: 15),
                 backgroundColor: Color(0xFF1098E7)),
-            onPressed: () {
+            onPressed: () async {
               if (btnWifi) {
                 servicios.add("WIFI");
               }
@@ -200,10 +203,35 @@ class _CrearAnuncioView9State extends State<CrearAnuncioView9> {
 
               servicios = [];
 
-              Navigator.push(
+              var negocio = <String, dynamic>{
+                "nombre": controllerhotel.nombreNegocio,
+                "tipoEspacio": controllerhotel.tipoEspacio,
+                "habitaciones": controllerhotel.habitaciones
+                    ?.map((habitacion) => habitacion.toJson())
+                    .toList(),
+                "longitud": controllerhotel.longitud,
+                "latitud": controllerhotel.latitud,
+                "direccion": controllerhotel.direccion,
+                "horaAbrir": controllerhotel.horaAbrir,
+                "horaCerrar": controllerhotel.horaCerrar,
+                "metodosPago": controllerhotel.metodosPago,
+                "servicios": controllerhotel.servicios,
+                "fotos": controllerhotel.images
+                    ?.map((foto) => foto.toJson())
+                    .toList(),
+                "user": controlleruser.usuario!.userName,
+              };
+
+              var resp = await PeticionesNegocio.crearNegocio(negocio, context);
+
+              if(resp == "create"){
+                Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => const AnuncioCreado()));
+              }
+
+              
             },
             child: Text(
               "Siguiente",

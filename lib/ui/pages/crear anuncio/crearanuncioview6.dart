@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:telodigo/data/controllers/negociocontroller.dart';
 import 'package:telodigo/domain/models/habitaciones.dart';
+import 'package:telodigo/ui/components/customcomponents/customalert.dart';
 import 'package:telodigo/ui/pages/crear%20anuncio/crearanuncioview7.dart';
 
 class CrearAnuncioView6 extends StatefulWidget {
@@ -14,7 +15,7 @@ class CrearAnuncioView6 extends StatefulWidget {
 
 class _CrearAnuncioView6State extends State<CrearAnuncioView6> {
   static final NegocioController controllerhotel = Get.find();
-  TextEditingController horaController = TextEditingController(text: "");
+  List<Precios> precios = [];
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +83,6 @@ class _CrearAnuncioView6State extends State<CrearAnuncioView6> {
                   margin: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
                   padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                   decoration: BoxDecoration(
-                      // color: Colors.blueAccent,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: Colors.black45, width: 1)),
                   child: Column(
@@ -92,156 +92,124 @@ class _CrearAnuncioView6State extends State<CrearAnuncioView6> {
                         children: [
                           Text(habitacion.nombre,
                               style: TextStyle(fontWeight: FontWeight.w500)),
-                          IconButton(onPressed: () {}, icon: Icon(Icons.add))
+                          Row(
+                            children: [
+                              
+                              habitacion.precios.length == 0
+                                  ? Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.red,
+                                      ),
+                                      child: Icon(
+                                        Icons.close,
+                                        color: const Color.fromARGB(
+                                            255, 255, 255, 255),
+                                      ))
+                                  : Icon(
+                                      Icons.check_circle,
+                                      color: Color.fromARGB(255, 53, 163, 1),
+                                    )
+                            ],
+                          )
                         ],
                       ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(
+                            width: 50,
                             child: Text(
                               "Hora",
                               style: TextStyle(fontWeight: FontWeight.w500),
                             ),
                           ),
-                          SizedBox(
-                            width: 100,
-                          ),
                           Container(
+                            width: 80,
                             child: Text("Precio",
                                 style: TextStyle(fontWeight: FontWeight.w500)),
+                          ),
+                          Container(
+                            width: 100,
                           )
                         ],
                       ),
-
-//precios
                       for (var precio in habitacion.precios)
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
-                              width: 40,
-                              child: TextField(
-                                keyboardType: TextInputType.number,
-                                onChanged: (value) {
-                                  horaController.text = value;
-                                  precio.hora =
-                                      int.tryParse(horaController.text) ??
-                                          precio.hora;
-                                },
-                                onEditingComplete: () {
-                                  setState(() {
-                                    precio.hora =
-                                        int.tryParse(horaController.text) ??
-                                            precio.hora;
-                                  });
-                                },
-                                controller: TextEditingController(
-                                    text: precio.hora.toString()),
+                              width: 50,
+                              child: Text(
+                                "${precio.hora}",
+                                style: TextStyle(fontWeight: FontWeight.w500),
                               ),
                             ),
-                            IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    habitacion.precios.remove(precio);
-                                  });
-                                },
-                                icon: Icon(Icons.delete))
+                            Container(
+                              width: 80,
+                              child: Text("S/${precio.precio}",
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.w500)),
+                            ),
+                            Container(
+                              width: 100,
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                      onPressed: () {
+                                        habitacion.precios.remove(precio);
+                                        setState(() {});
+                                      },
+                                      icon: Icon(Icons.delete_forever)),
+                                  IconButton(
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertEdit(
+                                              title: "Editar Precio",
+                                              precio: precio,
+                                              updatePrecio: (precio2) {
+                                                int index = habitacion.precios
+                                                    .indexOf(precio);
+
+                                                habitacion.precios[index] =
+                                                    precio2;
+
+                                                setState(() {});
+                                              },
+                                            );
+                                          },
+                                        );
+                                      },
+                                      icon: Icon(Icons.edit))
+                                ],
+                              ),
+                            )
                           ],
                         ),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(),
-                          Container(
-                            margin: EdgeInsets.all(10),
-                            width: 30,
-                            height: 30,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.blue,
-                            ),
-                            child: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  habitacion.precios
-                                      .add(Precios(precio: 0, hora: 0));
-                                });
-                              },
-                              icon: Icon(
-                                Icons.add,
-                                size: 15,
-                              ),
-                              color: Colors.white,
-                            ),
-                          )
-                        ],
+                      SizedBox(
+                        height: 20,
                       ),
+                      ElevatedButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertAgregar(
+                                  title: "Nuevo Precio",
+                                  updatePrecio: (precio2) {
+                                    setState(() {
+                                      habitacion.precios.add(precio2);
+                                    });
+                                  },
+                                );
+                              },
+                            );
+                          },
+                          child: Text("Nuevo Precio"))
                     ],
                   )),
-
-// Column(
-//   children: [
-//     for (var habitacion in controllerhotel.habitaciones!)
-//       Column(
-//         children: [
-//           Container(
-//             width: 400,
-//             margin: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-//             padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-//             decoration: BoxDecoration(
-//               borderRadius: BorderRadius.circular(10),
-//               border: Border.all(color: Colors.black45, width: 1),
-//             ),
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 Row(
-//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                   children: [
-//                     Text(habitacion.nombre, style: TextStyle(fontWeight: FontWeight.w500)),
-//                     IconButton(
-//                       onPressed: () {
-//                         // Agregar un nuevo precio para esta habitación
-//                         setState(() {
-//                           habitacion.precios.add(Precios(precio: 0, tiempo: 0));
-//                         });
-//                       },
-//                       icon: Icon(Icons.add),
-//                     ),
-//                   ],
-//                 ),
-//                 for (var precio in habitacion.precios)
-//                   Row(
-//                     children: [
-//                       Expanded(
-//                         child: TextField(
-//                           decoration: InputDecoration(labelText: 'Hora'),
-//                           onChanged: (value) {
-//                             // Actualizar el tiempo en el modelo
-//                             precio.tiempo = int.tryParse(value) ?? 0;
-//                           },
-//                         ),
-//                       ),
-//                       SizedBox(width: 20),
-//                       Expanded(
-//                         child: TextField(
-//                           decoration: InputDecoration(labelText: 'Precio'),
-//                           onChanged: (value) {
-//                             // Actualizar el precio en el modelo
-//                             precio.precio = double.tryParse(value) ?? 0.0;
-//                           },
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//               ],
-//             ),
-//           ),
-//           SizedBox(height: 10),
-//         ],
-//       ),
-//   ],
-// ),
           ]))),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
@@ -250,6 +218,28 @@ class _CrearAnuncioView6State extends State<CrearAnuncioView6> {
                 padding: EdgeInsets.symmetric(vertical: 15),
                 backgroundColor: Color(0xFF1098E7)),
             onPressed: () {
+              int numero = 0;
+
+              for (var habitacion in controllerhotel.habitaciones!){
+                if(habitacion.precios.length == 0){
+                  numero = numero + 1;
+                }
+              }
+
+              if(numero > 0){
+                showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const CustomAlert(
+                            title: "Valida tus Precios",
+                            text: "Por favor verifica tus habitaciones parece ser que hay habitaciones sin establecer precios",
+                          );
+                        },
+                      );
+              }else {
+                print("Puedes segir");
+              }
+
               Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -260,6 +250,331 @@ class _CrearAnuncioView6State extends State<CrearAnuncioView6> {
               style: TextStyle(color: Colors.white),
             )),
       ),
+    );
+  }
+}
+
+
+class AlertEdit extends StatefulWidget {
+  final Precios precio;
+  final Function(Precios) updatePrecio;
+  final String title;
+
+  const AlertEdit(
+      {super.key,
+      required this.precio,
+      required this.updatePrecio,
+      required this.title});
+
+  @override
+  State<AlertEdit> createState() => _AlertEditState();
+}
+
+class _AlertEditState extends State<AlertEdit> {
+  int selectedNumber = 1;
+  TextEditingController controller = TextEditingController(text: "0");
+
+  @override
+  void initState() {
+    super.initState();
+    selectedNumber = widget.precio.hora;
+    controller.text = widget.precio.precio.toString();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Center(
+          child: Text(
+        "${widget.title}",
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+      )),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 400,
+            padding: EdgeInsets.symmetric(horizontal: 30),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Text("Horas:  "),
+                    Container(
+                      alignment: Alignment.center,
+                      width: 100,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(
+                            width: 1,
+                            color: Colors.black38,
+                          )),
+                      child: DropdownButton<int>(
+                        value: selectedNumber,
+                        items: List.generate(24, (index) {
+                          return DropdownMenuItem<int>(
+                            value: index + 1,
+                            child: Text((index + 1).toString()),
+                          );
+                        }),
+                        onChanged: (value) {
+                          setState(() {
+                            selectedNumber = value!;
+                          });
+                        },
+                        underline: Container(
+                          height: 0,
+                          color: Colors.transparent,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    Text("Precio:  "),
+                    Container(
+                      width: 100,
+                      height: 50,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(
+                            width: 1,
+                            color: Colors.black38,
+                          )),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          border:
+                              OutlineInputBorder(borderSide: BorderSide.none),
+                        ),
+                        keyboardType: TextInputType.number,
+                        controller: controller,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text("Cancelar"),
+        ),
+        TextButton(
+          onPressed: () {
+            if (controller.text.isEmpty) {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return const CustomAlert(
+                    title: "Agrega un precio",
+                    text: "Por favor agrega un precio para continuar",
+                  );
+                },
+              );
+            } else if (double.tryParse(controller.text) == null) {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return const CustomAlert(
+                    title: "Valor Invalido",
+                    text: "El valor ingresado es invalido",
+                  );
+                },
+              );
+            } else if (double.parse(controller.text) == 0) {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return const CustomAlert(
+                    title: "Valor Invalido",
+                    text: "El valor ingresado debe ser mayor de 0",
+                  );
+                },
+              );
+            } else {
+              Precios precios = Precios(
+                  precio: double.parse(controller.text), hora: selectedNumber);
+
+              setState(() {
+                widget.updatePrecio(precios);
+              });
+            }
+            Navigator.of(context).pop();
+          },
+          child: Text("Guardar"),
+        ),
+      ],
+    );
+  }
+}
+
+class AlertAgregar extends StatefulWidget {
+  final Function(Precios) updatePrecio;
+  final String title;
+
+  const AlertAgregar(
+      {super.key, required this.updatePrecio, required this.title});
+
+  @override
+  State<AlertAgregar> createState() => _AlertAgregarState();
+}
+
+class _AlertAgregarState extends State<AlertAgregar> {
+  int selectedNumber = 1;
+  TextEditingController controller = TextEditingController(text: "0");
+
+  @override
+  void initState() {
+    super.initState();
+    selectedNumber = 1;
+    controller.text = "0";
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Center(
+          child: Text(
+        "${widget.title}",
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+      )),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 400,
+            padding: EdgeInsets.symmetric(horizontal: 30),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Text("Horas:  "),
+                    Container(
+                      alignment: Alignment.center,
+                      width: 100,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(
+                            width: 1,
+                            color: Colors.black38,
+                          )),
+                      child: DropdownButton<int>(
+                        value: selectedNumber,
+                        items: List.generate(24, (index) {
+                          return DropdownMenuItem<int>(
+                            value: index + 1,
+                            child: Text((index + 1).toString()),
+                          );
+                        }),
+                        onChanged: (value) {
+                          setState(() {
+                            selectedNumber = value!;
+                          });
+                        },
+                        underline: Container(
+                          height: 0,
+                          color: Colors.transparent,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    Text("Precio:  "),
+                    Container(
+                      width: 100,
+                      height: 50,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(
+                            width: 1,
+                            color: Colors.black38,
+                          )),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          border:
+                              OutlineInputBorder(borderSide: BorderSide.none),
+                        ),
+                        keyboardType: TextInputType.number,
+                        controller: controller,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text("Cancelar"),
+        ),
+        TextButton(
+          onPressed: () {
+            if (controller.text.isEmpty) {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return const CustomAlert(
+                    title: "Agrega un precio",
+                    text: "Por favor agrega un precio para continuar",
+                  );
+                },
+              );
+            } else if (double.tryParse(controller.text) == null) {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return const CustomAlert(
+                    title: "Valor Invalido",
+                    text: "El valor ingresado es invalido",
+                  );
+                },
+              );
+            } else if (double.parse(controller.text) == 0) {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return const CustomAlert(
+                    title: "Valor Invalido",
+                    text: "El valor ingresado debe ser mayor de 0",
+                  );
+                },
+              );
+            } else {
+              Precios precios = Precios(
+                  precio: double.parse(controller.text), hora: selectedNumber);
+
+              setState(() {
+                widget.updatePrecio(precios);
+              });
+            }
+            Navigator.of(context).pop();
+          },
+          child: Text("Guardar"),
+        ),
+      ],
     );
   }
 }

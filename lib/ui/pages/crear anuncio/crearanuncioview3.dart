@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:telodigo/data/controllers/negociocontroller.dart';
 import 'package:telodigo/ui/pages/crear%20anuncio/crearanunciomap.dart';
 import 'package:telodigo/ui/pages/crear%20anuncio/crearanuncioview4.dart';
 
@@ -11,6 +13,7 @@ class CrearAnuncioView3 extends StatefulWidget {
 
 class _CrearAnuncioView3State extends State<CrearAnuncioView3> {
   TextEditingController controller = TextEditingController(text: "");
+  static final NegocioController controllerhotel = Get.find();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,6 +72,8 @@ class _CrearAnuncioView3State extends State<CrearAnuncioView3> {
                 backgroundColor: Color.fromARGB(255, 16, 152, 231)),
             onPressed: controller.text != ""
                 ? () {
+                    controllerhotel.NewDireccion(controller.text);
+
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -83,4 +88,3 @@ class _CrearAnuncioView3State extends State<CrearAnuncioView3> {
     );
   }
 }
-

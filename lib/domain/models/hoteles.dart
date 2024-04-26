@@ -1,4 +1,5 @@
 import 'package:telodigo/domain/models/habitaciones.dart';
+import 'package:telodigo/domain/models/images.dart';
 
 class Hoteles {
 
@@ -8,10 +9,18 @@ class Hoteles {
   final String direccion;
   final String horaAbrir;
   final String horaCerrar;
-  final String longitud;
-  final String latitud;
+  final double longitud;
+  final double latitud;
+  final List<String> metodosPago;
+  final List<String> servicios;
+  final List<Imagens> fotos;
+  final String user;
 
-  Hoteles({
+  Hoteles( {
+    required this.user,
+    required this.fotos,
+    required this.servicios,
+    required this.metodosPago,
     required this.direccion,
     required this.nombre,
     required this.tipoEspacio,
@@ -31,6 +40,10 @@ class Hoteles {
       direccion: data['direccion'] ?? '',
       horaAbrir: data['horaAbrir'] ?? '',
       horaCerrar: data['horaCerrar'] ?? '',
+      metodosPago: data['metodosPago'] ?? '',
+      servicios: data['servicios'] ?? '',
+      fotos: data['fotos'] ?? '',
+      user: data['user'] ?? '',
 
     );
   }
