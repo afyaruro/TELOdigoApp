@@ -4,6 +4,7 @@ import 'package:telodigo/data/controllers/negociocontroller.dart';
 import 'package:telodigo/data/controllers/usercontroller.dart';
 import 'package:telodigo/data/service/peticionnegocio.dart';
 import 'package:telodigo/ui/pages/crear%20anuncio/anunciocreado.dart';
+import 'package:telodigo/ui/pages/crear%20anuncio/erroranunciocreate.dart';
 
 class CrearAnuncioView9 extends StatefulWidget {
   const CrearAnuncioView9({super.key});
@@ -229,6 +230,11 @@ class _CrearAnuncioView9State extends State<CrearAnuncioView9> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => const AnuncioCreado()));
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const ErrorAnuncioCreate()));
               }
 
               

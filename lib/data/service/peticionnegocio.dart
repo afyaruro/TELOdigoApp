@@ -34,18 +34,10 @@ showDialog(
     );
 
 
-
-
-
-        // Usuario user = Usuario.desdeDoc(usuario);
-        // controlleruser.DatosUser(user);
-
-        // return "create";
-
 try{
 
     await collection.doc().set(hotel).timeout(
-          Duration(minutes: 5),
+          Duration(seconds: 5),
           onTimeout: () async {
             Navigator.pop(context);
             showDialog(
