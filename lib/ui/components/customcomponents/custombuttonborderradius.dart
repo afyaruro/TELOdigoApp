@@ -36,7 +36,7 @@ Widget CustomButtonsRadius(Color colorBackground, Color colorText,
           borderRadius: BorderRadius.circular(50),
           splashColor: Colors.black54,
           onTap: () async {
-            await Future.delayed(Duration(milliseconds: 500), () {
+            await Future.delayed(Duration(milliseconds: 200), () {
               action();
             });
           },

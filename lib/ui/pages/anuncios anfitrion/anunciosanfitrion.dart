@@ -1,9 +1,11 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:telodigo/data/service/peticionnegocio.dart';
 import 'package:telodigo/domain/models/hoteles.dart';
 import 'package:telodigo/ui/components/customcomponents/custombuttonborderradius.dart';
 import 'package:telodigo/ui/pages/crear%20anuncio/crearanuncioview1.dart';
+import 'package:telodigo/ui/pages/crear%20anuncio/crearanuncioview2.dart';
 
 import '../../components/customcomponents/customaditem.dart';
 
@@ -15,68 +17,149 @@ class AnunciosAnfitrion extends StatefulWidget {
 }
 
 class _AnunciosAnfitrionState extends State<AnunciosAnfitrion> {
-  final List<Hoteles> hoteles =
-      [
-        Hoteles(nombre: "Unico", tipoEspacio: "Habitacion", direccion: '', habitaciones: [], latitud: '', longitud: '', horaAbrir: '', horaCerrar: '',),
-        Hoteles(nombre: "Unico", tipoEspacio: "Habitacion", direccion: '', habitaciones: [], latitud: '', longitud: '', horaAbrir: '', horaCerrar: '',),
-        Hoteles(nombre: "Unico", tipoEspacio: "Habitacion", direccion: '', habitaciones: [], latitud: '', longitud: '', horaAbrir: '', horaCerrar: '',),
-        Hoteles(nombre: "Unico", tipoEspacio: "Habitacion", direccion: '', habitaciones: [], latitud: '', longitud: '', horaAbrir: '', horaCerrar: '',),
-        Hoteles(nombre: "Unico", tipoEspacio: "Habitacion", direccion: '', habitaciones: [], latitud: '', longitud: '', horaAbrir: '', horaCerrar: '',),
-        Hoteles(nombre: "Unico", tipoEspacio: "Habitacion", direccion: '', habitaciones: [], latitud: '', longitud: '', horaAbrir: '', horaCerrar: '',),
-        Hoteles(nombre: "Unico", tipoEspacio: "Habitacion", direccion: '', habitaciones: [], latitud: '', longitud: '', horaAbrir: '', horaCerrar: '',),
-        Hoteles(nombre: "Unico", tipoEspacio: "Habitacion", direccion: '', habitaciones: [], latitud: '', longitud: '', horaAbrir: '', horaCerrar: '',),
-      ];
+   List<Hoteles> hoteles = [];
+
+  @override
+  void initState() {
+    super.initState();
+  PeticionesNegocio.listNegocios().then((value) {
+
+  setState(() {
+
+    hoteles = value;
+
+  });
+
+});
+  }
+
+  
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-        child: hoteles.isEmpty ?  FirstHotel():ListHotel(hotelList: hoteles,));
+    return Scaffold(
+
+    body: FutureBuilder<List<Hoteles>>(
+
+      future: PeticionesNegocio.listNegocios(),
+
+      builder: (context, snapshot) {
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+
+          return Center(
+
+            child: CircularProgressIndicator(),
+
+          );
+
+        } else if (snapshot.hasError) {
+
+          return Center(
+
+            child: Text('Error: ${snapshot.error}'),
+
+          );
+
+        } else {
+
+          final List<Hoteles> hoteles = snapshot.data ?? [];
+
+          return SingleChildScrollView(
+
+            child: hoteles.isEmpty ? FirstHotel() : ListHotel(hotelList: hoteles),
+
+          );
+
+        }
+
+      },
+
+    ),
+
+  );
   }
 }
 
-class ListHotel extends StatelessWidget {
+class ListHotel extends StatefulWidget {
   final List<Hoteles> hotelList;
-  const ListHotel({
-    required this.hotelList,
-    super.key,
-  });
+  const ListHotel({super.key, required this.hotelList});
 
+  @override
+  State<ListHotel> createState() => _ListHotelState();
+}
+
+class _ListHotelState extends State<ListHotel> {
   @override
   Widget build(BuildContext context) {
     return Container(
-    width: MediaQuery.of(context).size.width,
-    height: MediaQuery.of(context).size.height,
-    decoration: const BoxDecoration(
-            gradient: LinearGradient(
-                colors: [Color(0xff3B2151), Color(0xff08000F)],
-                stops: [0.0, 0.9],
-                begin: FractionalOffset.topCenter,
-                end: FractionalOffset.bottomCenter)),
-    child:Stack(
-      alignment: Alignment(0,0),
-      children: [
-        Align(alignment: Alignment(-.8,-.7),child: Text("Tus Anuncions",style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.bold),),),
-        Align(alignment: Alignment(.9, -.72),child: IconButton(onPressed: () {  }, icon:Icon(Icons.add_circle_outline_rounded,color: Colors.white,size: 30,) ,),),
-        Align(alignment: Alignment(0, .5),child:SizedBox(
-          width: MediaQuery.of(context).size.width*.85,
-          height: MediaQuery.of(context).size.height*.74,
-          child: ListView.builder(
-            padding: EdgeInsets.only(top: 20,bottom:30),
-            itemCount: hotelList.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 55),
-                child:aditem(nombre: hotelList[index].nombre, tipoEspacio: hotelList[index].tipoEspacio),//ExpandableWidget()
-              );
-            },
-          ),
-        ),)
-      ],
-    )
-    );
-    
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: Stack(
+          alignment: Alignment(0, 0),
+          children: [
+            Align(
+              alignment: Alignment(-.8, -.7),
+              child: Text(
+                "Tus Anuncions",
+                style: TextStyle(
+                    color: const Color.fromARGB(255, 0, 0, 0),
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            Align(
+              alignment: Alignment(.9, -.72),
+              child: ElevatedButton(
+                 style: ElevatedButton.styleFrom(
+                      backgroundColor: Color.fromARGB(255, 16, 152, 231)),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const CrearAnuncioView2()));
+                },
+                child: Text("Crear", style: TextStyle(color: Colors.white),),
+              ),
+            ),
+            Align(
+              alignment: Alignment(0, .5),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * .85,
+                height: MediaQuery.of(context).size.height * .74,
+                child: ListView.builder(
+                  padding: EdgeInsets.only(top: 20, bottom: 30),
+                  itemCount: widget.hotelList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 5),
+                      child: aditem(
+                          nombre: widget.hotelList[index].nombre,
+                          tipoEspacio: widget.hotelList[index]
+                              .tipoEspacio), //ExpandableWidget()
+                    );
+                  },
+                ),
+              ),
+            )
+          ],
+        ));
   }
 }
+
+// class ListHotel extends StatelessWidget {
+//   final List<Hoteles> hotelList;
+//   const ListHotel({
+//     required this.hotelList,
+//     super.key,
+//   });
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return
+
+//   }
+// }
 
 class FirstHotel extends StatelessWidget {
   const FirstHotel({
@@ -96,15 +179,16 @@ class FirstHotel extends StatelessWidget {
           Container(
               width: 200,
               margin: EdgeInsets.only(top: 15),
-              child: CustomButtonsRadius(Colors.black, Colors.white,
-                  "¡Registralo Aquí!", false, () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const CrearAnuncioView1()));
-                  }))
+              child: CustomButtonsRadius(
+                  Colors.black, Colors.white, "¡Registralo Aquí!", false, () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const CrearAnuncioView1()));
+              }))
         ],
       ),
     );
   }
 }
+//

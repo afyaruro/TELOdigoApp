@@ -70,7 +70,7 @@ class _aditemState extends State<aditem> {
             color: Colors.white,
           ),
           borderRadius: const BorderRadius.all(Radius.circular(10)),
-          color: const Color(0xFF848484)),
+          color: Color.fromARGB(255, 34, 11, 99)),
       child: Padding(
         padding: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 0),
         child: Stack(

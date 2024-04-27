@@ -15,8 +15,10 @@ class Hoteles {
   final List<String> servicios;
   final List<Imagens> fotos;
   final String user;
+  final double saldo;
 
   Hoteles( {
+    required this.saldo,
     required this.user,
     required this.fotos,
     required this.servicios,
@@ -44,6 +46,7 @@ class Hoteles {
       servicios: data['servicios'] ?? '',
       fotos: data['fotos'] ?? '',
       user: data['user'] ?? '',
+      saldo: data['saldo'] ?? '',
 
     );
   }

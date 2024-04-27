@@ -221,6 +221,7 @@ class _CrearAnuncioView9State extends State<CrearAnuncioView9> {
                     ?.map((foto) => foto.toJson())
                     .toList(),
                 "user": controlleruser.usuario!.userName,
+                "saldo": 0.0,
               };
 
               var resp = await PeticionesNegocio.crearNegocio(negocio, context);
