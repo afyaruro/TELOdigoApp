@@ -17,6 +17,7 @@ class AnunciosAnfitrion extends StatefulWidget {
 }
 
 class _AnunciosAnfitrionState extends State<AnunciosAnfitrion> {
+
    List<Hoteles> hoteles = [];
 
   @override
@@ -33,7 +34,6 @@ class _AnunciosAnfitrionState extends State<AnunciosAnfitrion> {
 });
   }
 
-  
 
   @override
   Widget build(BuildContext context) {
@@ -93,57 +93,92 @@ class _ListHotelState extends State<ListHotel> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        child: Stack(
-          alignment: Alignment(0, 0),
-          children: [
-            Align(
-              alignment: Alignment(-.8, -.7),
-              child: Text(
-                "Tus Anuncions",
-                style: TextStyle(
-                    color: const Color.fromARGB(255, 0, 0, 0),
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-            Align(
-              alignment: Alignment(.9, -.72),
-              child: ElevatedButton(
-                 style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromARGB(255, 16, 152, 231)),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const CrearAnuncioView2()));
-                },
-                child: Text("Crear", style: TextStyle(color: Colors.white),),
-              ),
-            ),
-            Align(
-              alignment: Alignment(0, .5),
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width * .85,
-                height: MediaQuery.of(context).size.height * .74,
-                child: ListView.builder(
-                  padding: EdgeInsets.only(top: 20, bottom: 30),
-                  itemCount: widget.hotelList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: aditem(
-                          nombre: widget.hotelList[index].nombre,
-                          tipoEspacio: widget.hotelList[index]
-                              .tipoEspacio), //ExpandableWidget()
-                    );
-                  },
-                ),
-              ),
-            )
-          ],
-        ));
+// <<<<<<< HEAD
+
+// mio
+//         width: MediaQuery.of(context).size.width,
+//         height: MediaQuery.of(context).size.height,
+//         child: Stack(
+//           alignment: Alignment(0, 0),
+//           children: [
+//             Align(
+//               alignment: Alignment(-.8, -.7),
+//               child: Text(
+//                 "Tus Anuncions",
+//                 style: TextStyle(
+//                     color: const Color.fromARGB(255, 0, 0, 0),
+//                     fontSize: 18,
+//                     fontWeight: FontWeight.bold),
+//               ),
+//             ),
+//             Align(
+//               alignment: Alignment(.9, -.72),
+//               child: ElevatedButton(
+//                  style: ElevatedButton.styleFrom(
+//                       backgroundColor: Color.fromARGB(255, 16, 152, 231)),
+//                 onPressed: () {
+//                   Navigator.push(
+//                       context,
+//                       MaterialPageRoute(
+//                           builder: (context) => const CrearAnuncioView2()));
+//                 },
+//                 child: Text("Crear", style: TextStyle(color: Colors.white),),
+//               ),
+//             ),
+//             Align(
+//               alignment: Alignment(0, .5),
+//               child: SizedBox(
+//                 width: MediaQuery.of(context).size.width * .85,
+//                 height: MediaQuery.of(context).size.height * .74,
+//                 child: ListView.builder(
+//                   padding: EdgeInsets.only(top: 20, bottom: 30),
+//                   itemCount: widget.hotelList.length,
+//                   itemBuilder: (BuildContext context, int index) {
+//                     return Padding(
+//                       padding: const EdgeInsets.only(bottom: 5),
+//                       child: aditem(
+//                           nombre: widget.hotelList[index].nombre,
+//                           tipoEspacio: widget.hotelList[index]
+//                               .tipoEspacio), //ExpandableWidget()
+//                     );
+//                   },
+//                 ),
+//               ),
+//             )
+//           ],
+//         ));
+// =======
+    width: MediaQuery.of(context).size.width,
+    height: MediaQuery.of(context).size.height,
+    decoration: const BoxDecoration(
+            gradient: LinearGradient(
+                colors: [Color(0xff3B2151), Color(0xff08000F)],
+                stops: [0.0, 0.9],
+                begin: FractionalOffset.topCenter,
+                end: FractionalOffset.bottomCenter)),
+    child:Stack(
+      alignment: Alignment(0,0),
+      children: [
+        Align(alignment: Alignment(-.8,-.82),child: Text("Tus Anuncions",style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.bold),),),
+        Align(alignment: Alignment(.9, -.84),child: IconButton(onPressed: () {  }, icon:Icon(Icons.add_circle_outline_rounded,color: Colors.white,size: 30,) ,),),
+        Align(alignment: Alignment(0, .3),child:SizedBox(
+          width: MediaQuery.of(context).size.width*.85,
+          height: MediaQuery.of(context).size.height*.80,
+          child: ListView.builder(
+            padding: EdgeInsets.only(top: 10,bottom:30),
+            itemCount: widget.hotelList.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 55),
+                child:aditem(nombre: widget.hotelList[index].nombre, tipoEspacio: widget.hotelList[index].tipoEspacio),//ExpandableWidget()
+              );
+            },
+          ),
+        ),)
+      ],
+    )
+    );
+    
   }
 }
 
