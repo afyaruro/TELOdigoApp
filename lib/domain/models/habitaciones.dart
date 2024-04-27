@@ -1,17 +1,29 @@
 class Habitaciones {
   final String nombre;
-  List<Precios> precios = [];
-  int cantidad = 0;
+  final List<Precios> precios;
+  late int cantidad;
 
   Habitaciones({
     required this.nombre,
+    required this.precios,
+    required this.cantidad,
   });
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "nombre": nombre,
         "cantidad": cantidad,
         "precios": precios.map((precio) => precio.toJson()).toList(),
       };
+
+  factory Habitaciones.fromMap(Map<String, dynamic> map) {
+    return Habitaciones(
+      nombre: map['nombre'],
+      cantidad: map['cantidad'],
+      precios: (map['precios'] as List<dynamic>)
+          .map((e) => Precios.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+  }
 }
 
 class Precios {
@@ -27,5 +39,11 @@ class Precios {
         "precio": precio,
         "hora": hora,
       };
-}
 
+  factory Precios.fromJson(Map<String, dynamic> json) {
+    return Precios(
+      precio: json["precio"],
+      hora: json["hora"],
+    );
+  }
+}
