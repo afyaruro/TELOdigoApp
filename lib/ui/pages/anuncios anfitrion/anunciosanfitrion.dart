@@ -17,14 +17,11 @@ class AnunciosAnfitrion extends StatefulWidget {
 class _AnunciosAnfitrionState extends State<AnunciosAnfitrion> {
   final List<Hoteles> hoteles =
       [
-        Hoteles(nombre: "Unico", tipoEspacio: "Habitacion", direccion: '', habitaciones: [], latitud: '', longitud: '', horaAbrir: '', horaCerrar: '',),
-        Hoteles(nombre: "Unico", tipoEspacio: "Habitacion", direccion: '', habitaciones: [], latitud: '', longitud: '', horaAbrir: '', horaCerrar: '',),
-        Hoteles(nombre: "Unico", tipoEspacio: "Habitacion", direccion: '', habitaciones: [], latitud: '', longitud: '', horaAbrir: '', horaCerrar: '',),
-        Hoteles(nombre: "Unico", tipoEspacio: "Habitacion", direccion: '', habitaciones: [], latitud: '', longitud: '', horaAbrir: '', horaCerrar: '',),
-        Hoteles(nombre: "Unico", tipoEspacio: "Habitacion", direccion: '', habitaciones: [], latitud: '', longitud: '', horaAbrir: '', horaCerrar: '',),
-        Hoteles(nombre: "Unico", tipoEspacio: "Habitacion", direccion: '', habitaciones: [], latitud: '', longitud: '', horaAbrir: '', horaCerrar: '',),
-        Hoteles(nombre: "Unico", tipoEspacio: "Habitacion", direccion: '', habitaciones: [], latitud: '', longitud: '', horaAbrir: '', horaCerrar: '',),
-        Hoteles(nombre: "Unico", tipoEspacio: "Habitacion", direccion: '', habitaciones: [], latitud: '', longitud: '', horaAbrir: '', horaCerrar: '',),
+        Hoteles(nombre: "Unico", tipoEspacio: "Habitacion", direccion: '', habitaciones: [], latitud: 0.0, longitud: 0.0, horaAbrir: '', horaCerrar: '', user: '', fotos: [], servicios: [], metodosPago: [],),
+        Hoteles(nombre: "Unico", tipoEspacio: "Habitacion", direccion: '', habitaciones: [], latitud: 0.0, longitud: 0.0, horaAbrir: '', horaCerrar: '', user: '', fotos: [], servicios: [], metodosPago: [],),
+        Hoteles(nombre: "Unico", tipoEspacio: "Habitacion", direccion: '', habitaciones: [], latitud: 0.0, longitud: 0.0, horaAbrir: '', horaCerrar: '', user: '', fotos: [], servicios: [], metodosPago: [],),
+        Hoteles(nombre: "Unico", tipoEspacio: "Habitacion", direccion: '', habitaciones: [], latitud: 0.0, longitud: 0.0, horaAbrir: '', horaCerrar: '', user: '', fotos: [], servicios: [], metodosPago: [],),
+        Hoteles(nombre: "Unico", tipoEspacio: "Habitacion", direccion: '', habitaciones: [], latitud: 0.0, longitud: 0.0, horaAbrir: '', horaCerrar: '', user: '', fotos: [], servicios: [], metodosPago: [],),
       ];
 
   @override
@@ -55,13 +52,13 @@ class ListHotel extends StatelessWidget {
     child:Stack(
       alignment: Alignment(0,0),
       children: [
-        Align(alignment: Alignment(-.8,-.7),child: Text("Tus Anuncions",style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.bold),),),
-        Align(alignment: Alignment(.9, -.72),child: IconButton(onPressed: () {  }, icon:Icon(Icons.add_circle_outline_rounded,color: Colors.white,size: 30,) ,),),
-        Align(alignment: Alignment(0, .5),child:SizedBox(
+        Align(alignment: Alignment(-.8,-.82),child: Text("Tus Anuncions",style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.bold),),),
+        Align(alignment: Alignment(.9, -.84),child: IconButton(onPressed: () {  }, icon:Icon(Icons.add_circle_outline_rounded,color: Colors.white,size: 30,) ,),),
+        Align(alignment: Alignment(0, .3),child:SizedBox(
           width: MediaQuery.of(context).size.width*.85,
-          height: MediaQuery.of(context).size.height*.74,
+          height: MediaQuery.of(context).size.height*.80,
           child: ListView.builder(
-            padding: EdgeInsets.only(top: 20,bottom:30),
+            padding: EdgeInsets.only(top: 10,bottom:30),
             itemCount: hotelList.length,
             itemBuilder: (BuildContext context, int index) {
               return Padding(
