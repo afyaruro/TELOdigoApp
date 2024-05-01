@@ -159,7 +159,8 @@ class _CrearAnuncioView4State extends State<CrearAnuncioView4> {
                         onPressed: () {
                           if (!controller_habitacion.text.isEmpty) {
                             Habitaciones habitacion = Habitaciones(
-                                nombre: controller_habitacion.text);
+                              precios: [], cantidad: 0,
+                                nombre: controller_habitacion.text, );
                             habitaciones.add(habitacion);
 
                             
