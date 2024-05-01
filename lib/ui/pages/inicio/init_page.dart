@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:telodigo/data/service/apimercadopago.dart';
 import 'package:telodigo/ui/components/customcomponents/custombackgroundlogin.dart';
 import 'package:telodigo/ui/components/customcomponents/custombuttonborderradius.dart';
 import 'package:telodigo/ui/components/customcomponents/exitconfirmation.dart';
@@ -18,6 +19,15 @@ class Init_Page extends StatefulWidget {
 }
 
 class _Init_PageState extends State<Init_Page> {
+  MercadoPago mercado =MercadoPago();
+
+  @override
+  void initState() {
+    super.initState();
+    mercado.getCredentials();
+    print(mercado.credentials);
+  }
+  
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
