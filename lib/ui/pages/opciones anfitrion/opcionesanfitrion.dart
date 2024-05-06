@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:telodigo/ui/pages/home/home.dart';
 
+import 'payment_method.dart';
+
 class OpcionesAnfitrion extends StatelessWidget {
   const OpcionesAnfitrion({super.key});
 
@@ -24,7 +26,7 @@ class OpcionesAnfitrion extends StatelessWidget {
                     height: 100,
                     child: ElevatedButton(
                       onPressed: () {},
-                      child: Column(
+                      child: const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -42,8 +44,13 @@ class OpcionesAnfitrion extends StatelessWidget {
                     width: 100,
                     height: 100,
                     child: ElevatedButton(
-                      onPressed: () {},
-                      child: Column(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const PaymentMethod()));
+                      },
+                      child: const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -63,14 +70,13 @@ class OpcionesAnfitrion extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          const HomeUser()), 
-                  (Route<dynamic> route) => false,
-                );
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const HomeUser()),
+                          (Route<dynamic> route) => false,
+                        );
                       },
-                      child: Column(
+                      child: const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [

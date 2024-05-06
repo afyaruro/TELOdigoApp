@@ -33,9 +33,17 @@ class MercadoPago {
           },
           body: json.encode(requestBody));
       if (response.statusCode == 200 || response.statusCode == 201) {
-        return response;
+         return {
+        "result": json.decode(response.body),
+        "message": response.body,
+        "error": null
+      };
       } else {
-        return {"result": null, "message": response};
+         return {
+        "result": null,
+        "message": response.body,
+        "error": null
+      };
       }
     } catch (e) {
       return {
@@ -48,17 +56,30 @@ class MercadoPago {
 
   Future searchCustomerXEmail(String customerEmail) async {
     http.Response response = http.Response('', 500);
+    late var uri;
     try {
-      var uri = Uri.https(credentials['URL_BASE'], '/v1/customers/search',
+      if (customerEmail ==""){
+        uri = Uri.https(credentials['URL_BASE'], '/v1/customers/search');
+      }else{
+        uri = Uri.https(credentials['URL_BASE'], '/v1/customers/search',
           {"email": customerEmail});
+      }
       response = await http.get(uri, headers: {
         'Content-Type': 'application/json',
         'Authorization': credentials['ACCESS_TOKEN'],
       });
       if (response.statusCode == 200 || response.statusCode == 201) {
-        return response;
+        return {
+        "result": json.decode(response.body),
+        "message": response.body,
+        "error": null
+      };
       } else {
-        return {"result": null, "message": response};
+        return {
+        "result": null,
+        "message": response.body,
+        "error": null
+      };
       }
     } catch (e) {
       return {
@@ -187,6 +208,37 @@ class MercadoPago {
       };
     }
   }
+  
+  Future listCustomerCard(String customerId) async {
+    http.Response response = http.Response('', 500);
+    try {
+      var uri = Uri.https(credentials['URL_BASE'], '/v1/customers/$customerId/cards');
+      response = await http.get(uri,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': credentials['ACCESS_TOKEN'],
+          });
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return {
+        "result": json.decode(response.body),
+        "message": response.body,
+        "error": null
+      };
+      } else {
+        return {
+        "result": null,
+        "message": response.body,
+        "error": null
+      };
+      }
+    } catch (e) {
+      return {
+        "result": null,
+        "message": response.body,
+        "error": e.toString()
+      };
+    }
+  }
 
   Future updateCustomerCard(
       String customerId,String cardId, Map<String, dynamic> requestBody) async {
@@ -252,9 +304,17 @@ class MercadoPago {
           },
           body: json.encode(requestBody));
       if (response.statusCode == 200 || response.statusCode == 201) {
-        return json.decode(response.body)["id"];
+        return {
+        "result": json.decode(response.body),
+        "message": response.body,
+        "error": null
+      };
       } else {
-        return {"result": null, "message": response};
+        return {
+        "result": null,
+        "message": response.body,
+        "error": null
+      };
       }
     } catch (e) {
       return {
@@ -280,7 +340,7 @@ class MercadoPago {
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
       } else {
-        return {"result": null, "message": response};
+        return {"result": null, "message": response.body};
       }
     } catch (e) {
       return {

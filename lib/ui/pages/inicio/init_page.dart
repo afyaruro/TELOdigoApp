@@ -24,8 +24,7 @@ class _Init_PageState extends State<Init_Page> {
   @override
   void initState() {
     super.initState();
-    mercado.getCredentials();
-    print(mercado.credentials);
+
   }
   
   @override

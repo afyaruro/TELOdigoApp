@@ -8,7 +8,7 @@ class Usuario {
   final String foto;
   final bool modoOscuro;
 
-  Usuario( 
+  Usuario(
       {required this.userName,
       required this.password,
       required this.nombres,

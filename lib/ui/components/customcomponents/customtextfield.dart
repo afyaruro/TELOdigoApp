@@ -1,4 +1,7 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CustomTextField1 extends StatefulWidget {
   final String nombre;
@@ -217,6 +220,102 @@ class _CustomTextField4State extends State<CustomTextField4> {
     );
   }
 }
+
+
+class CustomTextField5 extends StatefulWidget {
+  final String nombre;
+  final bool isPassword;
+  final TextEditingController controller;
+  final double height;
+  final double width;
+  final double textFontSize;
+  final String placeholder;
+  VoidCallback funtion;
+  List<TextInputFormatter> inputFormater;
+  TextInputType keyboard;
+
+
+  CustomTextField5({super.key,
+    required this.nombre,
+    required this.isPassword,
+    required this.controller,
+    required this.height,
+    required this.width,
+    required this.textFontSize,
+    required this.placeholder,
+    required this.funtion,
+    required this.inputFormater,
+    required this.keyboard,
+    
+  });
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _CustomTextField5State createState() => _CustomTextField5State();
+}
+
+class _CustomTextField5State extends State<CustomTextField5> {
+  bool _obscureText = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: widget.height,
+      width: widget.width,
+      child: TextField(
+        onChanged: (text){
+          setState(() {
+            widget.funtion();
+          });
+
+        },
+        keyboardType:widget.keyboard,
+        inputFormatters: widget.inputFormater,
+        controller: widget.controller,
+        textAlignVertical: TextAlignVertical.center,
+        obscureText: widget.isPassword ? _obscureText : false,
+        decoration: InputDecoration(
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          contentPadding: const EdgeInsets.symmetric(vertical: 5,horizontal:15),
+          hintText: widget.placeholder,
+          hintStyle: TextStyle(color: Colors.white, fontSize: widget.textFontSize),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(widget.height / 4),
+            borderSide: const BorderSide(color: Colors.white),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(widget.height / 4),
+            borderSide: const BorderSide(color: Colors.white),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(widget.height / 4),
+            borderSide: const BorderSide(color: Colors.white),
+          ),
+          labelText: widget.nombre,
+          labelStyle:TextStyle(color: Colors.white, fontSize: widget.textFontSize),
+          suffixIcon: widget.isPassword
+              ? IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _obscureText = !_obscureText;
+                    });
+                  },
+                  icon: Icon(
+                    _obscureText ? Icons.visibility : Icons.visibility_off,
+                    size: 20,
+                  ),
+                  color: Colors.white,
+                )
+              : null,
+        ),
+        style: const TextStyle(
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+}
+
 
 class CustomComboBoxbutton extends StatefulWidget {
   List<String> data;
