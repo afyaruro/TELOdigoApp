@@ -9,13 +9,14 @@ class Payer {
   String lastName;
   String email;
   String id;
-  List<Card> cards;
+  List<CreditCard> cards;
   Payer(
       {required this.firstName,
       required this.lastName,
       required this.email,
       this.id = "",
-      List<Card>? cards}):cards=cards ?? [] ;
+      List<CreditCard>? cards})
+      : cards = cards ?? [];
 
   Map<String, dynamic> toJson() => {
         "first_name": firstName,
@@ -26,7 +27,7 @@ class Payer {
 
   mapXListCard(List<dynamic> cardslist) {
     for (var card in cardslist) {
-      Card itemCard = Card.desdeDoc(card);
+      CreditCard itemCard = CreditCard.desdeDoc(card);
       cards.add(itemCard);
     }
   }
@@ -41,7 +42,7 @@ class Payer {
   }
 }
 
-class Card {
+class CreditCard {
   String numCard;
   String nameCard;
   int expireMonthCard;
@@ -52,20 +53,21 @@ class Card {
   List<String> paymentsMethodId = ["debvisa", "visa", "debmaster", "master"];
   String paymentMethod = "";
 
-  Card(
+  CreditCard(
       {required this.numCard,
       required this.nameCard,
       required this.expireMonthCard,
       required this.expireYearCard,
-      required this.cvv,
+      this.cvv = 0,
       this.idNum = "",
-      this.issuerId = 0});
+      this.issuerId = 0,});
+
   int generateRandomNumber() {
-    Random random = Random();
-    // Generar un número aleatorio de 11 dígitos
-    int randomNumber = random.nextInt(99999999999 - 10000000000) + 10000000000;
-    return randomNumber;
-  }
+  Random random = Random();
+  // Generar un número aleatorio de 10 dígitos y luego agregar un 9 al principio
+  int randomNumber = random.nextInt(100000000) + 9000000000;
+  return randomNumber.abs();
+}
 
   getPaymentMethod(int index) {
     paymentMethod = paymentsMethodId[index];
@@ -76,26 +78,23 @@ class Card {
         "payment_method_id": paymentMethod,
         "cardholder": {
           "name": nameCard,
-          "identification": {
-            "number": idNum,
-            "type": "CPF"
-          }
         },
         "expiration_month": expireMonthCard,
         "expiration_year": expireYearCard,
-        "security_code": cvv
+        "security_code": cvv.toString()
       };
 
-  factory Card.desdeDoc(Map<String, dynamic> data) {
-    return Card(
+  factory CreditCard.desdeDoc(Map<String, dynamic> data) {
+    CreditCard c =CreditCard(
       numCard: data['last_four_digits'] ?? '',
       nameCard: data['cardholder']['name'] ?? '',
       expireMonthCard: data['expiration_month'] ?? '',
       expireYearCard: data['expiration_year'] ?? '',
       idNum: data['id'] ?? '',
       issuerId: data['issuer']['id'] ?? '',
-      cvv: 0,
     );
+    c.paymentMethod = data['payment_method']['id'] ?? '';
+    return c;
   }
 }
 
@@ -111,45 +110,42 @@ class Payment {
       };
 }
 
-class MercadoTransaction{
+class MercadoTransaction {
   final UserController _userController = Get.find();
   final MercadoPago m = MercadoPago();
 
   MercadoTransaction();
 
   Future getUserMercadoPago() async {
-    var correo = _userController.usuario!.correo;
+    String correo = _userController.usuario!.correo;
     var users = await m.searchCustomerXEmail(correo);
     late var total;
-    if (users['result'] != null){
-      total =users['result']['paging']['total'];
-      if (total!=0){
+    if (users['result'] != null) {
+      total = users['result']['paging']['total'];
+      if (total != 0) {
         var user = users['result']['results'][0];
         Payer payer = Payer.desdeDoc(user);
         payer.mapXListCard(user['cards']);
         return {"payer": payer, "message": "operacion exitosa"};
-      }else{
+      } else {
         return {"payer": null, "message": "Email no registrado en MercadoPago"};
       }
-    }else{  
-      print("no encontro el email");
+    } else {
+      print("no encontro el email: $correo");
       return {"payer": null, "message": users['message']};
-    
     }
   }
 
   Future registerUserMercadoPago() async {
-      var firstName =_userController.usuario!.nombres.split(' ')[0];
-      var lastName =_userController.usuario!.apellidos.split(' ')[0];
-      var email = _userController.usuario!.correo;
-      Payer payer  =Payer(firstName: firstName, lastName: lastName, email: email);
-      var user = await m.createCustomer(payer.toJson());
-      if(user['result']!=null){
-        return {'payer': payer, 'message': "operacion exitosa"};
-      }else{
-        return {'payer': null, 'message':user['message'] };
-      }
+    var firstName = _userController.usuario!.nombres.split(' ')[0];
+    var lastName = _userController.usuario!.apellidos.split(' ')[0];
+    var email = _userController.usuario!.correo;
+    Payer payer = Payer(firstName: firstName, lastName: lastName, email: email);
+    var user = await m.createCustomer(payer.toJson());
+    if (user['result'] != null) {
+      return {'payer': payer, 'message': "operacion exitosa"};
+    } else {
+      return {'payer': null, 'message': user['message']};
+    }
   }
-
-  
 }

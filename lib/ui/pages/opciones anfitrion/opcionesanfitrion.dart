@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:telodigo/domain/models/mercadopago.dart';
 import 'package:telodigo/ui/pages/home/home.dart';
 
 import 'payment_method.dart';
 
 class OpcionesAnfitrion extends StatelessWidget {
   const OpcionesAnfitrion({super.key});
-
+  
   @override
   Widget build(BuildContext context) {
+    MercadoTransaction mt = MercadoTransaction();
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -44,11 +46,12 @@ class OpcionesAnfitrion extends StatelessWidget {
                     width: 100,
                     height: 100,
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        var payer = await mt.getUserMercadoPago();
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const PaymentMethod()));
+                                builder: (context) => PaymentMethod(payer: payer['payer'],)));
                       },
                       child: const Column(
                         mainAxisAlignment: MainAxisAlignment.center,

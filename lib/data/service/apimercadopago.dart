@@ -150,14 +150,22 @@ class MercadoPago {
           },
           body: json.encode({"token": cardToken}));
       if (response.statusCode == 200 || response.statusCode == 201) {
-        return response;
+        return {
+        "result": json.decode(response.body),
+        "message": response.reasonPhrase,
+        "error": null
+      };
       } else {
-        return {"result": null, "message": response};
+        return {
+        "result": null,
+        "message": json.decode(response.body),
+        "error": null
+      };
       }
     } catch (e) {
       return {
         "result": null,
-        "message": response.body,
+        "message": response.reasonPhrase,
         "error": e.toString()
       };
     }
@@ -306,7 +314,7 @@ class MercadoPago {
       if (response.statusCode == 200 || response.statusCode == 201) {
         return {
         "result": json.decode(response.body),
-        "message": response.body,
+        "message": response.reasonPhrase,
         "error": null
       };
       } else {
