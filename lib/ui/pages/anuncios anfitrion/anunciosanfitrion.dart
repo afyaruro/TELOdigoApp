@@ -5,7 +5,6 @@ import 'package:telodigo/data/service/peticionnegocio.dart';
 import 'package:telodigo/domain/models/hoteles.dart';
 import 'package:telodigo/ui/components/customcomponents/custombuttonborderradius.dart';
 import 'package:telodigo/ui/pages/crear%20anuncio/crearanuncioview1.dart';
-import 'package:telodigo/ui/pages/crear%20anuncio/crearanuncioview2.dart';
 
 import '../../components/customcomponents/customaditem.dart';
 
@@ -18,7 +17,7 @@ class AnunciosAnfitrion extends StatefulWidget {
 
 class _AnunciosAnfitrionState extends State<AnunciosAnfitrion> {
 
-   List<Hoteles> hoteles = [];
+  List<Hoteles> hoteles = [];
 
   @override
   void initState() {

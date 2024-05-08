@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:telodigo/ui/components/customcomponents/exitconfirmation.dart';
 import 'package:telodigo/ui/pages/anuncios%20anfitrion/anunciosanfitrion.dart';
+import 'package:telodigo/ui/pages/chat/chats_screen.dart';
 import 'package:telodigo/ui/pages/opciones%20anfitrion/opcionesanfitrion.dart';
-import 'package:telodigo/ui/pages/sign_in/sign_in.dart';
 import 'package:telodigo/ui/pages/sign_up/sign_up.dart';
 
 class HomeAnfitrion extends StatefulWidget {
@@ -22,7 +22,7 @@ class _HomeAnfitrionState extends State<HomeAnfitrion> {
 
   final Screens = [
     const AnunciosAnfitrion(),
-    sign_in(),
+    const ChatsScreen(),
     sign_up(),
     sign_up(),
     OpcionesAnfitrion(),

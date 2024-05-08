@@ -2,8 +2,6 @@
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:telodigo/data/controllers/usercontroller.dart';
 import 'package:telodigo/data/service/apimercadopago.dart';
 import 'package:telodigo/domain/models/mercadopago.dart';
 import 'package:telodigo/ui/components/customcomponents/custombuttonborderradius.dart';
@@ -19,10 +17,10 @@ class ConfigureCard extends StatefulWidget {
 }
 
 class _ConfigureCardState extends State<ConfigureCard> {
-  final UserController _userController = Get.find();
   MercadoPago m = MercadoPago();
   MercadoTransaction mt = MercadoTransaction();
   int _selectedIndex = -1;
+  bool _itemTap = false;
   final List<List<String>> items = [
     ['Debito', "assets/visa.png"],
     ['Credito', "assets/visa.png"],
@@ -53,6 +51,7 @@ class _ConfigureCardState extends State<ConfigureCard> {
   @override
   void initState() {
     super.initState();
+    print(_selectedIndex);
     numCard = TextEditingController();
     firstNameCard = TextEditingController();
     lastNameCard = TextEditingController();
@@ -60,13 +59,29 @@ class _ConfigureCardState extends State<ConfigureCard> {
     codCard = TextEditingController();
   }
 
+  bool validateSelection() {
+    print(_selectedIndex);
+    if (_selectedIndex != -1) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   bool isAnyFieldEmpty() {
     // Verifica si algún campo está vacío
-    return numCard.text.isEmpty ||
-        firstNameCard.text.isEmpty ||
-        lastNameCard.text.isEmpty ||
-        expireCard.text.isEmpty ||
-        codCard.text.isEmpty;
+    print(numCard.text.isEmpty);
+    if (validateSelection() &&
+        numCard.text.isEmpty &&
+        firstNameCard.text.isEmpty &&
+        lastNameCard.text.isEmpty &&
+        expireCard.text.isEmpty &&
+        codCard.text.isEmpty) {
+      return true;
+    } else {
+      print("Todos los campos llenos");
+      return false;
+    }
   }
 
   String removeCharacter(String inputString, String charToRemove) {
@@ -83,21 +98,21 @@ class _ConfigureCardState extends State<ConfigureCard> {
     return completedYear;
   }
 
-  test() {
-    Navigator.of(context).pop();
-    Navigator.of(context).pop();
-    // Navigator.push(
-    //                         context,
-    //                         MaterialPageRoute(
-    //                             builder: (context) => const PaymentMethod()));
+  tapOverrideItem(
+    int index,
+  ) {
+    if (index == _selectedIndex) {
+      _itemTap = true;
+    } else {
+      _itemTap = false;
+    }
   }
 
   saveCard() async {
-    //var res = await mt.getUserMercadoPago();
-    //print(res['payer'].id);
-    if (isAnyFieldEmpty()) {
+    bool validator = isAnyFieldEmpty();
+    if (validator) {
       ///---------------Alerta de caampos vacions---------///
-      print("Alerta de caampos vacions");
+      print("Alerta de campos vacios");
     } else {
       CreditCard card = CreditCard(
         numCard: removeCharacter(_numCard, " "),
@@ -106,24 +121,35 @@ class _ConfigureCardState extends State<ConfigureCard> {
         expireYearCard: completeYear(int.parse(_expireCard.split('/')[1])),
         cvv: int.parse(_codCard),
       );
+      card.getPaymentMethod(_selectedIndex);
+      print(card.toJson());
       var tokenCard = await m.getCardtoken(card.toJson());
       if (tokenCard['result'] != null) {
         var payer = await mt.getUserMercadoPago();
-        if (payer['result'] != null) {
+        if (payer['payer'] != null) {
           var result = await m.createCustomerCard(
               payer['payer'].id, tokenCard['result']['id']);
           if (result['result'] != null) {
-            Navigator.of(context).pop();
-            Navigator.of(context).pop();
+            var payer = await mt.getUserMercadoPago();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PaymentMethod(payer: payer['payer'],)));
           }
-          {
+          else{
             ///---------------Alerta de error al añadir la targeta---------///
+            print("Alerta de error al añadir la targeta");
+            print(result['message']);
           }
         } else {
           ///---------------Alerta de error al obtener el usuario---------///
+          print("Alerta de error al obtener el usuario");
+          print(payer['message']);
         }
       } else {
         ///---------------Alerta de error al generar el token card---------///
+        print("Alerta de error al generar el token card");
+        print(tokenCard['message']);
       }
     }
   }
@@ -243,7 +269,6 @@ class _ConfigureCardState extends State<ConfigureCard> {
                 funtion: () {
                   setState(() {
                     _numCard = numCard.text;
-                    print(numCard.text);
                   });
                 },
                 keyboard: TextInputType.number,
@@ -379,7 +404,14 @@ class _ConfigureCardState extends State<ConfigureCard> {
               child: GestureDetector(
                 onTap: () {
                   setState(() {
-                    _selectedIndex = index;
+                    tapOverrideItem(index);
+                    if (_itemTap) {
+                      _selectedIndex = -1;
+                      print("tap override index $index");
+                    } else {
+                      _selectedIndex = index;
+                      print("tap on index $index");
+                    }
                   });
                 },
                 child: Padding(

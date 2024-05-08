@@ -346,9 +346,17 @@ class MercadoPago {
           },
           body: json.encode(requestBody));
       if (response.statusCode == 200 || response.statusCode == 201) {
-        return response;
+        return {
+        "result": json.decode(response.body),
+        "message": response.reasonPhrase,
+        "error": null
+      };
       } else {
-        return {"result": null, "message": response.body};
+        return {
+        "result": null,
+        "message": response.body,
+        "error": null
+      };
       }
     } catch (e) {
       return {

@@ -1,7 +1,7 @@
 // ignore_for_file: must_be_immutable
 
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class CreditCardUI extends StatelessWidget {
   String num;
@@ -15,8 +15,8 @@ class CreditCardUI extends StatelessWidget {
     this.month = 0,
     this.year = 0,
     this.method = "",
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -76,9 +76,12 @@ class CreditCardUI extends StatelessWidget {
                 child:
                     Image.asset("assets/sim-card-3.png", width: 50, height: 50,),
               ),
-              Align(
-                alignment: const Alignment(.9, -1),
-                child: Image.asset(imageIcon(), width: 60, height: 60,color: Color(0xffffffff),),
+              Visibility(
+                visible: method.isEmpty? false:true,
+                child: Align(
+                  alignment: const Alignment(.9, -1),
+                  child: Image.asset(imageIcon(), width: 60, height: 60,color: Color(0xffffffff),),
+                ),
               ),
               Visibility(
                 visible: masterText(),
