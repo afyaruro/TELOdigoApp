@@ -2,7 +2,7 @@ import 'package:telodigo/domain/models/habitaciones.dart';
 import 'package:telodigo/domain/models/images.dart';
 
 class Hoteles {
-
+  final int id;
   final String nombre;
   final String tipoEspacio;
   final List<Habitaciones> habitaciones;
@@ -16,8 +16,11 @@ class Hoteles {
   final List<Imagens> fotos;
   final String user;
   final double saldo;
+  final double calificacion;
 
-  Hoteles( {
+  Hoteles({
+    required this.id,
+    required this.calificacion,
     required this.saldo,
     required this.user,
     required this.fotos,
@@ -29,25 +32,43 @@ class Hoteles {
     required this.habitaciones,
     required this.latitud,
     required this.longitud,
-    required this.horaAbrir, required this.horaCerrar, 
+    required this.horaAbrir,
+    required this.horaCerrar,
   });
 
   factory Hoteles.desdeDoc(Map<String, dynamic> data) {
+    final List<dynamic> habitacionesJson =
+        (data["habitaciones"] as List).cast<dynamic>();
+    final List<Habitaciones> habitaciones =
+        habitacionesJson.map((json) => Habitaciones.fromMap(json)).toList();
+
+    final List<String> servicios = (data["servicios"] as List).cast<String>();
+
+    final List<String> metodosPago =
+        (data["metodosPago"] as List).cast<String>();
+
+    final List<dynamic> fotosJson = (data["fotos"] as List).cast<dynamic>();
+    final List<Imagens> fotos =
+        fotosJson.map((json) => Imagens.fromJson(json)).toList();
+
+    final int id = data["id"];
+
     return Hoteles(
+      id: id,
       nombre: data['nombre'] ?? '',
       tipoEspacio: data['tipoEspacio'] ?? '',
-      habitaciones: data['habitaciones'] ?? '',
+      habitaciones: habitaciones,
       longitud: data['longitud'] ?? '',
       latitud: data['latitud'] ?? '',
       direccion: data['direccion'] ?? '',
       horaAbrir: data['horaAbrir'] ?? '',
       horaCerrar: data['horaCerrar'] ?? '',
-      metodosPago: data['metodosPago'] ?? '',
-      servicios: data['servicios'] ?? '',
-      fotos: data['fotos'] ?? '',
+      metodosPago: metodosPago,
+      servicios: servicios,
+      fotos: fotos,
       user: data['user'] ?? '',
       saldo: data['saldo'] ?? '',
-
+      calificacion: data['calificacion'] ?? '',
     );
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:telodigo/data/service/peticionnegocio.dart';
 import 'package:telodigo/ui/components/customcomponents/custombackgroundlogin.dart';
 import 'package:telodigo/ui/components/customcomponents/custombuttonborderradius.dart';
 import 'package:telodigo/ui/components/customcomponents/customoption.dart';
@@ -15,7 +16,6 @@ class sign_in extends StatefulWidget {
 }
 
 class _sign_inState extends State<sign_in> {
-  
   final TextEditingController controller_userName =
       TextEditingController(text: "");
   final TextEditingController controller_password =
@@ -71,7 +71,7 @@ class _sign_inState extends State<sign_in> {
                   },
                   child: const Padding(
                     padding: EdgeInsets.all(10),
-                    child:  Text(
+                    child: Text(
                       "¿Olvidaste tu contraseña?",
                       style: TextStyle(color: Colors.white),
                     ),
@@ -81,13 +81,17 @@ class _sign_inState extends State<sign_in> {
             ),
             CustomButtonsRadius(const Color(0xffffffff),
                 const Color(0xff3B2151), "¡COMENZAR!", false, () async {
-                  var resp = await login(user: controller_userName.text, password: controller_password.text, context: context);
+              var resp = await login(
+                  user: controller_userName.text,
+                  password: controller_password.text,
+                  context: context);
 
-                  if(resp == true || resp == false){
-                    FocusScope.of(context).requestFocus(FocusNode());
-                  }
-
-                }),
+              PeticionesNegocio.listNegocios();
+              // PeticionesNegocio.listFavoritos();
+              if (resp == true || resp == false) {
+                FocusScope.of(context).requestFocus(FocusNode());
+              }
+            }),
             const SizedBox(
               height: 50,
             ),

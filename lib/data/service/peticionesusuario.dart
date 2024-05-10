@@ -157,7 +157,11 @@ class PeticionesUsuario {
       return false; // Ocurrió un error, asumimos que el correo no es único
     }
   }
+
+
 }
+
+
 
 
   

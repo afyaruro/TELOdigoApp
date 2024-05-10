@@ -9,7 +9,7 @@ class ExitConfirmationDialog extends StatelessWidget {
       actions: <Widget>[
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop(false); // Cancelar la acción
+            Navigator.of(context).pop(false);
           },
           child: Text('Cancelar'),
         ),

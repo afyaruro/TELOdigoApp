@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:get/get.dart';
+import 'package:telodigo/domain/models/favoritos.dart';
 import 'package:telodigo/domain/models/habitaciones.dart';
+import 'package:telodigo/domain/models/hoteles.dart';
 import 'package:telodigo/domain/models/images.dart';
 // import 'package:telodigo/domain/models/hoteles.dart';
 
@@ -33,15 +36,30 @@ class NegocioController extends GetxController {
   final Rxn<List<Habitaciones>> _habitaciones = Rxn<List<Habitaciones>>();
   List<Habitaciones>? get habitaciones => _habitaciones.value;
 
+  final Rxn<List<File>> _fotosFile = Rxn<List<File>>();
+  List<File>? get fotosFile => _fotosFile.value;
+
   final Rxn<List<String>> _metodosPago = Rxn<List<String>>();
   List<String>? get metodosPago => _metodosPago.value;
 
-  final Rxn<List<Imagens>> _images = Rxn<List<Imagens>>();
+  final Rxn<List<Imagens>> _images = Rxn<List<Imagens>>([]);
   List<Imagens>? get images => _images.value;
 
    final Rxn<List<String>> _servicios = Rxn<List<String>>();
   List<String>? get servicios => _servicios.value;
   
+
+  final Rxn<List<Hoteles>> _hoteles = Rxn<List<Hoteles>>([]);
+  List<Hoteles>? get hoteles=> _hoteles.value;
+
+  final Rxn<List<Hoteles>> _hoteles2 = Rxn<List<Hoteles>>([]);
+  List<Hoteles>? get hoteles2=> _hoteles2.value;
+
+  final Rxn<List<Favorito>> _favoritos = Rxn<List<Favorito>>([]);
+  List<Favorito>? get favoritos => _favoritos.value;
+
+  final Rxn<List<Hoteles>> _hotelesfavoritos = Rxn<List<Hoteles>>([]);
+  List<Hoteles>? get hotelesfavoritos => _hotelesfavoritos.value;
 
   Future<void> IngresarTipoEspacio(String espacio) async {
     _tipoEspacio.value = espacio;
@@ -65,18 +83,56 @@ class NegocioController extends GetxController {
 
 
 
-  Future<void> NewImagen(List<Imagens> images) async {
+  Future<void> RestartImagenes() async {
     _images.value = [];
-    _images.value = images;
+  }
+
+    Future<void> NewImagenF(List<File> images) async {
+    _fotosFile.value = [];
+    _fotosFile.value = images;
   }
 
   Future<void> deleteImagen(Imagens image) async {
     _images.value!.remove(image);
   }
 
+  Future<void> addImagen(Imagens image) async {
+    _images.value!.add(image);
+  }
+
+Future<void> deleteImagenF(File image) async {
+    _fotosFile.value!.remove(image);
+  }
   Future<void> NewServicios(List<String> servicios) async {
     _servicios.value = [];
     _servicios.value = servicios;
+  }
+
+  Future<void> AddHotel(Hoteles hotel) async{
+    _hoteles.value!.add(hotel);
+  }
+
+   Future<void> removeFavorito(Favorito favorito) async {
+    _favoritos.value!.remove(favorito);
+  }
+
+ Future<void> ListHotel(List<Hoteles> hoteles) async {
+    _hoteles.value = [];
+    _hoteles.value = hoteles;
+  }
+
+ Future<void> AddFavorito(Favorito favorito) async{
+    _favoritos.value!.add(favorito);
+  }
+
+  Future<void> ListFavoritos(List<Favorito> favoritos) async {
+    _favoritos.value = [];
+    _favoritos.value = favoritos;
+  }
+
+    Future<void> ListHotel2(List<Hoteles> hoteles) async {
+    _hoteles2.value = [];
+    _hoteles2.value = hoteles;
   }
 
   Future<void> NewDireccion(String direccion) async {
@@ -88,5 +144,15 @@ class NegocioController extends GetxController {
   
     _latitud.value = latitud;
     _longitud.value = longitud;
+  }
+
+  Future<void> ListHabitaciones(List<Habitaciones> habitaciones) async { 
+    _habitaciones.value = habitaciones;
+  }
+
+
+    Future<void> HotelesFavorito(List<Hoteles> hoteles) async{
+    _hotelesfavoritos.value = [];
+    _hotelesfavoritos.value = hoteles;
   }
 }

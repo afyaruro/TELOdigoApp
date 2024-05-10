@@ -59,7 +59,7 @@ class _CustomImageHotelState extends State<CustomImageHotel> {
       Imagens imagen =
           Imagens(image: await imageToBase64(await resizeImage(_image!)));
       images.add(imagen);
-      controllerhotel.NewImagen(images);
+      // controllerhotel.NewImagen(images);
       Navigator.pop(context);
     } else {
       Navigator.pop(context);

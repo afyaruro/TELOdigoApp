@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:telodigo/data/service/peticionnegocio.dart';
 import 'package:telodigo/ui/components/customcomponents/custombackgroundlogin.dart';
 import 'package:telodigo/ui/components/customcomponents/custombuttonborderradius.dart';
 import 'package:telodigo/ui/components/customcomponents/exitconfirmation.dart';
@@ -15,19 +16,17 @@ class CreateCuenta extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-          // Mostrar la alerta y esperar la respuesta del usuario
-          bool exits = await showDialog(
-            context: context,
-            builder: (context) => ExitConfirmationDialog(),
-          );
-          if (exits) {
-            exit(0);
-          }
-          // Devolver false para evitar que la acción de retroceso continúe
-          return false;
-
-          
-        },
+        // Mostrar la alerta y esperar la respuesta del usuario
+        bool exits = await showDialog(
+          context: context,
+          builder: (context) => ExitConfirmationDialog(),
+        );
+        if (exits) {
+          exit(0);
+        }
+        // Devolver false para evitar que la acción de retroceso continúe
+        return false;
+      },
       child: Scaffold(
         body: CustomBackgroundLogin(
             child: SingleChildScrollView(
@@ -52,15 +51,18 @@ class CreateCuenta extends StatelessWidget {
                 )),
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-              CustomButtonsRadius(Colors.white, Colors.black, "Continuar", false,
-                  () {
+              CustomButtonsRadius(
+                  Colors.white, Colors.black, "Continuar", false, () {
+                PeticionesNegocio.listNegocios();
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => HomeUser()),  //debe mandar ya adentro de la app
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          HomeUser()), //debe mandar ya adentro de la app
                   (Route<dynamic> route) => false,
                 );
-              })
-              ,SizedBox(height: MediaQuery.of(context).size.height * 0.2),
+              }),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.2),
             ],
           ),
         )),

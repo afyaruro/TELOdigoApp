@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:telodigo/data/controllers/negociocontroller.dart';
+// import 'dart:convert';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+// import 'package:image/image.dart' as img;
+import 'package:telodigo/domain/models/images.dart';
 import 'package:telodigo/ui/pages/crear%20anuncio/crearanuncioview9.dart';
+import 'package:telodigo/ui/pages/prueba/prueba.dart'; // Importante: image/image.dart
 
 class CrearAnuncioView8 extends StatefulWidget {
   const CrearAnuncioView8({super.key});
@@ -11,8 +17,13 @@ class CrearAnuncioView8 extends StatefulWidget {
 }
 
 class _CrearAnuncioView8State extends State<CrearAnuncioView8> {
+  // TextEditingController controller = TextEditingController(text: "");
+  // TextEditingController cant = TextEditingController(text: "0");
+  static final NegocioController controllerhotel = Get.find();
 
+  // File? _image;
   bool resp = false;
+  // List<Imagens> images = [];
   List<File> fotosFile = [];
 
   var _image;
@@ -28,15 +39,74 @@ class _CrearAnuncioView8State extends State<CrearAnuncioView8> {
       _image = (image != null) ? File(image.path) : null;
       if (image != null) {
         fotosFile.add(_image);
+        // controllerhotel.NewImagenF(fotosFile);
       }
     });
   }
 
- 
+  // Future<void> _pickImage() async {
+  //   final picker = ImagePicker();
+
+  //   showDialog(
+  //     context: context,
+  //     barrierDismissible: false,
+  //     builder: (BuildContext context) {
+  //       return const AlertDialog(
+  //         content: Column(
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: [
+  //             SizedBox(height: 10),
+  //             Text("Cargando tu foto..."),
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //   );
+
+  //   final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+
+  //   setState(() {
+  //     if (pickedImage != null) {
+  //       _image = File(pickedImage.path);
+  //       resp = true;
+  //     } else {
+  //       print('No se seleccionó ninguna imagen.');
+  //       resp = false;
+  //     }
+  //   });
+
+  //   if (resp == true) {
+  //     Imagens imagen =
+  //         Imagens(image: await imageToBase64(await resizeImage(_image!)));
+  //     images.add(imagen);
+  //     controllerhotel.NewImagen(images);
+  //     Navigator.pop(context);
+  //   } else {
+  //     Navigator.pop(context);
+  //   }
+
+  //   setState(() {});
+  // }
+
+  // Future<String> imageToBase64(File imageFile) async {
+  //   List<int> imageBytes = await imageFile.readAsBytes();
+  //   String base64Image = base64Encode(imageBytes);
+  //   return base64Image;
+  // }
+
+  // Future<File> resizeImage(File imageFile) async {
+  //   final bytes = await imageFile.readAsBytes();
+  //   final image = img.decodeImage(bytes);
+  //   final resizedImage = img.copyResize(image!, width: 400);
+  //   final resizedFile = File(imageFile.path)
+  //     ..writeAsBytesSync(img.encodeJpg(resizedImage));
+  //   return resizedFile;
+  // }
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return MaterialApp(
+      home: Scaffold(
         appBar: AppBar(
           backgroundColor: Color.fromARGB(255, 21, 1, 37),
           foregroundColor: Colors.white,
@@ -91,9 +161,8 @@ class _CrearAnuncioView8State extends State<CrearAnuncioView8> {
                     padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
                     child: GestureDetector(
                       onTap: () {
-                        // _camGaleria(false);
-                        _opcioncamara(context);
-
+                        _camGaleria(false);
+                        // _opcioncamara(context);
                         print("Hola");
                       },
                       child: Container(
@@ -209,13 +278,30 @@ class _CrearAnuncioView8State extends State<CrearAnuncioView8> {
                   padding: EdgeInsets.symmetric(vertical: 15),
                   backgroundColor: Color(0xFF1098E7)),
               onPressed: fotosFile.length > 2
-                  ? ()  {
+                  ? () async {
+                      var cant = 0;
+                      var url = "";
+                      Imagens img;
+                      for (var imagen in fotosFile) {
+                        url = await PeticionesMesa.cargarfoto(
+                            imagen, "prueba6${cant}");
+
+                         img = Imagens(image: url);  
+
+                         print(img.image);
+                        
+                        controllerhotel.addImagen(img);
 
 
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CrearAnuncioView9(fotosFile: fotosFile,)));
+                        cant = cant + 1;
+                      }
+
+                      print(controllerhotel.images!.length);
+
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => const CrearAnuncioView9()));
                     }
                   : null,
               child: Text(
@@ -223,7 +309,7 @@ class _CrearAnuncioView8State extends State<CrearAnuncioView8> {
                 style: TextStyle(color: Colors.white),
               )),
         ),
-     
+      ),
     );
   }
 
@@ -239,8 +325,8 @@ class _CrearAnuncioView8State extends State<CrearAnuncioView8> {
                     title: const Text('Imagen de Galeria'),
                     onTap: () {
                       _camGaleria(false);
-                      // Get.back();
-                      Navigator.of(context).pop();
+                      Get.back();
+                      // Navigator.of(context).pop();
                     }),
                 ListTile(
                   leading: const Icon(Icons.photo_camera),

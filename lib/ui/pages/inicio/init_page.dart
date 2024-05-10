@@ -4,6 +4,8 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:telodigo/data/controllers/mapcontroller.dart';
 import 'package:telodigo/ui/components/customcomponents/custombackgroundlogin.dart';
 import 'package:telodigo/ui/components/customcomponents/custombuttonborderradius.dart';
 import 'package:telodigo/ui/components/customcomponents/exitconfirmation.dart';
@@ -18,6 +20,7 @@ class Init_Page extends StatefulWidget {
 }
 
 class _Init_PageState extends State<Init_Page> {
+   static final MapController controller = Get.find();
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -55,12 +58,14 @@ class _Init_PageState extends State<Init_Page> {
                 height: MediaQuery.of(context).size.height * 0.05,
               ),
               CustomButtonsRadius(Colors.white,
-                  const Color(0xff3B2151), "CREAR CUENTA", false, () {
+                  const Color(0xff3B2151), "CREAR CUENTA", false, () async {
+                    await controller.getCurrentLocation();
                 Navigator.push(
                     context, CupertinoPageRoute(builder: (context) => const sign_up()));
               }),
               CustomButtonsRadius(const Color(0xff3B2151),
-                  const Color(0xffffffff), "INICIAR SESION", true, () {
+                  const Color(0xffffffff), "INICIAR SESION", true, () async {
+                   await  controller.getCurrentLocation();
                 Navigator.push(
                     context, CupertinoPageRoute(builder: (context) => const sign_in()));
               }),

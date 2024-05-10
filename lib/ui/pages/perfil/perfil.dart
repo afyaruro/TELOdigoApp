@@ -17,8 +17,8 @@ class Perfil extends StatefulWidget {
 
 class _PerfilState extends State<Perfil> {
   bool modo_oscuro = false;
-  Color background = Colors.white;
-  Color color_segundario = Color.fromARGB(190, 0, 0, 0);
+  Color background = Color.fromARGB(255, 29, 7, 48);
+  Color color_segundario = Color.fromARGB(255, 255, 255, 255);
   final UserController controlleruser = Get.find();
 
   @override
@@ -73,25 +73,7 @@ class _PerfilState extends State<Perfil> {
               color: color_segundario,
               text: "Otras Opciones",
             ),
-            CustomOptionPerfil(
-              color: color_segundario,
-              icon: Icons.bedtime,
-              text: "Cambiar a Modo Oscuro",
-              action: () {
-                setState(() {
-                  if (modo_oscuro == false) {
-                    modo_oscuro = true;
-                    background = Color(0xff3b2151);
-                    color_segundario = Colors.white;
-                  } else {
-                    modo_oscuro = false;
-                    background = Colors.white;
-                    color_segundario = Color(0xff333333);
-                  }
-                  print(modo_oscuro);
-                });
-              },
-            ),
+            
             CustomOptionPerfil(
               color: color_segundario,
               icon: Icons.question_answer_rounded,

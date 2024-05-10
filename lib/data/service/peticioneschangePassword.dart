@@ -21,7 +21,7 @@ class PeticionesChangePassword {
 
     try {
       final sendReport = await send(message, smtpServer);
-      print('Mensaje enviado: ');
+      print('Mensaje enviado: $sendReport');
     } catch (e) {
       print('Error al enviar el mensaje: $e');
     }
