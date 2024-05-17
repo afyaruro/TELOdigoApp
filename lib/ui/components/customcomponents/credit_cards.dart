@@ -47,13 +47,13 @@ class CreditCardUI extends StatelessWidget {
         borderRadius: BorderRadius.circular(15.0),
       ),
       elevation: 12,
-      shadowColor: Color.fromARGB(255, 190, 160, 209),
+      
       child: Container(
         width: MediaQuery.of(context).size.width * .85,
         height: 220,
         decoration: BoxDecoration(
           border:
-              Border.all(color: Color.fromARGB(255, 190, 160, 209), width: 1),
+              Border.all(color: Color.fromARGB(255, 255, 255, 255), width: 1),
           gradient: const LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,

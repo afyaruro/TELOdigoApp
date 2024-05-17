@@ -28,7 +28,7 @@ class _Datos_GeneralesState extends State<Datos_Generales> {
   final TextEditingController controller_img =
       TextEditingController(text: controlleruser.usuario!.foto);
 
-  bool modo_oscuro = false;
+  bool modo_oscuro = true;
 
   @override
   Widget build(BuildContext context) {
@@ -45,10 +45,13 @@ class _Datos_GeneralesState extends State<Datos_Generales> {
         ),
         centerTitle: true,
       ),
+      backgroundColor: const Color.fromARGB(255, 29, 7, 48),
+
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Colors.white,
+        color: Color.fromARGB(255, 29, 7, 48),
+
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -76,7 +79,7 @@ class _Datos_GeneralesState extends State<Datos_Generales> {
                   ? CustomTextField1(
                       nombre: "Apellidos",
                       isPassword: false,
-                      controller: controller_nombres,
+                      controller: controller_apellidos,
                     )
                   : CustomTextField3("Apellidos", controller_apellidos),
               Container(

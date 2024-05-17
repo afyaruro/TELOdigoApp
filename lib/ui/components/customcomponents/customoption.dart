@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:telodigo/ui/pages/sign_in/sign_in.dart';
 import 'package:telodigo/ui/pages/sign_up/sign_up.dart';
@@ -22,11 +21,10 @@ Widget CustomOption(bool isLogin, context) {
                 child: InkWell(
                   borderRadius: BorderRadius.circular(12),
                   splashColor: Color.fromARGB(255, 184, 184, 184),
-                  onTap: () async {
-                    await Future.delayed(Duration(milliseconds: 100), () {
+                  onTap: () {
                       Navigator.push(context,
-                          CupertinoPageRoute(builder: (context) => sign_in()));
-                    });
+                          MaterialPageRoute(builder: (context) => sign_in()));
+                   
                   },
                   child: Center(
                     child: Text(
@@ -53,11 +51,10 @@ Widget CustomOption(bool isLogin, context) {
                 child: InkWell(
                   borderRadius: BorderRadius.circular(12),
                   splashColor: Color.fromARGB(255, 0, 0, 0),
-                  onTap: () async {
-                    await Future.delayed(Duration(milliseconds: 100), () {
+                  onTap: (){
                       Navigator.push(context,
-                          CupertinoPageRoute(builder: (context) => sign_up()));
-                    });
+                          MaterialPageRoute(builder: (context) => sign_up()));
+                  
                   },
                   child: Center(
                     child: Text(
@@ -97,11 +94,10 @@ Widget CustomOption(bool isLogin, context) {
                 child: InkWell(
                   borderRadius: BorderRadius.circular(12),
                   splashColor: Color.fromARGB(255, 0, 0, 0),
-                  onTap: () async {
-                    await Future.delayed(Duration(milliseconds: 200), () {
+                  onTap: ()  {
                       Navigator.push(context,
-                          CupertinoPageRoute(builder: (context) => sign_in()));
-                    });
+                          MaterialPageRoute(builder: (context) => sign_in()));
+                   
                   },
                   child: Center(
                     child: Text(
@@ -128,11 +124,10 @@ Widget CustomOption(bool isLogin, context) {
                 child: InkWell(
                   borderRadius: BorderRadius.circular(12),
                   splashColor: Color.fromARGB(255, 184, 184, 184),
-                  onTap: () async {
-                    await Future.delayed(Duration(milliseconds: 200), () {
+                  onTap: () {
                       Navigator.push(context,
-                          CupertinoPageRoute(builder: (context) => sign_up()));
-                    });
+                          MaterialPageRoute(builder: (context) => sign_up()));
+                  
                   },
                   child: Center(
                     child: Text(

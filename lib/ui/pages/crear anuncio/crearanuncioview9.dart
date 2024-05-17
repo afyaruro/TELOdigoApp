@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:telodigo/data/controllers/negociocontroller.dart';
@@ -7,7 +10,8 @@ import 'package:telodigo/ui/pages/crear%20anuncio/anunciocreado.dart';
 import 'package:telodigo/ui/pages/crear%20anuncio/erroranunciocreate.dart';
 
 class CrearAnuncioView9 extends StatefulWidget {
-  const CrearAnuncioView9({super.key});
+  final List<File> fotosFile;
+  const CrearAnuncioView9({super.key, required this.fotosFile});
 
   @override
   State<CrearAnuncioView9> createState() => _CrearAnuncioView9State();
@@ -176,6 +180,7 @@ class _CrearAnuncioView9State extends State<CrearAnuncioView9> {
                 padding: EdgeInsets.symmetric(vertical: 15),
                 backgroundColor: Color(0xFF1098E7)),
             onPressed: () async {
+             
               if (btnWifi) {
                 servicios.add("WIFI");
               }
@@ -200,11 +205,16 @@ class _CrearAnuncioView9State extends State<CrearAnuncioView9> {
                 servicios.add("Netflix");
               }
 
-              controllerhotel.NewServicios(servicios);
 
-              servicios = [];
+              
 
+              final CollectionReference collection =
+                  FirebaseFirestore.instance.collection("Negocios");
+              var hotelCount = (await collection.get()).size;
+
+              
               var negocio = <String, dynamic>{
+                "id": hotelCount + 1,
                 "nombre": controllerhotel.nombreNegocio,
                 "tipoEspacio": controllerhotel.tipoEspacio,
                 "habitaciones": controllerhotel.habitaciones
@@ -216,29 +226,28 @@ class _CrearAnuncioView9State extends State<CrearAnuncioView9> {
                 "horaAbrir": controllerhotel.horaAbrir,
                 "horaCerrar": controllerhotel.horaCerrar,
                 "metodosPago": controllerhotel.metodosPago,
-                "servicios": controllerhotel.servicios,
-                "fotos": controllerhotel.images
-                    ?.map((foto) => foto.toJson())
-                    .toList(),
+                "servicios": servicios,
+                "fotos": "",
                 "user": controlleruser.usuario!.userName,
                 "saldo": 0.0,
+                "calificacion": 3.0,
               };
 
-              var resp = await PeticionesNegocio.crearNegocio(negocio, context);
+              var resp = await PeticionesNegocio.crearNegocio(negocio, context, widget.fotosFile);
 
-              if(resp == "create"){
+              if (resp == "create") {
+                servicios = [];
+                controllerhotel.RestartImagenes();
                 Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const AnuncioCreado()));
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AnuncioCreado()));
               } else {
                 Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const ErrorAnuncioCreate()));
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ErrorAnuncioCreate(servicios: servicios,)));
               }
-
-              
             },
             child: Text(
               "Siguiente",

@@ -25,8 +25,6 @@ class ChatInputField extends StatelessWidget {
       child: SafeArea(
         child: Row(
           children: [
-            const Icon(Icons.mic, color: Color(0xff3B2151)),
-            const SizedBox(width: 20.0),
             Expanded(
               child: Container(
                 padding: const EdgeInsets.symmetric(
@@ -38,44 +36,37 @@ class ChatInputField extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    Icon(
-                      Icons.sentiment_satisfied_alt_outlined,
-                      color: Theme.of(context)
-                          .textTheme
-                          .bodyLarge!
-                          .color!
-                          .withOpacity(0.64),
-                    ),
                     const SizedBox(width: 20.0 / 4),
                     const Expanded(
                       child: TextField(
                         decoration: InputDecoration(
-                          hintText: "Type message",
+                          hintText: "Mensaje",
                           border: InputBorder.none,
                         ),
                       ),
-                    ),
-                    Icon(
-                      Icons.attach_file,
-                      color: Theme.of(context)
-                          .textTheme
-                          .bodyLarge!
-                          .color!
-                          .withOpacity(0.64),
-                    ),
-                    const SizedBox(width: 20.0 / 4),
-                    Icon(
-                      Icons.camera_alt_outlined,
-                      color: Theme.of(context)
-                          .textTheme
-                          .bodyLarge!
-                          .color!
-                          .withOpacity(0.64),
                     ),
                   ],
                 ),
               ),
             ),
+            SizedBox(
+              width: 20,
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 47, 11, 77),
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                onPressed: () {
+                  //aqui se envia el mensaje
+                },
+                icon: Icon(
+                  Icons.send,
+                  color: Color.fromARGB(255, 255, 255, 255),
+                ),
+              ),
+            )
           ],
         ),
       ),

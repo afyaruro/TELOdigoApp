@@ -9,7 +9,7 @@ class AnuncioCreado extends StatelessWidget {
   const AnuncioCreado({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     return WillPopScope(
       onWillPop: () async {
         // Mostrar la alerta y esperar la respuesta del usuario

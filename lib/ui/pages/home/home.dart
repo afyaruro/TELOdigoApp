@@ -5,13 +5,15 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:telodigo/ui/components/customcomponents/exitconfirmation.dart';
+import 'package:telodigo/ui/pages/Reservar/listreservauser.dart';
+import 'package:telodigo/ui/pages/favoritos/listfavoritos.dart';
+import 'package:telodigo/ui/pages/mapa%20principal/mapahotels.dart';
+import 'package:telodigo/ui/pages/negocios%20lista/principal.dart';
 import 'package:telodigo/ui/pages/perfil/perfil.dart';
-import 'package:telodigo/ui/pages/sign_in/sign_in.dart';
-import 'package:telodigo/ui/pages/sign_up/sign_up.dart';
-import 'package:telodigo/ui/pages/terminos&condiciones/terminos&condiciones.dart';
 
 class HomeUser extends StatefulWidget {
-  const HomeUser({super.key});
+  final int currentIndex;
+  const HomeUser({super.key,  this.currentIndex = 0, });
 
   @override
   State<HomeUser> createState() => _HomeUserState();
@@ -21,12 +23,21 @@ class _HomeUserState extends State<HomeUser> {
    int _currentIndex = 0;
 
   final Screens = [
-    terminos_condiciones(),
-    sign_in(),
-    sign_up(),
-    terminos_condiciones(),
+    Principal(),
+    MapaHotels(),
+    ListReservasUser(),
+    Favoritos(),
     Perfil(),
   ];
+
+    @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.currentIndex;
+    setState(() {
+      
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

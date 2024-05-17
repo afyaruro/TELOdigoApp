@@ -17,15 +17,15 @@ class _ChatsScreenState extends State<ChatsScreen> {
     return Scaffold(
       appBar: buildAppBar(),
       body: const Body(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: Color(0xff3B2151),
-        child: const Icon(
-          Icons.person_add_alt_1,
-          color: Colors.white,
-        ),
-      ),
-      bottomNavigationBar: buildBottomNavigationBar(),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {},
+      //   backgroundColor: Color(0xff3B2151),
+      //   child: const Icon(
+      //     Icons.person_add_alt_1,
+      //     color: Colors.white,
+      //   ),
+      // ),
+      // bottomNavigationBar: buildBottomNavigationBar(),
     );
   }
 

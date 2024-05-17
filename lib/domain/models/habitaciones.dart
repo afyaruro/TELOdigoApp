@@ -16,7 +16,7 @@ class Habitaciones {
       };
 
   factory Habitaciones.fromMap(Map<String, dynamic> map) {
-    return Habitaciones(
+    return Habitaciones( 
       nombre: map['nombre'],
       cantidad: map['cantidad'],
       precios: (map['precios'] as List<dynamic>)

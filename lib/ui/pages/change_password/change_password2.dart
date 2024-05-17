@@ -25,6 +25,8 @@ class _changePassword2State extends State<changePassword2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 0, 0, 0),
+
         appBar: AppBar(
           backgroundColor: Color(0xff3B2151),
           iconTheme: IconThemeData(color: Colors.white),
@@ -65,8 +67,8 @@ class _changePassword2State extends State<changePassword2> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.05,
                 ),
-                CustomButtonsRadius(const Color(0xffffffff),
-                    const Color(0xff3B2151), "¡CONFIRMAR!", true, () async {
+                CustomButtonsRadiusx(const Color(0xffffffff),
+                    const Color(0xff3B2151), "¡CONFIRMAR!",  () async {
                   await respuestaChangePassword(
                       codigo: controller_codigo.text,
                       pass: controller_pass.text,

@@ -17,6 +17,7 @@ class OpcionesAnfitrion extends StatelessWidget {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
+          color: Color.fromARGB(255, 29, 7, 48),
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: Column(
@@ -80,7 +81,7 @@ class OpcionesAnfitrion extends StatelessWidget {
                         children: [
                           Icon(Icons.credit_card),
                           Text(
-                            "Metodo de Pago",
+                            "Solicitar Pago",
                             textAlign: TextAlign.center,
                             style: TextStyle(fontSize: 12),
                           )

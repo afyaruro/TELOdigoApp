@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:telodigo/domain/models/ChatMessage.dart';
 import 'audio_message.dart';
@@ -34,13 +33,13 @@ class Message extends StatelessWidget {
         mainAxisAlignment:
             message.isSender ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: [
-          if (!message.isSender) ...[
-            const CircleAvatar(
-              radius: 12,
-              backgroundImage: AssetImage("assets/user_2.png"),
-            ),
-            const SizedBox(width: 20.0 / 2),
-          ],
+          // if (!message.isSender) ...[
+          //   const CircleAvatar(
+          //     radius: 12,
+          //     backgroundImage: AssetImage("assets/user_2.png"),
+          //   ),
+          //   const SizedBox(width: 20.0 / 2),
+          // ],
           messageContaint(message),
           if (message.isSender) MessageStatusDot(status: message.messageStatus)
         ],

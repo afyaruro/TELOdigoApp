@@ -1,5 +1,4 @@
 // ignore_for_file: deprecated_member_use, use_build_context_synchronously
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:telodigo/data/service/apimercadopago.dart';
@@ -131,12 +130,13 @@ class _ConfigureCardState extends State<ConfigureCard> {
               payer['payer'].id, tokenCard['result']['id']);
           if (result['result'] != null) {
             var payer = await mt.getUserMercadoPago();
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => PaymentMethod(payer: payer['payer'],)));
-          }
-          else{
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => PaymentMethod(
+                          payer: payer['payer'],
+                        )));
+          } else {
             ///---------------Alerta de error al añadir la targeta---------///
             print("Alerta de error al añadir la targeta");
             print(result['message']);
@@ -162,224 +162,200 @@ class _ConfigureCardState extends State<ConfigureCard> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        return false;
-      },
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: const Color(0xff3B2151),
-        body: Stack(
-          alignment: const Alignment(0, 0),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Datos de la tarjeta",
+          style: TextStyle(
+              color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
+        ),
+        foregroundColor: Colors.white,
+        backgroundColor: Color.fromARGB(255, 29, 7, 48),
+      ),
+      backgroundColor: const Color.fromARGB(255, 29, 7, 48),
+      body: SingleChildScrollView(
+        child: Column(
           children: [
-            Align(
-              alignment: const Alignment(-1, -.9),
-              child: IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-                  },
-                  icon: const Icon(
-                    Icons.arrow_back_rounded,
-                    color: Colors.white,
-                    size: 30,
-                  )),
+            SizedBox(
+              height: 50,
             ),
-            const Align(
-              alignment: Alignment(-.8, -.8),
-              child: Text(
-                "Datos de la tarjeta",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-            Align(
-              alignment: const Alignment(0, -.6),
-              child: Container(
-                height: 170,
-                width: MediaQuery.of(context).size.width * .65,
-                decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(20)),
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Stack(
-                    alignment: const Alignment(0, 0),
-                    children: [
-                      Align(
-                        alignment: const Alignment(-1, -1),
-                        child: Image.asset("assets/sim-card.png",
-                            width: 30, height: 30),
+            Container(
+              height: 170,
+              width: MediaQuery.of(context).size.width * .65,
+              decoration: BoxDecoration(
+                  color: Colors.black, borderRadius: BorderRadius.circular(20)),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Stack(
+                  alignment: const Alignment(0, 0),
+                  children: [
+                    Align(
+                      alignment: const Alignment(-1, -1),
+                      child: Image.asset("assets/sim-card.png",
+                          width: 30, height: 30),
+                    ),
+                    Align(
+                      alignment: const Alignment(-1, -0),
+                      child: Text(
+                        _numCard,
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.normal),
                       ),
-                      Align(
-                        alignment: const Alignment(-1, -0),
-                        child: Text(
-                          _numCard,
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.normal),
-                        ),
+                    ),
+                    Align(
+                      alignment: const Alignment(-1, 1),
+                      child: Text(
+                        _nameCard,
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.normal),
                       ),
-                      Align(
-                        alignment: const Alignment(-1, 1),
-                        child: Text(
-                          _nameCard,
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                              fontWeight: FontWeight.normal),
-                        ),
+                    ),
+                    Align(
+                      alignment: const Alignment(1, 1),
+                      child: Text(
+                        _expireCard,
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.normal),
                       ),
-                      Align(
-                        alignment: const Alignment(1, 1),
-                        child: Text(
-                          _expireCard,
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                              fontWeight: FontWeight.normal),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
-            Align(
-                alignment: const Alignment(0, -.2),
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width * .9,
-                  height: 76,
-                  child: typeCard(),
-                )
-              ),
-            Align(
-              alignment: const Alignment(0, .05),
-              child: CustomTextField5(
-                nombre: "Numero de tarjeta",
-                isPassword: false,
-                controller: numCard,
-                height: 70,
-                width: MediaQuery.of(context).size.width * .9,
-                textFontSize: 12,
-                placeholder: "XXXX XXXX XXXX XXXX",
-                funtion: () {
-                  setState(() {
-                    _numCard = numCard.text;
-                  });
-                },
-                keyboard: TextInputType.number,
-                inputFormater: [mfNumCard],
+            SizedBox(
+              width: MediaQuery.of(context).size.width * .9,
+              height: 76,
+              child: typeCard(),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            CustomTextField5(
+              nombre: "Numero de tarjeta",
+              isPassword: false,
+              controller: numCard,
+              height: 70,
+              width: MediaQuery.of(context).size.width * .9,
+              textFontSize: 12,
+              placeholder: "XXXX XXXX XXXX XXXX",
+              funtion: () {
+                setState(() {
+                  _numCard = numCard.text;
+                });
+              },
+              keyboard: TextInputType.number,
+              inputFormater: [mfNumCard],
+            ),
+            Container(
+              width: 400,
+              margin: EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Flexible(
+                    child: CustomTextField5(
+                      nombre: "Nombre",
+                      isPassword: false,
+                      controller: firstNameCard,
+                      height: 70,
+                      width: MediaQuery.of(context).size.width * .42,
+                      textFontSize: 12,
+                      placeholder: "Nombre",
+                      funtion: () {
+                        setState(() {
+                          _nameCard =
+                              "${firstNameCard.text.toUpperCase()} ${lastNameCard.text.toUpperCase()}";
+                        });
+                      },
+                      keyboard: TextInputType.name,
+                      inputFormater: const [],
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Flexible(
+                    child: CustomTextField5(
+                      nombre: "Apellido",
+                      isPassword: false,
+                      controller: lastNameCard,
+                      height: 70,
+                      width: MediaQuery.of(context).size.width * .42,
+                      textFontSize: 12,
+                      placeholder: "Apellido",
+                      funtion: () {
+                        setState(() {
+                          _nameCard =
+                              "${firstNameCard.text.toUpperCase()} ${lastNameCard.text.toUpperCase()}";
+                        });
+                      },
+                      keyboard: TextInputType.name,
+                      inputFormater: const [],
+                    ),
+                  ),
+                ],
               ),
             ),
-            Align(
-              alignment: const Alignment(-.85, .2),
-              child: CustomTextField5(
-                nombre: "Nombre",
-                isPassword: false,
-                controller: firstNameCard,
-                height: 70,
-                width: MediaQuery.of(context).size.width * .42,
-                textFontSize: 12,
-                placeholder: "Nombre",
-                funtion: () {
-                  setState(() {
-                    _nameCard =
-                        "${firstNameCard.text.toUpperCase()} ${lastNameCard.text.toUpperCase()}";
-                  });
-                },
-                keyboard: TextInputType.name,
-                inputFormater: const [],
+            Container(
+              width: 400,
+              margin: EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Flexible(
+                    child: CustomTextField5(
+                      nombre: "Expiracion",
+                      isPassword: false,
+                      controller: expireCard,
+                      height: 70,
+                      width: MediaQuery.of(context).size.width * .42,
+                      textFontSize: 12,
+                      placeholder: "MM/YY",
+                      funtion: () {
+                        setState(() {
+                          _expireCard = expireCard.text;
+                        });
+                      },
+                      keyboard: TextInputType.datetime,
+                      inputFormater: [mfExpireCard],
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Flexible(
+                    child: CustomTextField5(
+                      nombre: "Codigo de seguridad",
+                      isPassword: false,
+                      controller: codCard,
+                      height: 70,
+                      width: MediaQuery.of(context).size.width * .42,
+                      textFontSize: 12,
+                      placeholder: "XXX",
+                      funtion: () {
+                        setState(() {
+                          _codCard = codCard.text;
+                        });
+                      },
+                      keyboard: TextInputType.number,
+                      inputFormater: [mfCodCard],
+                    ),
+                  ),
+                ],
               ),
             ),
-            Align(
-              alignment: const Alignment(.82, .2),
-              child: CustomTextField5(
-                nombre: "Apellido",
-                isPassword: false,
-                controller: lastNameCard,
-                height: 70,
-                width: MediaQuery.of(context).size.width * .42,
-                textFontSize: 12,
-                placeholder: "Apellido",
-                funtion: () {
-                  setState(() {
-                    _nameCard =
-                        "${firstNameCard.text.toUpperCase()} ${lastNameCard.text.toUpperCase()}";
-                  });
-                },
-                keyboard: TextInputType.name,
-                inputFormater: const [],
-              ),
-            ),
-            Align(
-              alignment: const Alignment(-.85, .35),
-              child: CustomTextField5(
-                nombre: "Expiracion",
-                isPassword: false,
-                controller: expireCard,
-                height: 70,
-                width: MediaQuery.of(context).size.width * .42,
-                textFontSize: 12,
-                placeholder: "MM/YY",
-                funtion: () {
-                  setState(() {
-                    _expireCard = expireCard.text;
-                  });
-                },
-                keyboard: TextInputType.datetime,
-                inputFormater: [mfExpireCard],
-              ),
-            ),
-            Align(
-              alignment: const Alignment(.82, .35),
-              child: CustomTextField5(
-                nombre: "Codigo de seguridad",
-                isPassword: false,
-                controller: codCard,
-                height: 70,
-                width: MediaQuery.of(context).size.width * .42,
-                textFontSize: 12,
-                placeholder: "XXX",
-                funtion: () {
-                  setState(() {
-                    _codCard = codCard.text;
-                  });
-                },
-                keyboard: TextInputType.number,
-                inputFormater: [mfCodCard],
-              ),
-            ),
-            // Align(
-            //     alignment: const Alignment(0, .45),
-            //     child: SizedBox(
-            //       width: MediaQuery.of(context).size.width * .9,
-            //       child: const Row(
-            //         children: [
-            //           Icon(
-            //             Icons.shield_outlined,
-            //             color: Colors.white,
-            //           ),
-            //           SizedBox(
-            //             width: 10,
-            //           ),
-            //           Text(
-            //             "Cobraremos un monto aleatorio menor a 500 COP \npara validar tu tarjeta.Este sera devuelto de inmediato",
-            //             style: TextStyle(
-            //                 color: Colors.white,
-            //                 fontSize: 12,
-            //                 fontWeight: FontWeight.normal),
-            //           ),
-            //         ],
-            //       ),
-            //     )),
             Align(
               alignment: const Alignment(0, .8),
-              child: CustomButtonsRadius4(const Color(0xffffffff),
-                  const Color(0xFFBEA0D1), "Guardar", true, saveCard),
+              child: CustomButtonsRadiusx(const Color(0xffffffff),
+                  Color.fromARGB(255, 47, 4, 73), "Guardar", () {
+                saveCard();
+              }),
             )
           ],
         ),

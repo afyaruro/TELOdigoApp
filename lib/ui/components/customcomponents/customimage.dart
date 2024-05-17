@@ -97,7 +97,7 @@ class _ImagenPerfilState extends State<ImagenPerfil> {
               height: 40,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(50),
-                color: Color.fromARGB(190, 0, 0, 0),
+                color: Color.fromARGB(189, 180, 179, 179),
               ),
               child: Icon(
                 Icons.camera_alt,

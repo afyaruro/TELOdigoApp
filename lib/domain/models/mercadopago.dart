@@ -82,9 +82,9 @@ class CreditCard {
         },
         "expiration_month": expireMonthCard,
         "expiration_year": expireYearCard,
-        "security_code": cvv.toString()
+        "security_code": cvv.toString(),
       };
-
+ 
   factory CreditCard.desdeDoc(Map<String, dynamic> data) {
     CreditCard c = CreditCard(
       numCard: data['last_four_digits'] ?? '',
@@ -185,7 +185,13 @@ class MercadoTransaction {
       {int installments = 1}) async {
     if (usercards.isNotEmpty) {
       if (amount != 0.0) {
+        card.cvv = 123;
         var res = await m.getCardtoken(card.toJson());
+        print("Hola Probando Recarga");
+
+        
+
+
         if (res['result'] != null) {
           Payment paymentData = Payment(
               payer: payer,

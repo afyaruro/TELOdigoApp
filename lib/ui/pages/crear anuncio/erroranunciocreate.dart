@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:telodigo/data/controllers/negociocontroller.dart';
@@ -11,12 +12,13 @@ import 'package:telodigo/ui/pages/crear%20anuncio/anunciocreado.dart';
 import 'package:telodigo/ui/pages/home%20anfitrion/homeanfitrion.dart';
 
 class ErrorAnuncioCreate extends StatelessWidget {
-  const ErrorAnuncioCreate({super.key});
+  final List<String> servicios;
+  const ErrorAnuncioCreate({super.key, required this.servicios});
 
   @override
   Widget build(BuildContext context) {
     final NegocioController controllerhotel = Get.find();
- final UserController controlleruser = Get.find();
+    final UserController controlleruser = Get.find();
     return WillPopScope(
       onWillPop: () async {
         // Mostrar la alerta y esperar la respuesta del usuario
@@ -65,43 +67,49 @@ class ErrorAnuncioCreate extends StatelessWidget {
                         padding: EdgeInsets.symmetric(vertical: 15),
                         backgroundColor: Color.fromARGB(255, 233, 233, 233)),
                     onPressed: () async {
+                      final CollectionReference collection =
+                          FirebaseFirestore.instance.collection("Negocios");
+                      var hotelCount = (await collection.get()).size;
 
+                      var negocio = <String, dynamic>{
+                        "id": hotelCount + 1,
+                        "nombre": controllerhotel.nombreNegocio,
+                        "tipoEspacio": controllerhotel.tipoEspacio,
+                        "habitaciones": controllerhotel.habitaciones
+                            ?.map((habitacion) => habitacion.toJson())
+                            .toList(),
+                        "longitud": controllerhotel.longitud,
+                        "latitud": controllerhotel.latitud,
+                        "direccion": controllerhotel.direccion,
+                        "horaAbrir": controllerhotel.horaAbrir,
+                        "horaCerrar": controllerhotel.horaCerrar,
+                        "metodosPago": controllerhotel.metodosPago,
+                        "servicios": servicios,
+                        "fotos": controllerhotel.images
+                            ?.map((foto) => foto.toJson())
+                            .toList(),
+                        "user": controlleruser.usuario!.userName,
+                        "saldo": 0.0,
+                        "calificacion": 3.0,
+                      };
 
-              var negocio = <String, dynamic>{
-                "nombre": controllerhotel.nombreNegocio,
-                "tipoEspacio": controllerhotel.tipoEspacio,
-                "habitaciones": controllerhotel.habitaciones
-                    ?.map((habitacion) => habitacion.toJson())
-                    .toList(),
-                "longitud": controllerhotel.longitud,
-                "latitud": controllerhotel.latitud,
-                "direccion": controllerhotel.direccion,
-                "horaAbrir": controllerhotel.horaAbrir,
-                "horaCerrar": controllerhotel.horaCerrar,
-                "metodosPago": controllerhotel.metodosPago,
-                "servicios": controllerhotel.servicios,
-                "fotos": controllerhotel.images
-                    ?.map((foto) => foto.toJson())
-                    .toList(),
-                "user": controlleruser.usuario!.userName,
-              };
+                      var resp = await PeticionesNegocio.crearNegocio(
+                          negocio, context, []);
 
-              var resp = await PeticionesNegocio.crearNegocio(negocio, context);
-
-              if(resp == "create"){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const AnuncioCreado()));
-              } else {
-                Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                const ErrorAnuncioCreate()), //debe mandar ya adentro de la app
-                        (Route<dynamic> route) => false,
-                      );
-              }
+                      if (resp == "create") {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const AnuncioCreado()));
+                      } else {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                   ErrorAnuncioCreate(servicios: servicios,)), //debe mandar ya adentro de la app
+                          (Route<dynamic> route) => false,
+                        );
+                      }
                     },
                     child: Text(
                       "Volver a intentar",

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:telodigo/data/controllers/usercontroller.dart';
@@ -6,6 +5,7 @@ import 'package:telodigo/domain/models/usuario.dart';
 import 'package:telodigo/ui/pages/datos%20generales/datos_generales.dart';
 import 'package:telodigo/ui/pages/home%20anfitrion/homeanfitrion.dart';
 import 'package:telodigo/ui/pages/inicio/init_page.dart';
+import 'package:telodigo/ui/pages/perfil/informaproblema.dart';
 import 'package:telodigo/ui/pages/terminos&condiciones/terminos&condiciones.dart';
 
 class Perfil extends StatefulWidget {
@@ -17,8 +17,8 @@ class Perfil extends StatefulWidget {
 
 class _PerfilState extends State<Perfil> {
   bool modo_oscuro = false;
-  Color background = Colors.white;
-  Color color_segundario = Color.fromARGB(190, 0, 0, 0);
+  Color background = Color.fromARGB(255, 29, 7, 48);
+  Color color_segundario = Color.fromARGB(255, 255, 255, 255);
   final UserController controlleruser = Get.find();
 
   @override
@@ -44,7 +44,7 @@ class _PerfilState extends State<Perfil> {
               action: () {
                 Navigator.push(
                     context,
-                    CupertinoPageRoute(
+                    MaterialPageRoute(
                         builder: (context) => Datos_Generales()));
               },
             ),
@@ -65,7 +65,7 @@ class _PerfilState extends State<Perfil> {
               action: () {
                 Navigator.push(
                     context,
-                    CupertinoPageRoute(
+                    MaterialPageRoute(
                         builder: (context) => HomeAnfitrion()));
               },
             ),
@@ -73,36 +73,17 @@ class _PerfilState extends State<Perfil> {
               color: color_segundario,
               text: "Otras Opciones",
             ),
-            CustomOptionPerfil(
-              color: color_segundario,
-              icon: Icons.bedtime,
-              text: "Cambiar a Modo Oscuro",
-              action: () {
-                setState(() {
-                  if (modo_oscuro == false) {
-                    modo_oscuro = true;
-                    background = Color(0xff3b2151);
-                    color_segundario = Colors.white;
-                  } else {
-                    modo_oscuro = false;
-                    background = Colors.white;
-                    color_segundario = Color(0xff333333);
-                  }
-                  print(modo_oscuro);
-                });
-              },
-            ),
-            CustomOptionPerfil(
-              color: color_segundario,
-              icon: Icons.question_answer_rounded,
-              text: "Preguntas Frecuentes",
-              action: () {},
-            ),
+            
             CustomOptionPerfil(
               color: color_segundario,
               icon: Icons.warning_amber_rounded,
               text: "Informar un Problema",
-              action: () {},
+              action: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const InformaProblema()));
+              },
             ),
             CustomOptionPerfil(
               color: color_segundario,
@@ -111,7 +92,7 @@ class _PerfilState extends State<Perfil> {
               action: () {
                 Navigator.push(
                     context,
-                    CupertinoPageRoute(
+                    MaterialPageRoute(
                         builder: (context) => terminos_condiciones()));
               },
             ),
@@ -203,7 +184,7 @@ class CustomCerrarSesion extends StatelessWidget {
                   Navigator.pop(context);
                   Navigator.pushAndRemoveUntil(
                     context,
-                    CupertinoPageRoute(builder: (context) => const Init_Page()),
+                    MaterialPageRoute(builder: (context) => const Init_Page()),
                     (Route<dynamic> route) => false,
                   );
                 },

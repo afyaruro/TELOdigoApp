@@ -4,29 +4,47 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:telodigo/domain/models/hoteles.dart';
 import 'package:telodigo/ui/components/customcomponents/exitconfirmation.dart';
+import 'package:telodigo/ui/pages/Reservar/listreservasanfitrion.dart';
 import 'package:telodigo/ui/pages/anuncios%20anfitrion/anunciosanfitrion.dart';
-import 'package:telodigo/ui/pages/chat/chats_screen.dart';
+import 'package:telodigo/ui/pages/chats/verchats.dart';
 import 'package:telodigo/ui/pages/opciones%20anfitrion/opcionesanfitrion.dart';
 import 'package:telodigo/ui/pages/sign_up/sign_up.dart';
 
 class HomeAnfitrion extends StatefulWidget {
-  const HomeAnfitrion({super.key});
+  final int currentIndex;
+  const HomeAnfitrion({super.key, this.currentIndex = 0});
 
   @override
   State<HomeAnfitrion> createState() => _HomeAnfitrionState();
 }
 
+
+
 class _HomeAnfitrionState extends State<HomeAnfitrion> {
   int _currentIndex = 0;
+  List<Hoteles> hoteles = [];
+
+ 
 
   final Screens = [
     const AnunciosAnfitrion(),
-    const ChatsScreen(),
-    sign_up(),
-    sign_up(),
-    OpcionesAnfitrion(),
+    const VerChats(),
+    const ListReservasUserAnfitrion(),
+    const sign_up(),
+    const OpcionesAnfitrion(),
   ];
+
+
+     @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.currentIndex;
+    setState(() {
+      
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

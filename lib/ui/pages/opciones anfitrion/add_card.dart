@@ -1,8 +1,10 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:telodigo/ui/pages/opciones%20anfitrion/configure_card.dart';
 
+//no use
 
 class AddCreditCard extends StatefulWidget {
   const AddCreditCard({super.key});
@@ -15,42 +17,21 @@ class _AddCreditCardState extends State<AddCreditCard> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         return false;
       },
       child: Scaffold(
-        backgroundColor: const Color(0xff3B2151),
-        body: Stack(
-          alignment: const Alignment(0, 0),
-          children: [
-            Align(
-            alignment: const Alignment(-1, -.9),
-            child: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: const Icon(
-                  Icons.arrow_back_rounded,
-                  color: Colors.white,
-                  size: 30,
-                )),
+        appBar: AppBar(
+          title: Text(
+            "Selecciona el metodo de pago",
+            style: TextStyle(
+                color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
           ),
-            const Align(
-              alignment: Alignment(-.8, -.8),
-              child: Text(
-                "Selecciona el metodo de pago",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-            const Align(
-              alignment: Alignment(0, -.55),
-              child: MethodOpction(),
-            ),
-          ],
+          foregroundColor: Colors.white,
+          backgroundColor: Color.fromARGB(255, 29, 7, 48),
         ),
+        backgroundColor: Color.fromARGB(255, 29, 7, 48),
+        body: MethodOpction(),
       ),
     );
   }
@@ -64,10 +45,11 @@ class MethodOpction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width * .9,
-      height: 200,
+      width: 400,
+      height: 150,
+      margin: EdgeInsets.all(30),
       decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 156, 110, 187),
+          color: Color.fromARGB(255, 69, 24, 99),
           borderRadius: BorderRadius.circular(35)),
       child: InkWell(
         onTap: () {
@@ -98,31 +80,34 @@ class MethodOpction extends StatelessWidget {
                   const SizedBox(
                     width: 9,
                   ),
-                  const Text(
-                    "Credito o debito (Con CVV)",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold),
+                  Flexible(
+                    child: const Text(
+                      "Credito o debito (Con CVV)",
+                      overflow: TextOverflow.visible,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ],
               ),
               const SizedBox(
                 height: 14,
               ),
-              const Divider(
-                thickness: 1.5,
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Image.asset("assets/master.png", width: 40, height: 40),
-                  const SizedBox(
-                    width: 25,
-                  ),
-                  Image.asset("assets/visa.png", width: 40, height: 40),
-                ],
-              )
+              // const Divider(
+              //   thickness: 1.5,
+              // ),
+              // Row(
+              //   crossAxisAlignment: CrossAxisAlignment.start,
+              //   children: [
+              //     Image.asset("assets/master.png", width: 40, height: 40),
+              //     const SizedBox(
+              //       width: 25,
+              //     ),
+              //     Image.asset("assets/visa.png", width: 40, height: 40),
+              //   ],
+              // )
             ],
           ),
         ),

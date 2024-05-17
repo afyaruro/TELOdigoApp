@@ -1,7 +1,6 @@
 // ignore_for_file: deprecated_member_use, must_be_immutable
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:telodigo/data/service/apimercadopago.dart';
 import 'package:telodigo/domain/models/habitaciones.dart';
@@ -56,6 +55,10 @@ class _PaymentsRechargesState extends State<PaymentsRecharges> {
     print(listHotelName.length);
     setState(() {});
   }
+
+
+  final String publicKey = 'TEST-085f6aba-bb3c-421c-b4de-77ffb91907e1';
+final String accessToken = 'TEST-1713151696136887-051023-0478d28c52ce72c8df33ea839002ebf8-415512808';
 
   @override
   void initState() {
@@ -204,10 +207,38 @@ class _PaymentsRechargesState extends State<PaymentsRecharges> {
                     70.0,
                     22.0),
               )
+
+              // Align(
+              //   alignment: const Alignment(0, .8),
+              //   child: CustomButtonsRadiusx(
+              //       const Color(0xffffffff),
+              //       const Color(0xFFBEA0D1),
+              //       "Pagar",
+              //       (){
+                      
+
+              //       },
+              //       ),
+              // )
             ],
           ),
         ));
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   PaymentRecharge() async {
     CreditCard card = usercards[_selectedIndex];

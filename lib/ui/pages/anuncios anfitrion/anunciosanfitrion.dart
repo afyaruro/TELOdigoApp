@@ -1,12 +1,14 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:telodigo/data/service/peticionnegocio.dart';
 import 'package:telodigo/domain/models/hoteles.dart';
 import 'package:telodigo/ui/components/customcomponents/custombuttonborderradius.dart';
+import 'package:telodigo/ui/pages/Habitaciones/canthabitaciones.dart';
 import 'package:telodigo/ui/pages/crear%20anuncio/crearanuncioview1.dart';
-
-import '../../components/customcomponents/customaditem.dart';
+import 'package:telodigo/ui/pages/crear%20anuncio/crearanuncioview2.dart';
+import 'package:telodigo/ui/pages/view%20hotel/viewhotel.dart';
 
 class AnunciosAnfitrion extends StatefulWidget {
   const AnunciosAnfitrion({super.key});
@@ -16,67 +18,40 @@ class AnunciosAnfitrion extends StatefulWidget {
 }
 
 class _AnunciosAnfitrionState extends State<AnunciosAnfitrion> {
-
-  List<Hoteles> hoteles = [];
-
-  @override
-  void initState() {
-    super.initState();
-  PeticionesNegocio.listNegocios().then((value) {
-
-  setState(() {
-
-    hoteles = value;
-
-  });
-
-});
-  }
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      body: FutureBuilder<List<Hoteles>>(
+        future: PeticionesNegocio.listNegocios(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+          
+            return Container(
+              color: Color.fromARGB(255, 29, 7, 48),
+              child: Center(
+                // child: CircularProgressIndicator(),
+                child: Text("Cargando tus negocios...", style: TextStyle(color: Colors.white),),
+              ),
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          } else {
+            final List<Hoteles> hoteles = snapshot.data ?? [];
 
-    body: FutureBuilder<List<Hoteles>>(
-
-      future: PeticionesNegocio.listNegocios(),
-
-      builder: (context, snapshot) {
-
-        if (snapshot.connectionState == ConnectionState.waiting) {
-
-          return Center(
-
-            child: CircularProgressIndicator(),
-
-          );
-
-        } else if (snapshot.hasError) {
-
-          return Center(
-
-            child: Text('Error: ${snapshot.error}'),
-
-          );
-
-        } else {
-
-          final List<Hoteles> hoteles = snapshot.data ?? [];
-
-          return SingleChildScrollView(
-
-            child: hoteles.isEmpty ? FirstHotel() : ListHotel(hotelList: hoteles),
-
-          );
-
-        }
-
-      },
-
-    ),
-
-  );
+            return Container(
+              color: Color.fromARGB(255, 29, 7, 48),
+              child: SingleChildScrollView(
+                child: hoteles.isEmpty
+                    ? FirstHotel()
+                    : ListHotel(hotelList: hoteles),
+              ),
+            );
+          }
+        },
+      ),
+    );
   }
 }
 
@@ -89,111 +64,222 @@ class ListHotel extends StatefulWidget {
 }
 
 class _ListHotelState extends State<ListHotel> {
+  late Hoteles? selectedHotel;
+
   @override
   Widget build(BuildContext context) {
     return Container(
-// <<<<<<< HEAD
-
-// mio
-//         width: MediaQuery.of(context).size.width,
-//         height: MediaQuery.of(context).size.height,
-//         child: Stack(
-//           alignment: Alignment(0, 0),
-//           children: [
-//             Align(
-//               alignment: Alignment(-.8, -.7),
-//               child: Text(
-//                 "Tus Anuncions",
-//                 style: TextStyle(
-//                     color: const Color.fromARGB(255, 0, 0, 0),
-//                     fontSize: 18,
-//                     fontWeight: FontWeight.bold),
-//               ),
-//             ),
-//             Align(
-//               alignment: Alignment(.9, -.72),
-//               child: ElevatedButton(
-//                  style: ElevatedButton.styleFrom(
-//                       backgroundColor: Color.fromARGB(255, 16, 152, 231)),
-//                 onPressed: () {
-//                   Navigator.push(
-//                       context,
-//                       MaterialPageRoute(
-//                           builder: (context) => const CrearAnuncioView2()));
-//                 },
-//                 child: Text("Crear", style: TextStyle(color: Colors.white),),
-//               ),
-//             ),
-//             Align(
-//               alignment: Alignment(0, .5),
-//               child: SizedBox(
-//                 width: MediaQuery.of(context).size.width * .85,
-//                 height: MediaQuery.of(context).size.height * .74,
-//                 child: ListView.builder(
-//                   padding: EdgeInsets.only(top: 20, bottom: 30),
-//                   itemCount: widget.hotelList.length,
-//                   itemBuilder: (BuildContext context, int index) {
-//                     return Padding(
-//                       padding: const EdgeInsets.only(bottom: 5),
-//                       child: aditem(
-//                           nombre: widget.hotelList[index].nombre,
-//                           tipoEspacio: widget.hotelList[index]
-//                               .tipoEspacio), //ExpandableWidget()
-//                     );
-//                   },
-//                 ),
-//               ),
-//             )
-//           ],
-//         ));
-// =======
-    width: MediaQuery.of(context).size.width,
-    height: MediaQuery.of(context).size.height,
-    decoration: const BoxDecoration(
-            gradient: LinearGradient(
-                colors: [Color(0xff3B2151), Color(0xff08000F)],
-                stops: [0.0, 0.9],
-                begin: FractionalOffset.topCenter,
-                end: FractionalOffset.bottomCenter)),
-    child:Stack(
-      alignment: Alignment(0,0),
-      children: [
-        Align(alignment: Alignment(-.8,-.82),child: Text("Tus Anuncions",style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.bold),),),
-        Align(alignment: Alignment(.9, -.84),child: IconButton(onPressed: () {  }, icon:Icon(Icons.add_circle_outline_rounded,color: Colors.white,size: 30,) ,),),
-        Align(alignment: Alignment(0, .3),child:SizedBox(
-          width: MediaQuery.of(context).size.width*.85,
-          height: MediaQuery.of(context).size.height*.80,
-          child: ListView.builder(
-            padding: EdgeInsets.only(top: 10,bottom:30),
-            itemCount: widget.hotelList.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 55),
-                child:aditem(nombre: widget.hotelList[index].nombre, tipoEspacio: widget.hotelList[index].tipoEspacio),//ExpandableWidget()
-              );
-            },
-          ),
-        ),)
-      ],
-    )
-    );
-    
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height - 60,
+        child: Column(
+          children: [
+            Container(
+              width: 400,
+              padding: EdgeInsets.only(top: 50, right: 20, left: 20, bottom: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                Text(
+                  "Tus Anuncions",
+                  style: TextStyle(
+                      color: Color.fromARGB(255, 255, 255, 255),
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold),
+                ),
+              
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Color.fromARGB(255, 16, 152, 231)),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const CrearAnuncioView2()));
+                  },
+                  child: Text(
+                    "Crear",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              
+              ],),
+            ),
+            Container(
+                height: MediaQuery.of(context).size.height - 170,
+                child: ListView.builder(
+                  padding: EdgeInsets.only(top: 10, bottom: 20),
+                  itemCount: widget.hotelList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Padding(
+                        padding: const EdgeInsets.only(
+                          right: 30,
+                          left: 30,
+                          top: 10,
+                        ),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 20),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Color.fromARGB(31, 141, 139, 139)),
+                          width: 400,
+                          // height: 250,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Container(
+                                        width: 12,
+                                        height: 12,
+                                        decoration: BoxDecoration(
+                                            color:
+                                                widget.hotelList[index].saldo >
+                                                        5.0
+                                                    ? Color(0xFF00FF0A)
+                                                    : Colors.amber,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(6))),
+                                      ),
+                                      const SizedBox(
+                                        width: 6,
+                                      ),
+                                      Text(
+                                        widget.hotelList[index].saldo > 5.0
+                                            ? "Publicado"
+                                            : "Recargar",
+                                        style: const TextStyle(
+                                            color: Color.fromARGB(
+                                                255, 255, 255, 255),
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "S/ ${widget.hotelList[index].saldo.toStringAsFixed(2)}",
+                                        style: const TextStyle(
+                                            color: Color.fromARGB(
+                                                255, 255, 255, 255),
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      const SizedBox(
+                                        width: 8,
+                                      ),
+                                      const Icon(
+                                        Icons.monetization_on_outlined,
+                                        color: Color.fromARGB(255, 88, 39, 223),
+                                        size: 30,
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  ClipRRect(
+                                    child: Image.network(
+                                      widget.hotelList[index].fotos[0].image,
+                                      fit: BoxFit.cover,
+                                      width: 100,
+                                      height: 100,
+                                    ),
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  Container(
+                                    width: 140,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          widget.hotelList[index].nombre,
+                                          style: const TextStyle(
+                                              color: Color.fromARGB(
+                                                  255, 255, 255, 255),
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        SizedBox(
+                                          width: double.infinity,
+                                          child: ElevatedButton(
+                                              onPressed: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ViewHotel(
+                                                              hotel: widget
+                                                                      .hotelList[
+                                                                  index],
+                                                            )));
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          5.0),
+                                                ),
+                                                backgroundColor:
+                                                    const Color.fromARGB(
+                                                        255, 255, 255, 255),
+                                              ),
+                                              child: Text("Ver más")),
+                                        ),
+                                        SizedBox(
+                                          width: double.infinity,
+                                          child: ElevatedButton(
+                                              onPressed: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        CantHabitaciones(
+                                                      hotel: widget
+                                                          .hotelList[index],
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          5.0),
+                                                ),
+                                                backgroundColor:
+                                                    const Color.fromARGB(
+                                                        255, 255, 255, 255),
+                                              ),
+                                              child: Text("Habitaciones")),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        ));
+                  },
+                ),
+              ),
+          ],
+        ));
   }
 }
-
-// class ListHotel extends StatelessWidget {
-//   final List<Hoteles> hotelList;
-//   const ListHotel({
-//     required this.hotelList,
-//     super.key,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return
-
-//   }
-// }
 
 class FirstHotel extends StatelessWidget {
   const FirstHotel({
@@ -209,12 +295,15 @@ class FirstHotel extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text("¿No Has registrado aun tu negocio?"),
+          Text(
+            "¿No Has registrado aun tu negocio?",
+            style: TextStyle(color: Colors.white),
+          ),
           Container(
               width: 200,
               margin: EdgeInsets.only(top: 15),
-              child: CustomButtonsRadius(
-                  Colors.black, Colors.white, "¡Registralo Aquí!", false, () {
+              child: CustomButtonsRadius(Color.fromARGB(255, 13, 161, 219),
+                  Colors.white, "¡Registralo Aquí!", false, () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(

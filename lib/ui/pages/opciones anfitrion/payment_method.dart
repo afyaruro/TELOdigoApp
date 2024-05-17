@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:telodigo/data/service/apimercadopago.dart';
 import 'package:telodigo/domain/models/mercadopago.dart';
 import 'package:telodigo/ui/components/customcomponents/credit_cards.dart';
+import 'package:telodigo/ui/pages/opciones%20anfitrion/configure_card.dart';
 import 'add_card.dart';
 
 class PaymentMethod extends StatefulWidget {
   final Payer payer;
-  const PaymentMethod({ super.key, required this.payer});
+  const PaymentMethod({super.key, required this.payer});
 
   @override
   State<PaymentMethod> createState() => _PaymentMethodState();
@@ -39,37 +40,28 @@ class _PaymentMethodState extends State<PaymentMethod> {
         return true;
       },
       child: Scaffold(
-        backgroundColor: const Color(0xff3B2151),
-        body: Stack(
-          alignment: const Alignment(0, 0),
-          children: [
-            Align(
-              alignment: const Alignment(-1, -.9),
-              child: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(
-                    Icons.arrow_back_rounded,
-                    color: Colors.white,
-                    size: 30,
-                  )),
-            ),
-            const Align(
-              alignment: Alignment(-.8, -.8),
-              child: Text(
-                "Tus metodos de pago",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
+        appBar: AppBar(
+          backgroundColor: Color.fromARGB(255, 29, 7, 48),
+          foregroundColor: Colors.white,
+          title: Text(
+            "Tus metodos de pago",
+            style: TextStyle(
+                color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
+          ),
+        ),
+        backgroundColor: Color.fromARGB(255, 29, 7, 48),
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 100,
               ),
-            ),
-            Align(
-              alignment: const Alignment(0, -.5),
-              child: Container(
+              Container(
                 height: 220,
-                width: MediaQuery.of(context).size.width*.9,
+                width: 400,
+                padding: EdgeInsets.only(left: 10),
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   padding: EdgeInsets.all(0),
@@ -78,7 +70,13 @@ class _PaymentMethodState extends State<PaymentMethod> {
                     if (usercards.isNotEmpty) {
                       return Padding(
                         padding: const EdgeInsets.only(right: 8),
-                        child: CreditCardUI(num:usercards[index].numCard,name:usercards[index].nameCard,month:  usercards[index].expireMonthCard,year:usercards[index].expireYearCard,method: usercards[index].paymentMethod,),
+                        child: CreditCardUI(
+                          num: usercards[index].numCard,
+                          name: usercards[index].nameCard,
+                          month: usercards[index].expireMonthCard,
+                          year: usercards[index].expireYearCard,
+                          method: usercards[index].paymentMethod,
+                        ),
                       );
                     } else {
                       return CreditCardUI();
@@ -86,29 +84,30 @@ class _PaymentMethodState extends State<PaymentMethod> {
                   },
                 ),
               ),
-            ),
-
-            //  ,
-            //               ,
-            //              ,
-            //               
-            Align(
-              alignment: const Alignment(0, .5),
-              child: FloatingActionButton(
-                backgroundColor: const Color.fromARGB(255, 190, 160, 209),
-                onPressed: () {;
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const AddCreditCard()));
-                },
-                child: const Icon(
-                  Icons.add,
-                  color: Color(0xff3B2151),
-                ),
+          
+              SizedBox(height: 20,),
+              Container(
+                width: 200,
+                child: ElevatedButton(
+                    onPressed: () {
+                      // ;
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => const AddCreditCard()));
+                      Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const ConfigureCard()));
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.credit_card),
+                        Text("Nueva Tarjeta"),
+                      ],
+                    )),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
