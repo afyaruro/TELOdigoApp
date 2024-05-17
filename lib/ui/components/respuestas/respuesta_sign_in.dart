@@ -56,7 +56,7 @@ Future<bool> login(
 
     if (resp == "Password-Correct") {
       Navigator.pop(context);
-      print("Hola, haz ingresado correctamente");
+      // print("Hola, haz ingresado correctamente");
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const HomeUser()),

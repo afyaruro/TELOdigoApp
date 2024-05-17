@@ -18,6 +18,7 @@ class Reserva {
   final int minutoFinalReserva;
   final String metodoPago;
   final double precio;
+  final String nombreCliente;
 
   Reserva({
     required this.precio,
@@ -39,6 +40,7 @@ class Reserva {
     required this.minutoFinalReserva,
     required this.idHotel,
     required this.idUser,
+    required this.nombreCliente,
   });
 
   Map<String, dynamic> toJson() => {
@@ -61,11 +63,13 @@ class Reserva {
         "metodoPago": metodoPago,
         "idUserHotel": idUserHotel,
         "precio": precio,
+        "nombreCliente": nombreCliente
       };
 
   factory Reserva.fromJson(Map<String, dynamic> json) {
     return Reserva(
-      key: json['key'],
+        nombreCliente: json['nombreCliente'],
+        key: json['key'],
         precio: json['precio'],
         metodoPago: json['metodoPago'],
         codigo: json['codigo'],

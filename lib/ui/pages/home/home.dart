@@ -10,7 +10,6 @@ import 'package:telodigo/ui/pages/favoritos/listfavoritos.dart';
 import 'package:telodigo/ui/pages/mapa%20principal/mapahotels.dart';
 import 'package:telodigo/ui/pages/negocios%20lista/principal.dart';
 import 'package:telodigo/ui/pages/perfil/perfil.dart';
-import 'package:telodigo/ui/pages/sign_in/sign_in.dart';
 
 class HomeUser extends StatefulWidget {
   final int currentIndex;

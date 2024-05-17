@@ -25,7 +25,9 @@ class _FavoritosState extends State<Favoritos> {
             return Container(
               color: Color.fromARGB(255, 29, 7, 48),
               child: Center(
-                child: CircularProgressIndicator(),
+                // child: CircularProgressIndicator(),
+                child: Text("Cargando tus favoritos...", style: TextStyle(color: Colors.white),),
+
               ),
             );
           } else if (snapshot.hasError) {

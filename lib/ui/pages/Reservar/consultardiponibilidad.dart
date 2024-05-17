@@ -311,6 +311,7 @@ class _HoraMilitarWidgetState extends State<HoraMilitarWidget> {
             _selectedTime = pickedTime;
             widget.controllerHora.text = "${_selectedTime!.hour}";
             widget.controllerminuto.text = "${_selectedTime!.minute}";
+            
           });
         }
       },

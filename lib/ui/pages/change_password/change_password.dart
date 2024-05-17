@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:telodigo/ui/components/customcomponents/customalert.dart';
 import 'package:telodigo/ui/components/customcomponents/custombackgroundlogin.dart';
@@ -21,6 +21,8 @@ class _changePasswordState extends State<changePassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 0, 0, 0),
+
         appBar: AppBar(
           backgroundColor: Color(0xff3B2151),
           iconTheme: IconThemeData(color: Colors.white),
@@ -54,8 +56,8 @@ class _changePasswordState extends State<changePassword> {
                   height: MediaQuery.of(context).size.height * 0.02,
                 ),
 
-                CustomButtonsRadius(
-                    Colors.white, Colors.black, "Enviar Codigo", false,
+                CustomButtonsRadiusx(
+                    Colors.white, Colors.black, "Enviar Codigo", 
                     () async {
                   if (controller_correo.text == "") {
                     showDialog(
@@ -72,7 +74,7 @@ class _changePasswordState extends State<changePassword> {
                         destinatario: controller_correo.text, context: context);
                     Navigator.push(
                         context,
-                        CupertinoPageRoute(
+                         MaterialPageRoute(
                             builder: (context) => const changePassword2()));
                   }
                 }),

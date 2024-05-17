@@ -60,11 +60,9 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
         child: InkWell(
           borderRadius: BorderRadius.circular(20),
           splashColor: Colors.white,
-          onTap: () async {
+          onTap: () {
             FocusScope.of(context).unfocus();
-            await Future.delayed(Duration(milliseconds: 300), () {
               _callDatePicker();
-            });
           },
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 10),

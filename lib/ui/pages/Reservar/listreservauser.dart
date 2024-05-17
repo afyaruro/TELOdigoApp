@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:telodigo/data/service/PeticionesReservas.dart';
 import 'package:telodigo/domain/models/reserva.dart';
 import 'package:telodigo/ui/pages/Reservar/viewreserva.dart';
+import 'package:telodigo/ui/pages/chats/viewchat.dart';
 
 class ListReservasUser extends StatefulWidget {
   const ListReservasUser({super.key});
@@ -35,7 +36,9 @@ class _ListReservasUserState extends State<ListReservasUser> {
             return Container(
               color: Color.fromARGB(255, 29, 7, 48),
               child: Center(
-                child: CircularProgressIndicator(),
+                // child: CircularProgressIndicator(),
+                child: Text("Cargando tus reservas...", style: TextStyle(color: Colors.white),),
+
               ),
             );
           } else if (snapshot.hasError) {
@@ -305,7 +308,14 @@ class _ListHotelState extends State<ListHotel> {
                           ],
                         ),
                         ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ViewChat(
+                                            reserva: reserva,
+                                          )));
+                            },
                             child: Row(
                               children: [
                                 Text("Chat"),

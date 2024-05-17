@@ -30,6 +30,8 @@ class _sign_upState extends State<sign_up> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 0, 0, 0),
+
         body: CustomBackgroundLogin(
       child: SingleChildScrollView(
         child: Column(
@@ -99,13 +101,12 @@ class _sign_upState extends State<sign_up> {
                         ),
                       ),
                       onTap: () async {
-                        await Future.delayed(Duration(milliseconds: 600), () {
                           Navigator.push(
                               context,
-                              CupertinoPageRoute(
+                              MaterialPageRoute(
                                   builder: (context) =>
                                       const terminos_condiciones()));
-                        });
+                     
                       },
                     ),
                   )
@@ -115,11 +116,10 @@ class _sign_upState extends State<sign_up> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.02,
             ),
-            CustomButtonsRadius(
+            CustomButtonsRadiusx(
               const Color(0xffffffff),
               const Color(0xff3B2151),
               "¡REGISTRARME!",
-              false,
               () async {
                 bool resp = await newUser(
                     userName: controller_userName.text,

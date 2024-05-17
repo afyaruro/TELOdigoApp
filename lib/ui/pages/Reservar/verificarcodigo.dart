@@ -19,6 +19,10 @@ class _VerificarCodigoState extends State<VerificarCodigo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        foregroundColor: Colors.white,
+        backgroundColor: Color.fromARGB(255, 29, 7, 48),
+      ),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
@@ -28,7 +32,7 @@ class _VerificarCodigoState extends State<VerificarCodigo> {
             children: [
               Container(
                 width: 400,
-                margin: EdgeInsets.only(top: 100, left: 30, right: 30),
+                margin: EdgeInsets.only(top: 50, left: 30, right: 30),
                 child: Row(
                   children: [
                     Container(
@@ -103,7 +107,7 @@ class _VerificarCodigoState extends State<VerificarCodigo> {
                         Container(
                             width: 130,
                             child: Text(
-                              "${widget.reserva.idUser}",
+                              "${widget.reserva.nombreCliente}",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w300),

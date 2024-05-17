@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:telodigo/domain/models/reserva.dart';
+import 'package:telodigo/ui/pages/chats/viewchat.dart';
 
 class ViewReserva extends StatefulWidget {
   final Reserva reserva;
@@ -31,8 +32,6 @@ class _ViewReservaState extends State<ViewReserva> {
       body: Stack(
         children: [
           Container(
-            // width: double.infinity,
-            // height: 400,
             color: Color.fromARGB(103, 228, 228, 228),
             child: GoogleMap(
               initialCameraPosition: _cameraPosition,
@@ -164,7 +163,14 @@ class _ViewReservaState extends State<ViewReserva> {
                       ],
                     ),
                     SizedBox(height: 10,),
-                    ElevatedButton(onPressed: (){}, child: Text("Chatea con el Telo"))
+                    ElevatedButton(onPressed: (){
+                      Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ViewChat(
+                                            reserva: widget.reserva,
+                                          )));
+                    }, child: Text("Chatea con el Telo"))
                   ],
                 ),
               ),

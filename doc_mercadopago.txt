@@ -1,0 +1,14 @@
+url base
+https://api.mercadopago.com
+
+uso de la api
+Authorization: Bearer <ENV_ACCESS_TOKEN>
+https://api.mercadopago.com/V1/payments
+
+
+publicKey:
+TEST-71ae0208-49f7-4340-9866-ce3547a10a84
+
+accessToken:
+TEST-227723517277795-042920-d2d40bfdec98fc45a7a93e6831158fef-497199445
+

@@ -279,6 +279,8 @@ class _ReservarHabitacionState extends State<ReservarHabitacion> {
 
                       var codigo = generarCodigo();
                       Reserva reserva = Reserva(
+                          nombreCliente:
+                              "${controlleruser.usuario!.nombres} ${controlleruser.usuario!.apellidos}",
                           key: reservasCount + 1,
                           precio: widget.selectedPrecioHabitacion,
                           idUserHotel: widget.hotel.user,

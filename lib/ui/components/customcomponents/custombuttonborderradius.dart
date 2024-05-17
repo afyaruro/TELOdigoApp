@@ -18,8 +18,6 @@ Widget CustomButtonsRadius(Color colorBackground, Color colorText,
     }
   }
 
- 
-
   return Container(
       width: 400,
       height: 45,
@@ -33,9 +31,7 @@ Widget CustomButtonsRadius(Color colorBackground, Color colorText,
           borderRadius: BorderRadius.circular(50),
           splashColor: Colors.black54,
           onTap: () async {
-            await Future.delayed(Duration(milliseconds: 200), () {
-              action();
-            });
+            action();
           },
           child: Center(
             child: Text(
@@ -50,8 +46,32 @@ Widget CustomButtonsRadius(Color colorBackground, Color colorText,
       ));
 }
 
-Widget CustomButtonsRadius2(Color colorBackground, Color colorText,
-    String textButton, bool border, double radius, Function action,) {
+Widget CustomButtonsRadiusx(Color colorBackground, Color colorText,
+    String textButton, Function action) {
+  
+
+  return Container(
+      width: 400,
+      height: 50,
+      margin: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
+      child: ElevatedButton(
+        onPressed: () {
+          action();
+        },
+        child: Text("$textButton", style: TextStyle(color: colorText),),
+        style: ElevatedButton.styleFrom(
+            backgroundColor: colorBackground),
+      ));
+}
+
+Widget CustomButtonsRadius2(
+  Color colorBackground,
+  Color colorText,
+  String textButton,
+  bool border,
+  double radius,
+  Function action,
+) {
   BoxDecoration IsBorder(bool border, Color colorText, Color colorBackgroun) {
     if (border == true) {
       return BoxDecoration(
@@ -67,8 +87,6 @@ Widget CustomButtonsRadius2(Color colorBackground, Color colorText,
           color: colorBackgroun, borderRadius: BorderRadius.circular(radius));
     }
   }
-
- 
 
   return Container(
       width: 400,
@@ -83,9 +101,7 @@ Widget CustomButtonsRadius2(Color colorBackground, Color colorText,
           borderRadius: BorderRadius.circular(radius),
           splashColor: Colors.black54,
           onTap: () async {
-            await Future.delayed(Duration(milliseconds: 500), () {
-              action();
-            });
+            action();
           },
           child: Center(
             child: Text(
@@ -100,8 +116,15 @@ Widget CustomButtonsRadius2(Color colorBackground, Color colorText,
       ));
 }
 
-Widget CustomButtonsRadius3(Color colorBackground, Color colorText,
-    String textButton, bool border, double radius, Function action, double widthB, double heightB) {
+Widget CustomButtonsRadius3(
+    Color colorBackground,
+    Color colorText,
+    String textButton,
+    bool border,
+    double radius,
+    Function action,
+    double widthB,
+    double heightB) {
   BoxDecoration IsBorder(bool border, Color colorText, Color colorBackgroun) {
     if (border == true) {
       return BoxDecoration(
@@ -117,8 +140,6 @@ Widget CustomButtonsRadius3(Color colorBackground, Color colorText,
           color: colorBackgroun, borderRadius: BorderRadius.circular(radius));
     }
   }
-
- 
 
   return Container(
       width: widthB,
@@ -133,9 +154,7 @@ Widget CustomButtonsRadius3(Color colorBackground, Color colorText,
           borderRadius: BorderRadius.circular(radius),
           splashColor: Colors.black54,
           onTap: () async {
-            await Future.delayed(Duration(milliseconds: 500), () {
-              action();
-            });
+            action();
           },
           child: Center(
             child: Text(
@@ -143,6 +162,106 @@ Widget CustomButtonsRadius3(Color colorBackground, Color colorText,
               style: TextStyle(
                   color: colorText,
                   fontSize: 15,
+                  fontWeight: FontWeight.normal),
+            ),
+          ),
+        ),
+      ));
+}
+
+Widget CustomButtonsRadius4(Color colorBackground, Color colorText,
+    String textButton, bool border, Function action) {
+  BoxDecoration IsBorder(bool border, Color colorText, Color colorBackgroun) {
+    if (border == true) {
+      return BoxDecoration(
+        color: colorBackgroun,
+        borderRadius: BorderRadius.circular(50),
+        border: Border.all(
+          color: colorText,
+          width: 1,
+        ),
+      );
+    } else {
+      return BoxDecoration(
+          color: colorBackgroun, borderRadius: BorderRadius.circular(50));
+    }
+  }
+
+  return Container(
+      width: 400,
+      height: 45,
+      decoration: IsBorder(border, colorText, colorBackground),
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(50),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(50),
+          splashColor: Colors.black54,
+          onTap: () {
+            action();
+          },
+          child: Center(
+            child: Text(
+              textButton,
+              style: TextStyle(
+                  color: colorText,
+                  fontSize: 15,
+                  fontWeight: FontWeight.normal),
+            ),
+          ),
+        ),
+      ));
+}
+
+Widget CustomButtonsRadius5(
+  Color colorBackground,
+  Color colorText,
+  String textButton,
+  bool border,
+  Function action,
+  double width,
+  double height,
+  double fontSize,
+) {
+  BoxDecoration IsBorder(bool border, Color colorText, Color colorBackgroun) {
+    if (border == true) {
+      return BoxDecoration(
+        color: colorBackgroun,
+        borderRadius: BorderRadius.circular(50),
+        border: Border.all(
+          color: colorText,
+          width: 1,
+        ),
+      );
+    } else {
+      return BoxDecoration(
+          color: colorBackgroun, borderRadius: BorderRadius.circular(50));
+    }
+  }
+
+  return Container(
+      width: width,
+      height: height,
+      decoration: IsBorder(border, colorText, colorBackground),
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(50),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(50),
+          splashColor: Colors.black54,
+          onTap: () {
+            action();
+          },
+          child: Center(
+            child: Text(
+              textButton,
+              style: TextStyle(
+                  color: colorText,
+                  fontSize: fontSize,
                   fontWeight: FontWeight.normal),
             ),
           ),

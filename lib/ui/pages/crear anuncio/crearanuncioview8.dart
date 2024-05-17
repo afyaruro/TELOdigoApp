@@ -94,7 +94,7 @@ class _CrearAnuncioView8State extends State<CrearAnuncioView8> {
                         // _camGaleria(false);
                         _opcioncamara(context);
 
-                        print("Hola");
+                        // print("Hola");
                       },
                       child: Container(
                         width: 400,

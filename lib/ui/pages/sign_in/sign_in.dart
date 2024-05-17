@@ -24,80 +24,79 @@ class _sign_inState extends State<sign_in> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Color.fromARGB(255, 0, 0, 0),
         body: CustomBackgroundLogin(
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.1,
-            ),
-            Container(
-              padding: const EdgeInsets.only(
-                  left: 50, right: 50, top: 50, bottom: 50),
-              child: const Image(
-                image: AssetImage('assets/logo.png'),
-                height: 100,
-              ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0,
-            ),
-            CustomOption(true, context),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.1,
-            ),
-            CustomTextField1(
-                nombre: "Usuario",
-                isPassword: false,
-                controller: controller_userName),
-            CustomTextField1(
-                nombre: "Contraseña",
-                isPassword: true,
-                controller: controller_password),
-            Padding(
-              padding: EdgeInsets.only(top: 10, bottom: 50),
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  splashColor: Color.fromARGB(123, 206, 206, 206),
-                  onTap: () async {
-                    await Future.delayed(Duration(milliseconds: 500), () {
-                      Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                              builder: (context) => const changePassword()));
-                    });
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Text(
-                      "¿Olvidaste tu contraseña?",
-                      style: TextStyle(color: Colors.white),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.1,
+                ),
+                Container(
+                  padding: const EdgeInsets.only(
+                      left: 50, right: 50, top: 50, bottom: 50),
+                  child: const Image(
+                    image: AssetImage('assets/logo.png'),
+                    height: 100,
+                  ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0,
+                ),
+                CustomOption(true, context),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.1,
+                ),
+                CustomTextField1(
+                    nombre: "Usuario",
+                    isPassword: false,
+                    controller: controller_userName),
+                CustomTextField1(
+                    nombre: "Contraseña",
+                    isPassword: true,
+                    controller: controller_password),
+                Padding(
+                  padding: EdgeInsets.only(top: 10, bottom: 50),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      splashColor: Color.fromARGB(123, 206, 206, 206),
+                      onTap: () async {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const changePassword()));
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Text(
+                          "¿Olvidaste tu contraseña?",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ),
-            CustomButtonsRadius(const Color(0xffffffff),
-                const Color(0xff3B2151), "¡COMENZAR!", false, () async {
-              var resp = await login(
-                  user: controller_userName.text,
-                  password: controller_password.text,
-                  context: context);
+                CustomButtonsRadiusx(const Color(0xffffffff),
+                    const Color(0xff3B2151), "¡COMENZAR!", () async {
+                  var resp = await login(
+                      user: controller_userName.text,
+                      password: controller_password.text,
+                      context: context);
 
-              PeticionesNegocio.listNegocios();
-              // PeticionesNegocio.listFavoritos();
-              if (resp == true || resp == false) {
-                FocusScope.of(context).requestFocus(FocusNode());
-              }
-            }),
-            const SizedBox(
-              height: 50,
+                  PeticionesNegocio.listNegocios();
+                  // PeticionesNegocio.listFavoritos();
+                  if (resp == true || resp == false) {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                  }
+                }),
+                const SizedBox(
+                  height: 50,
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-    ));
+          ),
+        ));
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_places_autocomplete_text_field/google_places_autocomplete_text_field.dart';
+import 'package:telodigo/data/controllers/mapcontroller.dart';
 import 'package:telodigo/data/controllers/negociocontroller.dart';
 import 'package:telodigo/ui/pages/crear%20anuncio/crearanuncioview4.dart';
 
@@ -19,13 +20,23 @@ class _CrearAnuncioMapState extends State<CrearAnuncioMap> {
   late GoogleMapController googleMapController;
   LatLng? _selectedLocation;
    static final NegocioController controllerhotel = Get.find();
+    static final MapController controller = Get.find();
 
   Set<Marker> marketList = {};
 
-  static final CameraPosition _cameraPosition = CameraPosition(
+  static late CameraPosition _cameraPosition = CameraPosition(
     target: LatLng(-12.04318, -77.02824),
     zoom: 14.4746,
   );
+
+ @override
+  void initState() {
+    super.initState();
+
+    _cameraPosition = CameraPosition(
+        target: LatLng(controller.latitud, controller.logitud), zoom: 14.4746);
+    
+  }
 
   @override
   Widget build(BuildContext context) {

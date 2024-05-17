@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:telodigo/data/service/peticionnegocio.dart';
 import 'package:telodigo/domain/models/hoteles.dart';
 import 'package:telodigo/ui/components/customcomponents/custombuttonborderradius.dart';
@@ -17,24 +18,6 @@ class AnunciosAnfitrion extends StatefulWidget {
 }
 
 class _AnunciosAnfitrionState extends State<AnunciosAnfitrion> {
-  // static final NegocioController controllernegocio = Get.find();
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //       body: Container(
-  //     color: Color.fromARGB(255, 29, 7, 48),
-  //     width: MediaQuery.of(context).size.width,
-  //     height: MediaQuery.of(context).size.height,
-  //     child: SingleChildScrollView(
-  //       child: controllernegocio.hoteles!.isEmpty
-  //           ? FirstHotel()
-  //           : ListHotel(hotelList: controllernegocio.hoteles!),
-  //     ),
-  //   ));
-  // }
-  List<Hoteles> hoteles = [];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,10 +25,12 @@ class _AnunciosAnfitrionState extends State<AnunciosAnfitrion> {
         future: PeticionesNegocio.listNegocios(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
+          
             return Container(
               color: Color.fromARGB(255, 29, 7, 48),
               child: Center(
-                child: CircularProgressIndicator(),
+                // child: CircularProgressIndicator(),
+                child: Text("Cargando tus negocios...", style: TextStyle(color: Colors.white),),
               ),
             );
           } else if (snapshot.hasError) {
@@ -86,40 +71,41 @@ class _ListHotelState extends State<ListHotel> {
     return Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height - 60,
-        child: Stack(
-          alignment: Alignment(0, 0),
+        child: Column(
           children: [
-            Align(
-              alignment: Alignment(-.8, -.7),
-              child: Text(
-                "Tus Anuncions",
-                style: TextStyle(
-                    color: Color.fromARGB(255, 255, 255, 255),
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-            Align(
-              alignment: Alignment(.9, -.72),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 16, 152, 231)),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const CrearAnuncioView2()));
-                },
-                child: Text(
-                  "Crear",
-                  style: TextStyle(color: Colors.white),
+            Container(
+              width: 400,
+              padding: EdgeInsets.only(top: 50, right: 20, left: 20, bottom: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                Text(
+                  "Tus Anuncions",
+                  style: TextStyle(
+                      color: Color.fromARGB(255, 255, 255, 255),
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold),
                 ),
-              ),
+              
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Color.fromARGB(255, 16, 152, 231)),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const CrearAnuncioView2()));
+                  },
+                  child: Text(
+                    "Crear",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              
+              ],),
             ),
-            Align(
-              alignment: Alignment(0, 1.2),
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height * .74,
+            Container(
+                height: MediaQuery.of(context).size.height - 170,
                 child: ListView.builder(
                   padding: EdgeInsets.only(top: 10, bottom: 20),
                   itemCount: widget.hotelList.length,
@@ -163,9 +149,7 @@ class _ListHotelState extends State<ListHotel> {
                                         width: 6,
                                       ),
                                       Text(
-                                        
                                         widget.hotelList[index].saldo > 5.0
-
                                             ? "Publicado"
                                             : "Recargar",
                                         style: const TextStyle(
@@ -292,7 +276,6 @@ class _ListHotelState extends State<ListHotel> {
                   },
                 ),
               ),
-            )
           ],
         ));
   }

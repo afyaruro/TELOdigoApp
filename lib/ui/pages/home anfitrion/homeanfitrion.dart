@@ -8,8 +8,8 @@ import 'package:telodigo/domain/models/hoteles.dart';
 import 'package:telodigo/ui/components/customcomponents/exitconfirmation.dart';
 import 'package:telodigo/ui/pages/Reservar/listreservasanfitrion.dart';
 import 'package:telodigo/ui/pages/anuncios%20anfitrion/anunciosanfitrion.dart';
+import 'package:telodigo/ui/pages/chats/verchats.dart';
 import 'package:telodigo/ui/pages/opciones%20anfitrion/opcionesanfitrion.dart';
-import 'package:telodigo/ui/pages/sign_in/sign_in.dart';
 import 'package:telodigo/ui/pages/sign_up/sign_up.dart';
 
 class HomeAnfitrion extends StatefulWidget {
@@ -29,12 +29,13 @@ class _HomeAnfitrionState extends State<HomeAnfitrion> {
  
 
   final Screens = [
-    AnunciosAnfitrion(),
-    sign_in(),
-    ListReservasUserAnfitrion(),
-    sign_up(),
-    OpcionesAnfitrion(),
+    const AnunciosAnfitrion(),
+    const VerChats(),
+    const ListReservasUserAnfitrion(),
+    const sign_up(),
+    const OpcionesAnfitrion(),
   ];
+
 
      @override
   void initState() {

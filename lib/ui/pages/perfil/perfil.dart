@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:telodigo/data/controllers/usercontroller.dart';
@@ -6,6 +5,7 @@ import 'package:telodigo/domain/models/usuario.dart';
 import 'package:telodigo/ui/pages/datos%20generales/datos_generales.dart';
 import 'package:telodigo/ui/pages/home%20anfitrion/homeanfitrion.dart';
 import 'package:telodigo/ui/pages/inicio/init_page.dart';
+import 'package:telodigo/ui/pages/perfil/informaproblema.dart';
 import 'package:telodigo/ui/pages/terminos&condiciones/terminos&condiciones.dart';
 
 class Perfil extends StatefulWidget {
@@ -44,7 +44,7 @@ class _PerfilState extends State<Perfil> {
               action: () {
                 Navigator.push(
                     context,
-                    CupertinoPageRoute(
+                    MaterialPageRoute(
                         builder: (context) => Datos_Generales()));
               },
             ),
@@ -65,7 +65,7 @@ class _PerfilState extends State<Perfil> {
               action: () {
                 Navigator.push(
                     context,
-                    CupertinoPageRoute(
+                    MaterialPageRoute(
                         builder: (context) => HomeAnfitrion()));
               },
             ),
@@ -76,15 +76,14 @@ class _PerfilState extends State<Perfil> {
             
             CustomOptionPerfil(
               color: color_segundario,
-              icon: Icons.question_answer_rounded,
-              text: "Preguntas Frecuentes",
-              action: () {},
-            ),
-            CustomOptionPerfil(
-              color: color_segundario,
               icon: Icons.warning_amber_rounded,
               text: "Informar un Problema",
-              action: () {},
+              action: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const InformaProblema()));
+              },
             ),
             CustomOptionPerfil(
               color: color_segundario,
@@ -93,7 +92,7 @@ class _PerfilState extends State<Perfil> {
               action: () {
                 Navigator.push(
                     context,
-                    CupertinoPageRoute(
+                    MaterialPageRoute(
                         builder: (context) => terminos_condiciones()));
               },
             ),
@@ -185,7 +184,7 @@ class CustomCerrarSesion extends StatelessWidget {
                   Navigator.pop(context);
                   Navigator.pushAndRemoveUntil(
                     context,
-                    CupertinoPageRoute(builder: (context) => const Init_Page()),
+                    MaterialPageRoute(builder: (context) => const Init_Page()),
                     (Route<dynamic> route) => false,
                   );
                 },

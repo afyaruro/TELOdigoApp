@@ -1,9 +1,7 @@
 import 'dart:typed_data';
 import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:telodigo/data/controllers/mapcontroller.dart';
@@ -31,7 +29,6 @@ class _MapaHotelsState extends State<MapaHotels> {
   void initState() {
     super.initState();
 
-    // _getCurrentLocation();
     _cameraPosition = CameraPosition(
         target: LatLng(controller.latitud, controller.logitud), zoom: 14.4746);
     cargarNegociosEnMapa();
@@ -55,8 +52,6 @@ class _MapaHotelsState extends State<MapaHotels> {
         markerList.add(Marker(
             markerId: MarkerId(hotel.id.toString()),
             position: LatLng(hotel.latitud, hotel.longitud),
-            // icon: BitmapDescriptor.defaultMarkerWithHue(
-            //     BitmapDescriptor.hueViolet),
             icon: bitmapdescriptor,
             infoWindow: InfoWindow(
               title: hotel.nombre,
@@ -114,26 +109,6 @@ class _MapaHotelsState extends State<MapaHotels> {
     final ByteData? data = await img.toByteData(format: ImageByteFormat.png);
     return data!.buffer.asUint8List();
   }
-
-  // void _getCurrentLocation() async {
-  //   final GeolocatorPlatform geolocator = GeolocatorPlatform.instance;
-  //   print("Hola mundo");
-  //   try {
-  //     Position position = await geolocator.getCurrentPosition(
-  //         desiredAccuracy: LocationAccuracy.best);
-  //     print(position.longitude);
-  //     print(position.latitude);
-
-  //     _cameraPosition = CameraPosition(
-  //       target: LatLng(position.latitude, position.longitude),
-  //       zoom: 14.4746,
-  //     );
-
-  //     setState(() {});
-  //   } catch (e) {
-  //     print("Error al obtener la ubicación: $e");
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
