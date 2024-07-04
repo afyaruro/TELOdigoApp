@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:telodigo/data/controllers/usercontroller.dart';
 import 'package:telodigo/domain/models/mensajesHotel.dart';
 import 'package:telodigo/ui/pages/chats/customChatComponent.dart';
 import 'package:telodigo/ui/pages/chats/viewchatanfitrion.dart';
@@ -12,6 +14,8 @@ class VerChats extends StatefulWidget {
 }
 
 class _VerChatsState extends State<VerChats> {
+  static final UserController controlleruser = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +28,11 @@ class _VerChatsState extends State<VerChats> {
   Widget ListChats() {
     return Container(
       child: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('Chats').snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('Chats')
+            .where('idPropietarioNegocio',
+                isEqualTo: controlleruser.usuario!.userName)
+            .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -42,10 +50,10 @@ class _VerChatsState extends State<VerChats> {
             List<DocumentSnapshot> sortedDocs = snapshot.data!.docs.toList();
 
             sortedDocs.sort((a, b) {
-            DateTime fechaA = a['fecha'].toDate();
-            DateTime fechaB = b['fecha'].toDate();
-            return fechaB.compareTo(fechaA);
-          });
+              DateTime fechaA = a['fecha'].toDate();
+              DateTime fechaB = b['fecha'].toDate();
+              return fechaB.compareTo(fechaA);
+            });
 
             return SingleChildScrollView(
               child: Column(

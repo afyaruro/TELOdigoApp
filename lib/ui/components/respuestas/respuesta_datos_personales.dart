@@ -21,7 +21,7 @@ Future<bool> respuestaActualizarDatos(
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const CustomAlert(
+        return CustomAlert(
           title: "Validación de Edad",
           text: "Debes ser mayor de edad",
         );

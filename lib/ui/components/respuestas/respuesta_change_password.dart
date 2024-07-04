@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:telodigo/data/controllers/usercontroller.dart';
 import 'package:telodigo/data/service/peticioneschangePassword.dart';
@@ -49,7 +48,7 @@ Future<void> respuestaChangePassword({
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const CustomAlert(
+        return CustomAlert(
           title: "Valida tu Informacion",
           text:
               "Ingresa el codigo de verificación que hemos mandado a tu correo",
@@ -60,7 +59,7 @@ Future<void> respuestaChangePassword({
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const CustomAlert(
+        return CustomAlert(
           title: "Valida tu Informacion",
           text: "Por favor ingresa la nueva contraseña",
         );
@@ -70,7 +69,7 @@ Future<void> respuestaChangePassword({
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const CustomAlert(
+        return CustomAlert(
           title: "Valida tu Informacion",
           text: "Por favor ingresa confirma tu contraseña",
         );
@@ -82,7 +81,7 @@ Future<void> respuestaChangePassword({
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return const CustomAlert(
+            return CustomAlert(
               title: "Contraseña Insegura",
               text:
                   "Por favor verifica que contenga almenos un numero, una letra minuscula, una letra mayuscula y sean almenos 7 caracteres",
@@ -98,7 +97,7 @@ Future<void> respuestaChangePassword({
           showDialog(
             context: context,
             builder: (BuildContext context) {
-              return const CustomAlert(
+              return CustomAlert(
                 title: "Error de Contraseña",
                 text: "Las contraseñas no coinciden",
               );
@@ -110,7 +109,7 @@ Future<void> respuestaChangePassword({
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          return const CustomAlert(
+          return CustomAlert(
             title: "Valida tu Informacion",
             text: "Codigo de verificacion incorrecto",
           );

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:telodigo/data/controllers/negociocontroller.dart';
 import 'package:telodigo/domain/models/habitaciones.dart';
@@ -21,17 +20,18 @@ class _CrearAnuncioView6State extends State<CrearAnuncioView6> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 21, 1, 37),
+        backgroundColor: const Color.fromARGB(255, 21, 1, 37),
         foregroundColor: Colors.white,
         centerTitle: true,
         title: const Text(
-          "Paso 6 de 9",
+          "Paso 7 de 10",
           style: TextStyle(
             color: Color.fromARGB(255, 255, 255, 255),
             fontSize: 15,
           ),
         ),
       ),
+      backgroundColor: const Color.fromARGB(255, 21, 1, 37),
       body: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
@@ -45,9 +45,9 @@ class _CrearAnuncioView6State extends State<CrearAnuncioView6> {
                 child: Text(
                   "Añade tus precios",
                   style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                  ),
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white),
                 ),
               ),
             ),
@@ -58,9 +58,7 @@ class _CrearAnuncioView6State extends State<CrearAnuncioView6> {
                 padding: EdgeInsets.symmetric(horizontal: 30),
                 child: Text(
                   "Añade los precios según los tipos de habitación y las horas",
-                  style: TextStyle(
-                    fontSize: 14,
-                  ),
+                  style: TextStyle(fontSize: 14, color: Colors.white),
                 ),
               ),
             ),
@@ -72,6 +70,7 @@ class _CrearAnuncioView6State extends State<CrearAnuncioView6> {
                 child: Text(
                   "Seleccione el tipo de habitación para editar",
                   style: TextStyle(
+                    color: Colors.white,
                     fontSize: 14,
                   ),
                 ),
@@ -80,33 +79,41 @@ class _CrearAnuncioView6State extends State<CrearAnuncioView6> {
             for (var habitacion in controllerhotel.habitaciones!)
               Container(
                   width: 400,
-                  margin: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Colors.black45, width: 1)),
+                      border: Border.all(
+                          color: const Color.fromARGB(255, 255, 255, 255),
+                          width: 1)),
                   child: Column(
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(habitacion.nombre,
-                              style: TextStyle(fontWeight: FontWeight.w500)),
+                          Flexible(
+                            child: Text(habitacion.nombre,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white)),
+                          ),
                           Row(
                             children: [
-                              
                               habitacion.precios.length == 0
                                   ? Container(
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                         shape: BoxShape.circle,
                                         color: Colors.red,
                                       ),
-                                      child: Icon(
+                                      child: const Icon(
                                         Icons.close,
-                                        color: const Color.fromARGB(
-                                            255, 255, 255, 255),
+                                        color:
+                                            Color.fromARGB(255, 255, 255, 255),
                                       ))
-                                  : Icon(
+                                  : const Icon(
                                       Icons.check_circle,
                                       color: Color.fromARGB(255, 53, 163, 1),
                                     )
@@ -119,15 +126,19 @@ class _CrearAnuncioView6State extends State<CrearAnuncioView6> {
                         children: [
                           Container(
                             width: 50,
-                            child: Text(
+                            child: const Text(
                               "Hora",
-                              style: TextStyle(fontWeight: FontWeight.w500),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white),
                             ),
                           ),
                           Container(
                             width: 80,
-                            child: Text("Precio",
-                                style: TextStyle(fontWeight: FontWeight.w500)),
+                            child: const Text("Precio",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white)),
                           ),
                           Container(
                             width: 100,
@@ -142,14 +153,17 @@ class _CrearAnuncioView6State extends State<CrearAnuncioView6> {
                               width: 50,
                               child: Text(
                                 "${precio.hora}",
-                                style: TextStyle(fontWeight: FontWeight.w500),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white),
                               ),
                             ),
                             Container(
                               width: 80,
                               child: Text("S/${precio.precio}",
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.w500)),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.white)),
                             ),
                             Container(
                               width: 100,
@@ -160,7 +174,10 @@ class _CrearAnuncioView6State extends State<CrearAnuncioView6> {
                                         habitacion.precios.remove(precio);
                                         setState(() {});
                                       },
-                                      icon: Icon(Icons.delete_forever)),
+                                      icon: const Icon(
+                                        Icons.delete_forever,
+                                        color: Colors.white,
+                                      )),
                                   IconButton(
                                       onPressed: () {
                                         showDialog(
@@ -182,13 +199,16 @@ class _CrearAnuncioView6State extends State<CrearAnuncioView6> {
                                           },
                                         );
                                       },
-                                      icon: Icon(Icons.edit))
+                                      icon: const Icon(
+                                        Icons.edit,
+                                        color: Colors.white,
+                                      ))
                                 ],
                               ),
                             )
                           ],
                         ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       ElevatedButton(
@@ -207,7 +227,7 @@ class _CrearAnuncioView6State extends State<CrearAnuncioView6> {
                               },
                             );
                           },
-                          child: Text("Nuevo Precio"))
+                          child: const Text("Nuevo Precio"))
                     ],
                   )),
           ]))),
@@ -215,37 +235,36 @@ class _CrearAnuncioView6State extends State<CrearAnuncioView6> {
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
         child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(vertical: 15),
-                backgroundColor: Color(0xFF1098E7)),
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                backgroundColor: const Color(0xFF1098E7)),
             onPressed: () {
               int numero = 0;
 
-              for (var habitacion in controllerhotel.habitaciones!){
-                if(habitacion.precios.length == 0){
+              for (var habitacion in controllerhotel.habitaciones!) {
+                if (habitacion.precios.length == 0) {
                   numero = numero + 1;
                 }
               }
 
-              if(numero > 0){
+              if (numero > 0) {
                 showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return const CustomAlert(
-                            title: "Valida tus Precios",
-                            text: "Por favor verifica tus habitaciones parece ser que hay habitaciones sin establecer precios",
-                          );
-                        },
-                      );
-              }else {
-                print("Puedes segir");
+                  context: context,
+                  builder: (BuildContext context) {
+                    return CustomAlert(
+                      title: "Valida tus Precios",
+                      text:
+                          "Por favor verifica tus habitaciones parece ser que hay habitaciones sin establecer precios",
+                    );
+                  },
+                );
+              } else {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const CrearAnuncioView7()));
               }
-
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const CrearAnuncioView7()));
             },
-            child: Text(
+            child: const Text(
               "Siguiente",
               style: TextStyle(color: Colors.white),
             )),
@@ -253,7 +272,6 @@ class _CrearAnuncioView6State extends State<CrearAnuncioView6> {
     );
   }
 }
-
 
 class AlertEdit extends StatefulWidget {
   final Precios precio;
@@ -272,7 +290,7 @@ class AlertEdit extends StatefulWidget {
 
 class _AlertEditState extends State<AlertEdit> {
   int selectedNumber = 1;
-  TextEditingController controller = TextEditingController(text: "0");
+  TextEditingController controller = TextEditingController(text: "");
 
   @override
   void initState() {
@@ -286,21 +304,24 @@ class _AlertEditState extends State<AlertEdit> {
     return AlertDialog(
       title: Center(
           child: Text(
-        "${widget.title}",
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+        widget.title,
+        style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+            color: Color.fromARGB(255, 66, 35, 116)),
       )),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
             width: 400,
-            padding: EdgeInsets.symmetric(horizontal: 30),
+            padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   children: [
-                    Text("Horas:  "),
+                    const Text("Horas:  "),
                     Container(
                       alignment: Alignment.center,
                       width: 100,
@@ -312,7 +333,7 @@ class _AlertEditState extends State<AlertEdit> {
                           )),
                       child: DropdownButton<int>(
                         value: selectedNumber,
-                        items: List.generate(24, (index) {
+                        items: List.generate(23, (index) {
                           return DropdownMenuItem<int>(
                             value: index + 1,
                             child: Text((index + 1).toString()),
@@ -331,15 +352,14 @@ class _AlertEditState extends State<AlertEdit> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
                   children: [
-                    Text("Precio:  "),
+                    const Text("Precio:  "),
                     Container(
                       width: 100,
-                      height: 50,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
@@ -348,7 +368,7 @@ class _AlertEditState extends State<AlertEdit> {
                             color: Colors.black38,
                           )),
                       child: TextField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           border:
                               OutlineInputBorder(borderSide: BorderSide.none),
                         ),
@@ -368,7 +388,7 @@ class _AlertEditState extends State<AlertEdit> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text("Cancelar"),
+          child: const Text("Cancelar"),
         ),
         TextButton(
           onPressed: () {
@@ -376,7 +396,7 @@ class _AlertEditState extends State<AlertEdit> {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return const CustomAlert(
+                  return CustomAlert(
                     title: "Agrega un precio",
                     text: "Por favor agrega un precio para continuar",
                   );
@@ -386,7 +406,7 @@ class _AlertEditState extends State<AlertEdit> {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return const CustomAlert(
+                  return CustomAlert(
                     title: "Valor Invalido",
                     text: "El valor ingresado es invalido",
                   );
@@ -396,7 +416,7 @@ class _AlertEditState extends State<AlertEdit> {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return const CustomAlert(
+                  return CustomAlert(
                     title: "Valor Invalido",
                     text: "El valor ingresado debe ser mayor de 0",
                   );
@@ -412,7 +432,7 @@ class _AlertEditState extends State<AlertEdit> {
             }
             Navigator.of(context).pop();
           },
-          child: Text("Guardar"),
+          child: const Text("Guardar"),
         ),
       ],
     );
@@ -432,13 +452,13 @@ class AlertAgregar extends StatefulWidget {
 
 class _AlertAgregarState extends State<AlertAgregar> {
   int selectedNumber = 1;
-  TextEditingController controller = TextEditingController(text: "0");
+  TextEditingController controller = TextEditingController(text: "");
 
   @override
   void initState() {
     super.initState();
     selectedNumber = 1;
-    controller.text = "0";
+    controller.text = "";
   }
 
   @override
@@ -446,21 +466,24 @@ class _AlertAgregarState extends State<AlertAgregar> {
     return AlertDialog(
       title: Center(
           child: Text(
-        "${widget.title}",
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+        widget.title,
+        style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+            color: Color.fromARGB(255, 66, 35, 116)),
       )),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
             width: 400,
-            padding: EdgeInsets.symmetric(horizontal: 30),
+            padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   children: [
-                    Text("Horas:  "),
+                    const Text("Horas:  "),
                     Container(
                       alignment: Alignment.center,
                       width: 100,
@@ -472,7 +495,7 @@ class _AlertAgregarState extends State<AlertAgregar> {
                           )),
                       child: DropdownButton<int>(
                         value: selectedNumber,
-                        items: List.generate(24, (index) {
+                        items: List.generate(23, (index) {
                           return DropdownMenuItem<int>(
                             value: index + 1,
                             child: Text((index + 1).toString()),
@@ -491,15 +514,14 @@ class _AlertAgregarState extends State<AlertAgregar> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
                   children: [
-                    Text("Precio:  "),
+                    const Text("Precio:  "),
                     Container(
                       width: 100,
-                      height: 50,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
@@ -508,7 +530,7 @@ class _AlertAgregarState extends State<AlertAgregar> {
                             color: Colors.black38,
                           )),
                       child: TextField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           border:
                               OutlineInputBorder(borderSide: BorderSide.none),
                         ),
@@ -528,7 +550,7 @@ class _AlertAgregarState extends State<AlertAgregar> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text("Cancelar"),
+          child: const Text("Cancelar"),
         ),
         TextButton(
           onPressed: () {
@@ -536,7 +558,7 @@ class _AlertAgregarState extends State<AlertAgregar> {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return const CustomAlert(
+                  return CustomAlert(
                     title: "Agrega un precio",
                     text: "Por favor agrega un precio para continuar",
                   );
@@ -546,7 +568,7 @@ class _AlertAgregarState extends State<AlertAgregar> {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return const CustomAlert(
+                  return CustomAlert(
                     title: "Valor Invalido",
                     text: "El valor ingresado es invalido",
                   );
@@ -556,7 +578,7 @@ class _AlertAgregarState extends State<AlertAgregar> {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return const CustomAlert(
+                  return CustomAlert(
                     title: "Valor Invalido",
                     text: "El valor ingresado debe ser mayor de 0",
                   );
@@ -572,7 +594,7 @@ class _AlertAgregarState extends State<AlertAgregar> {
             }
             Navigator.of(context).pop();
           },
-          child: Text("Guardar"),
+          child: const Text("Guardar"),
         ),
       ],
     );

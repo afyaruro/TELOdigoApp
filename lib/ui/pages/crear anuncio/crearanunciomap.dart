@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_places_autocomplete_text_field/google_places_autocomplete_text_field.dart';
@@ -14,33 +13,32 @@ class CrearAnuncioMap extends StatefulWidget {
   State<CrearAnuncioMap> createState() => _CrearAnuncioMapState();
 }
 
-const kGoogleApiKey = "AIzaSyCnANhFGwttT-RM2rUhtDas13DRivPQO7Y";
+const kGoogleApiKey = "AIzaSyCGBD6GOKOf-uAqhfKUYSZy9JVvcFgKfpw";
 
 class _CrearAnuncioMapState extends State<CrearAnuncioMap> {
   late GoogleMapController googleMapController;
   LatLng? _selectedLocation;
-   static final NegocioController controllerhotel = Get.find();
-    static final MapController controller = Get.find();
+  static final NegocioController controllerhotel = Get.find();
+  static final MapController controller = Get.find();
 
   Set<Marker> marketList = {};
+  bool _isLoading = true;
 
   static late CameraPosition _cameraPosition = CameraPosition(
     target: LatLng(-12.04318, -77.02824),
     zoom: 14.4746,
   );
 
- @override
+  @override
   void initState() {
     super.initState();
-
     _cameraPosition = CameraPosition(
         target: LatLng(controller.latitud, controller.logitud), zoom: 14.4746);
-    
   }
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController controller = TextEditingController(text: "");
+    TextEditingController textEditingController = TextEditingController(text: "");
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 21, 1, 37),
@@ -51,6 +49,7 @@ class _CrearAnuncioMapState extends State<CrearAnuncioMap> {
           style: TextStyle(
             color: Color.fromARGB(255, 255, 255, 255),
             fontSize: 15,
+            fontWeight: FontWeight.w600
           ),
         ),
       ),
@@ -71,16 +70,25 @@ class _CrearAnuncioMapState extends State<CrearAnuncioMap> {
               initialCameraPosition: _cameraPosition,
               onMapCreated: (GoogleMapController controller) {
                 googleMapController = controller;
+                setState(() {
+                  _isLoading = false;
+                });
               },
               mapType: MapType.normal,
               onTap: (LatLng latLng) {
                 setState(() {
                   _selectedLocation = latLng;
-                  controllerhotel.EstablecerCoodenadas(_selectedLocation!.latitude, _selectedLocation!.longitude);
+                  controllerhotel.EstablecerCoodenadas(
+                      _selectedLocation!.latitude, _selectedLocation!.longitude);
                 });
               },
             ),
           ),
+          _isLoading
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : SizedBox(),
           Container(
             width: 400,
             padding: EdgeInsets.zero,
@@ -95,8 +103,8 @@ class _CrearAnuncioMapState extends State<CrearAnuncioMap> {
                     borderSide: BorderSide.none,
                   ),
                 ),
-                textEditingController: controller,
-                googleAPIKey: "AIzaSyCnANhFGwttT-RM2rUhtDas13DRivPQO7Y",
+                textEditingController: textEditingController,
+                googleAPIKey: kGoogleApiKey,
                 debounceTime: 400,
                 countries: ["pe"],
                 isLatLngRequired: true,
@@ -106,14 +114,11 @@ class _CrearAnuncioMapState extends State<CrearAnuncioMap> {
                     double lng = double.parse(prediction.lng!);
 
                     controllerhotel.EstablecerCoodenadas(lat, lng);
-                    
+
                     marketList = {};
                     marketList.add(Marker(
                         markerId: MarkerId("new"), position: LatLng(lat, lng)));
-                    _selectedLocation = LatLng(
-                      lat,
-                      lng,
-                    );
+                    _selectedLocation = LatLng(lat, lng);
                     googleMapController.animateCamera(
                       CameraUpdate.newLatLng(_selectedLocation!),
                     );
@@ -135,8 +140,7 @@ class _CrearAnuncioMapState extends State<CrearAnuncioMap> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      const CrearAnuncioView4()));
+                                  builder: (context) => const CrearAnuncioView4()));
                         }
                       : null,
                   child: Text(
@@ -147,7 +151,6 @@ class _CrearAnuncioMapState extends State<CrearAnuncioMap> {
           ),
         ],
       ),
-      // bottomNavigationBar:
     );
   }
 }

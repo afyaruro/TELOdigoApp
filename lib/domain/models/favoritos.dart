@@ -1,6 +1,6 @@
 class Favorito {
   final String nombre;
-  final int idHotel;
+  final String idHotel;
   final String idUser;
 
   Favorito({ required this.nombre, required this.idHotel, required this.idUser, 

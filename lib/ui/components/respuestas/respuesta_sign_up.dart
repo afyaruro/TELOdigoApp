@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:telodigo/config/imgbase64/perfil.dart';
 import 'package:telodigo/data/service/peticionesusuario.dart';
@@ -40,7 +39,7 @@ Future<bool> newUser(
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          return const CustomAlert(
+          return CustomAlert(
             title: "Validación de Edad",
             text: "Debes ser mayor de edad para registrarte",
           );
@@ -50,7 +49,7 @@ Future<bool> newUser(
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          return const CustomAlert(
+          return CustomAlert(
             title: "Validación de Correo",
             text: "Por favor digite un correo electrónico válido",
           );
@@ -60,10 +59,38 @@ Future<bool> newUser(
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          return const CustomAlert(
-            title: "Contraseña Insegura",
-            text:
-                "Por favor verifica que contenga almenos un numero, una letra minuscula, una letra mayuscula y sean almenos 7 caracteres",
+          return AlertDialog(
+            title: Text(
+              "Contraseña Insegura",
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+                color: Color.fromARGB(255, 0, 0, 0),
+              ),
+            ),
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                
+                Text("Por favor, verifica que contenga al menos:"),
+                SizedBox(
+                  height: 10,
+                ),
+                Text("• un número"),
+                Text("• una letra minúscula"),
+                Text("• una letra mayúscula"),
+                Text("• al menos 7 caracteres")
+              ],
+            ),
+            actions: [
+              TextButton(
+                child: Text('Aceptar'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
           );
         },
       );
@@ -77,6 +104,7 @@ Future<bool> newUser(
         "fechaNacimiento": fechaNacimiento,
         "foto": ImagenPerfilDefault.img,
         "modoOscuro": false,
+        "saldoCuenta": 0.0
       };
 
       var respuesta = await PeticionesUsuario.crearUsuario(
@@ -95,18 +123,16 @@ Future<bool> newUser(
 
         return true;
       } else if (respuesta == "correo-invalido") {
-
         Navigator.pop(context);
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return const CustomAlert(
+            return CustomAlert(
               title: "Correo No Valido",
               text: "El correo que deseas usar ya se encuentra en uso",
             );
           },
         );
-      
       } else if (respuesta == "timeout") {}
     }
   }
@@ -150,7 +176,7 @@ void CamposVacios(
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const CustomAlert(
+        return CustomAlert(
           title: "Validación de Campos",
           text: "Por favor digite su correo electronico",
         );
@@ -160,7 +186,7 @@ void CamposVacios(
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const CustomAlert(
+        return CustomAlert(
           title: "Validación de Campos",
           text: "Por favor seleccione la fecha de nacimiento",
         );
@@ -170,7 +196,7 @@ void CamposVacios(
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const CustomAlert(
+        return CustomAlert(
           title: "Validación de Campos",
           text: "Por favor verifique el usuario",
         );
@@ -180,7 +206,7 @@ void CamposVacios(
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const CustomAlert(
+        return CustomAlert(
           title: "Validación de Campos",
           text: "Por favor verifique la contraseña",
         );
@@ -190,7 +216,7 @@ void CamposVacios(
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const CustomAlert(
+        return CustomAlert(
           title: "Terminos y Condiciones",
           text: "Por favor acepta los terminos y condiciones",
         );

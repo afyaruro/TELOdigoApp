@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Reserva {
   final int key;
   final String codigo;
   late String estado;
   final String nombreNegocio;
-  final int idHotel;
+  final String idHotel;
   final String idUserHotel;
   final String idUser;
   final String direccion;
@@ -14,34 +16,43 @@ class Reserva {
   final String habitacion;
   final int horaInicioReserva;
   final int horaFinalReserva;
+  final int horaMaximaLlegada;
+  final int minutoMaximoLlegada;
   final int minutoInicioReserva;
   final int minutoFinalReserva;
   final String metodoPago;
   final double precio;
   final String nombreCliente;
+  late DateTime fecha;
+  late DateTime fechaFinal;
+  late DateTime fechaMaximaLLegada;
 
-  Reserva({
-    required this.precio,
-    required this.key,
-    required this.idUserHotel,
-    required this.metodoPago,
-    required this.codigo,
-    required this.estado,
-    required this.nombreNegocio,
-    required this.direccion,
-    required this.longitud,
-    required this.latitud,
-    required this.fotoPrincipal,
-    required this.tiempoReserva,
-    required this.habitacion,
-    required this.horaInicioReserva,
-    required this.horaFinalReserva,
-    required this.minutoInicioReserva,
-    required this.minutoFinalReserva,
-    required this.idHotel,
-    required this.idUser,
-    required this.nombreCliente,
-  });
+  Reserva(
+      {required this.minutoMaximoLlegada,
+      required this.horaMaximaLlegada,
+      required this.fecha,
+      required this.precio,
+      required this.key,
+      required this.idUserHotel,
+      required this.metodoPago,
+      required this.codigo,
+      required this.estado,
+      required this.nombreNegocio,
+      required this.direccion,
+      required this.longitud,
+      required this.latitud,
+      required this.fotoPrincipal,
+      required this.tiempoReserva,
+      required this.habitacion,
+      required this.horaInicioReserva,
+      required this.horaFinalReserva,
+      required this.minutoInicioReserva,
+      required this.minutoFinalReserva,
+      required this.idHotel,
+      required this.idUser,
+      required this.nombreCliente,
+      required this.fechaFinal,
+      required this.fechaMaximaLLegada});
 
   Map<String, dynamic> toJson() => {
         "codigo": codigo,
@@ -63,11 +74,23 @@ class Reserva {
         "metodoPago": metodoPago,
         "idUserHotel": idUserHotel,
         "precio": precio,
-        "nombreCliente": nombreCliente
+        "nombreCliente": nombreCliente,
+        "horaMaximaLlegada": horaMaximaLlegada,
+        "minutoMaximoLlegada": minutoMaximoLlegada,
+        "fecha": DateTime.now(),
+        "fechaFinal": fechaFinal,
+        "fechaMaximaLLegada": fechaMaximaLLegada
       };
 
   factory Reserva.fromJson(Map<String, dynamic> json) {
+    DateTime fecha = (json["fecha"] as Timestamp).toDate();
+    DateTime fechaFinal = (json["fechaFinal"] as Timestamp).toDate();
+    DateTime fechaMaximaLLegada =
+        (json["fechaMaximaLLegada"] as Timestamp).toDate();
     return Reserva(
+        fechaMaximaLLegada: fechaMaximaLLegada,
+        fecha: fecha,
+        fechaFinal: fechaFinal,
         nombreCliente: json['nombreCliente'],
         key: json['key'],
         precio: json['precio'],
@@ -87,6 +110,8 @@ class Reserva {
         horaFinalReserva: json['horaFinalReserva'],
         minutoInicioReserva: json['minutoInicioReserva'],
         minutoFinalReserva: json['minutoFinalReserva'],
+        horaMaximaLlegada: json['horaMaximaLlegada'],
+        minutoMaximoLlegada: json['minutoMaximoLlegada'],
         idUserHotel: json['idUserHotel']);
   }
 }

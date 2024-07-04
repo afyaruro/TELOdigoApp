@@ -56,7 +56,7 @@ class PeticionesInicioSesion {
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          return const CustomAlert(
+          return  CustomAlert(
             title: "Error de Conexión",
             text: "Verifica tu conexión a internet",
           );

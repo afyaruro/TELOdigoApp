@@ -48,8 +48,10 @@ class _ImageCarouselState extends State<ImageCarousel> {
             },
           ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        Wrap(
+          // mainAxisAlignment: MainAxisAlignment.center,
+          alignment: WrapAlignment.center,
+
           children: widget.imageUrls.asMap().entries.map((entry) {
             return GestureDetector(
               onTap: () {

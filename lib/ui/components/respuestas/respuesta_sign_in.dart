@@ -16,7 +16,7 @@ Future<bool> login(
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const CustomAlert(
+        return  CustomAlert(
           title: "Valida tu Informacion",
           text: "Por favor ingresa un usuario",
         );
@@ -26,7 +26,7 @@ Future<bool> login(
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const CustomAlert(
+        return  CustomAlert(
           title: "Valida tu Informacion",
           text: "Por favor ingresa la contraseña de tu cuenta",
         );
@@ -67,7 +67,7 @@ Future<bool> login(
       showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const CustomAlert(
+        return  CustomAlert(
           title: "Valida tu Informacion",
           text: "La contraseña indicada es incorrecta",
         );
@@ -78,7 +78,7 @@ Future<bool> login(
       showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const CustomAlert(
+        return  CustomAlert(
           title: "Valida tu Informacion",
           text: "El usuario no se encuentra registrado en el sistema",
         );
@@ -90,7 +90,7 @@ Future<bool> login(
       showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const CustomAlert(
+        return  CustomAlert(
           title: "Error Desconocido",
           text: "Estamos teniendo errores por favor intenta mas tarde",
         );

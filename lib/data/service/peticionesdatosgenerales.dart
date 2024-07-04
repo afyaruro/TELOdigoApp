@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:telodigo/data/controllers/usercontroller.dart';
 import 'package:telodigo/domain/models/usuario.dart';
 import 'package:telodigo/ui/components/customcomponents/customalert.dart';
+import 'package:telodigo/ui/pages/home/home.dart';
 
 class PeticionesDatosPersonales {
   static final CollectionReference collection =
@@ -62,9 +63,15 @@ class PeticionesDatosPersonales {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return const CustomAlert(
+            return CustomAlert(
               title: "Datos Actualizados",
               text: "Sus datos personales han sido actualizados",
+              function: (){
+                Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const HomeUser(currentIndex: 4,)));
+              },
             );
           },
         );
@@ -77,9 +84,9 @@ class PeticionesDatosPersonales {
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          return const CustomAlert(
+          return CustomAlert(
             title: "Error Imagen",
-            text: "La imagen es demaciado pesada",
+            text: "La imagen es demasiado pesada",
           );
         },
       );

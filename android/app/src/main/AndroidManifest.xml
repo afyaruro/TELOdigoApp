@@ -4,12 +4,12 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
-        android:label="Telodigo"
+        android:label="TELOdigo"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 
         <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCnANhFGwttT-RM2rUhtDas13DRivPQO7Y" />
+            android:value="AIzaSyCGBD6GOKOf-uAqhfKUYSZy9JVvcFgKfpw" />
         
         <activity
             android:name=".MainActivity"

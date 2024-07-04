@@ -13,59 +13,61 @@ import 'package:telodigo/ui/pages/perfil/perfil.dart';
 
 class HomeUser extends StatefulWidget {
   final int currentIndex;
-  const HomeUser({super.key,  this.currentIndex = 0, });
+  const HomeUser({
+    super.key,
+    this.currentIndex = 2,
+  });
 
   @override
   State<HomeUser> createState() => _HomeUserState();
 }
 
 class _HomeUserState extends State<HomeUser> {
-   int _currentIndex = 0;
+  int _currentIndex = 0;
 
   final Screens = [
+    
     Principal(),
-    MapaHotels(),
     ListReservasUser(),
+    MapaHotels(),
     Favoritos(),
     Perfil(),
   ];
 
-    @override
+  @override
   void initState() {
     super.initState();
     _currentIndex = widget.currentIndex;
-    setState(() {
-      
-    });
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-          // Mostrar la alerta y esperar la respuesta del usuario
-          bool exits = await showDialog(
-            context: context,
-            builder: (context) => ExitConfirmationDialog(),
-          );
-          if (exits) {
-            exit(0);
-          }
-          // Devolver false para evitar que la acción de retroceso continúe
-          return false;
-
-          
-        },
+        // Mostrar la alerta y esperar la respuesta del usuario
+        bool exits = await showDialog(
+          context: context,
+          builder: (context) => ExitConfirmationDialog(),
+        );
+        if (exits) {
+          exit(0);
+        }
+        // Devolver false para evitar que la acción de retroceso continúe
+        return false;
+      },
       child: Scaffold(
         body: Screens[_currentIndex],
         bottomNavigationBar: Container(
-          color: Color.fromARGB(255, 29, 7, 48),
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          color: const Color.fromARGB(255, 29, 7, 48),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           child: GNav(
             selectedIndex: _currentIndex,
-            onTabChange: (index) => {setState(() {
-              _currentIndex = index;
-            })},
+            onTabChange: (index) => {
+              setState(() {
+                _currentIndex = index;
+              })
+            },
             backgroundColor: Color.fromARGB(255, 29, 7, 48),
             iconSize: 20,
             color: Colors.white,
@@ -73,18 +75,19 @@ class _HomeUserState extends State<HomeUser> {
             gap: 7,
             tabBackgroundColor: Color.fromARGB(255, 135, 109, 156),
             padding: EdgeInsets.all(10),
-            tabs: [
+            tabs: const [
+              
               GButton(
                 icon: Icons.search,
                 text: "Buscar",
               ),
               GButton(
-                icon: Icons.room_outlined,
-                text: "Ubicacion",
-              ),
-              GButton(
                 icon: Icons.event_available_rounded,
                 text: "Reservas",
+              ),
+              GButton(
+                icon: Icons.room_outlined,
+                text: "POINTS",
               ),
               GButton(
                 icon: Icons.favorite_border,

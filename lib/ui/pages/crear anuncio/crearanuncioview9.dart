@@ -29,22 +29,24 @@ class _CrearAnuncioView9State extends State<CrearAnuncioView9> {
 
   static final NegocioController controllerhotel = Get.find();
   static final UserController controlleruser = Get.find();
+  bool isButtonDisabled = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 21, 1, 37),
+        backgroundColor: const Color.fromARGB(255, 21, 1, 37),
         foregroundColor: Colors.white,
         centerTitle: true,
         title: const Text(
-          "Paso 9 de 9",
+          "Paso 10 de 10",
           style: TextStyle(
             color: Color.fromARGB(255, 255, 255, 255),
             fontSize: 15,
           ),
         ),
       ),
+      backgroundColor: const Color.fromARGB(255, 21, 1, 37),
       body: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
@@ -57,9 +59,9 @@ class _CrearAnuncioView9State extends State<CrearAnuncioView9> {
                 child: Text(
                   "Cuéntale a los huéspedes todo lo que tu negocio tiene para ofrecer",
                   style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                  ),
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white),
                 ),
               ),
             ),
@@ -70,9 +72,7 @@ class _CrearAnuncioView9State extends State<CrearAnuncioView9> {
                 padding: EdgeInsets.symmetric(horizontal: 30),
                 child: Text(
                   "Agrega solo los servicios que ofreces",
-                  style: TextStyle(
-                    fontSize: 14,
-                  ),
+                  style: TextStyle(fontSize: 14, color: Colors.white),
                 ),
               ),
             ),
@@ -179,76 +179,99 @@ class _CrearAnuncioView9State extends State<CrearAnuncioView9> {
             style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.symmetric(vertical: 15),
                 backgroundColor: Color(0xFF1098E7)),
-            onPressed: () async {
-             
-              if (btnWifi) {
-                servicios.add("WIFI");
-              }
+            onPressed: isButtonDisabled
+                ? null
+                : () async {
+                    setState(() {
+                      isButtonDisabled = true;
+                    });
 
-              if (btnTv) {
-                servicios.add("TV");
-              }
+                    if (btnWifi) {
+                      servicios.add("WIFI");
+                    }
 
-              if (btnSillonTantrico) {
-                servicios.add("Sillon Tántrico");
-              }
+                    if (btnTv) {
+                      servicios.add("TV");
+                    }
 
-              if (btnAguaCaliente) {
-                servicios.add("Agua Caliente");
-              }
+                    if (btnSillonTantrico) {
+                      servicios.add("Sillon Tántrico");
+                    }
 
-              if (btnCochera) {
-                servicios.add("Cochera");
-              }
+                    if (btnAguaCaliente) {
+                      servicios.add("Agua Caliente");
+                    }
 
-              if (btnNetflix) {
-                servicios.add("Netflix");
-              }
+                    if (btnCochera) {
+                      servicios.add("Cochera");
+                    }
+
+                    if (btnNetflix) {
+                      servicios.add("Netflix");
+                    }
+
+                    final CollectionReference collection =
+                        FirebaseFirestore.instance.collection("Negocios");
+                    var hotelCount = (await collection.get()).size;
+
+                    var saldo =
+                        controlleruser.usuario!.userName == "Admin" ? 6.0 : 0.0;
+                    var estado = controlleruser.usuario!.userName == "Admin"
+                        ? "verificado"
+                        : "por verificar";
+
+                    var negocio = <String, dynamic>{
+                      "id":
+                          "${controlleruser.usuario!.userName}${controllerhotel.nombreNegocio}${hotelCount + 1}",
+                      "nombre": controllerhotel.nombreNegocio,
+                      "tipoEspacio": controllerhotel.tipoEspacio,
+                      "habitaciones": controllerhotel.habitaciones
+                          ?.map((habitacion) => habitacion.toJson())
+                          .toList(),
+                      "longitud": controllerhotel.longitud,
+                      "latitud": controllerhotel.latitud,
+                      "direccion": controllerhotel.direccion,
+
+                      
+                      "horaAbrir": controllerhotel.horaAbrir,
+                      "horaCerrar": controllerhotel.horaCerrar,
+                      "minutoAbrir": controllerhotel.minutoAbrir,
+                      "minutoCerrar": controllerhotel.minutoCerrar,
+                      "tipoHorario": controllerhotel.tipoHorario,
 
 
-              
+                      "metodosPago": controllerhotel.metodosPago,
+                      "servicios": servicios,
+                      "fotos": "",
+                      "user": controlleruser.usuario!.userName,
+                      "saldo": saldo,
+                      "calificacion": 4.0,
+                      "categorias": controllerhotel.categorias,
+                      "estado": estado
+                    };
 
-              final CollectionReference collection =
-                  FirebaseFirestore.instance.collection("Negocios");
-              var hotelCount = (await collection.get()).size;
+                    var resp = await PeticionesNegocio.crearNegocio(
+                        negocio, context, widget.fotosFile);
 
-              
-              var negocio = <String, dynamic>{
-                "id": hotelCount + 1,
-                "nombre": controllerhotel.nombreNegocio,
-                "tipoEspacio": controllerhotel.tipoEspacio,
-                "habitaciones": controllerhotel.habitaciones
-                    ?.map((habitacion) => habitacion.toJson())
-                    .toList(),
-                "longitud": controllerhotel.longitud,
-                "latitud": controllerhotel.latitud,
-                "direccion": controllerhotel.direccion,
-                "horaAbrir": controllerhotel.horaAbrir,
-                "horaCerrar": controllerhotel.horaCerrar,
-                "metodosPago": controllerhotel.metodosPago,
-                "servicios": servicios,
-                "fotos": "",
-                "user": controlleruser.usuario!.userName,
-                "saldo": 0.0,
-                "calificacion": 3.0,
-              };
-
-              var resp = await PeticionesNegocio.crearNegocio(negocio, context, widget.fotosFile);
-
-              if (resp == "create") {
-                servicios = [];
-                controllerhotel.RestartImagenes();
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const AnuncioCreado()));
-              } else {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ErrorAnuncioCreate(servicios: servicios,)));
-              }
-            },
+                    if (resp == "create") {
+                      servicios = [];
+                      controllerhotel.RestartImagenes();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const AnuncioCreado()));
+                    } else {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ErrorAnuncioCreate(
+                                    servicios: servicios,
+                                  )));
+                    }
+                    setState(() {
+                      isButtonDisabled = false;
+                    });
+                  },
             child: Text(
               "Siguiente",
               style: TextStyle(color: Colors.white),
@@ -275,7 +298,7 @@ class btnServicios extends StatelessWidget {
     return ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: btn
-              ? Color.fromARGB(255, 0, 0, 0)
+              ? const Color.fromARGB(255, 80, 27, 167)
               : const Color.fromARGB(255, 255, 255, 255),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
@@ -289,6 +312,10 @@ class btnServicios extends StatelessWidget {
           child: Text(
             nombre,
             textAlign: TextAlign.center,
+            style: TextStyle(
+                color: btn
+                    ? const Color.fromARGB(255, 255, 255, 255)
+                    : const Color.fromARGB(255, 80, 27, 167)),
           ),
         ));
   }

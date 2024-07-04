@@ -14,31 +14,55 @@ class ListReservasUser extends StatefulWidget {
 }
 
 class _ListReservasUserState extends State<ListReservasUser> {
-  // List<Hoteles> hoteles = [];
-
   bool selectedEspera = true;
   bool selectedHabitacion = false;
   bool selectedCulminado = false;
+  bool selectedCanceladas = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    PeticionesReserva.cancelarReservas(context);
+    PeticionesReserva.calificar(context);
+    PeticionesReserva.culminado(context);
+
+    // setState(() async {
+    //   await PeticionesReserva.cancelarReservas(context);
+    //   await PeticionesReserva.culminado(context);
+    //   await PeticionesReserva.calificar(context);
+    // });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder<List<Reserva>>(
-        future: !selectedEspera && !selectedHabitacion && !selectedCulminado
-            ? PeticionesReserva.listReservas()
+        future: !selectedEspera &&
+                !selectedHabitacion &&
+                !selectedCulminado &&
+                !selectedCanceladas
+            ? PeticionesReserva.listReservas(context)
             : selectedEspera
-                ? PeticionesReserva.listReservasFiltro("En espera")
+                ? PeticionesReserva.listReservasFiltro("En espera", context)
                 : selectedHabitacion
-                    ? PeticionesReserva.listReservasFiltro("En la Habitacion")
-                    : PeticionesReserva.listReservasFiltro("Culminado"),
+                    ? PeticionesReserva.listReservasFiltro(
+                        "En la Habitacion", context)
+                    : selectedCulminado
+                        ? PeticionesReserva.listReservasFiltro(
+                            "Culminado", context)
+                        : PeticionesReserva.listReservasFiltro(
+                            "Cancelada", context),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Container(
               color: Color.fromARGB(255, 29, 7, 48),
               child: Center(
                 // child: CircularProgressIndicator(),
-                child: Text("Cargando tus reservas...", style: TextStyle(color: Colors.white),),
-
+                child: Text(
+                  "Cargando tus reservas...",
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             );
           } else if (snapshot.hasError) {
@@ -78,6 +102,7 @@ class _ListReservasUserState extends State<ListReservasUser> {
                                             selectedEspera = estado!;
                                             selectedCulminado = false;
                                             selectedHabitacion = false;
+                                            selectedCanceladas = false;
                                           });
                                         }),
                                     Text(
@@ -95,6 +120,7 @@ class _ListReservasUserState extends State<ListReservasUser> {
                                             selectedHabitacion = estado!;
                                             selectedEspera = false;
                                             selectedCulminado = false;
+                                            selectedCanceladas = false;
                                           });
                                         }),
                                     Text(
@@ -112,10 +138,29 @@ class _ListReservasUserState extends State<ListReservasUser> {
                                             selectedCulminado = estado!;
                                             selectedEspera = false;
                                             selectedHabitacion = false;
+                                            selectedCanceladas = false;
                                           });
                                         }),
                                     Text(
                                       "Culminado",
+                                      style: TextStyle(color: Colors.white),
+                                    )
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Checkbox(
+                                        value: selectedCanceladas,
+                                        onChanged: (estado) {
+                                          setState(() {
+                                            selectedCanceladas = estado!;
+                                            selectedEspera = false;
+                                            selectedHabitacion = false;
+                                            selectedCulminado = false;
+                                          });
+                                        }),
+                                    Text(
+                                      "Canceladas",
                                       style: TextStyle(color: Colors.white),
                                     )
                                   ],
@@ -171,6 +216,7 @@ class _ListReservasUserState extends State<ListReservasUser> {
                                             selectedEspera = estado!;
                                             selectedCulminado = false;
                                             selectedHabitacion = false;
+                                            selectedCanceladas = false;
                                           });
                                         }),
                                     Text(
@@ -188,6 +234,7 @@ class _ListReservasUserState extends State<ListReservasUser> {
                                             selectedHabitacion = estado!;
                                             selectedEspera = false;
                                             selectedCulminado = false;
+                                            selectedCanceladas = false;
                                           });
                                         }),
                                     Text(
@@ -205,10 +252,29 @@ class _ListReservasUserState extends State<ListReservasUser> {
                                             selectedCulminado = estado!;
                                             selectedEspera = false;
                                             selectedHabitacion = false;
+                                            selectedCanceladas = false;
                                           });
                                         }),
                                     Text(
                                       "Culminado",
+                                      style: TextStyle(color: Colors.white),
+                                    )
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Checkbox(
+                                        value: selectedCanceladas,
+                                        onChanged: (estado) {
+                                          setState(() {
+                                            selectedCanceladas = estado!;
+                                            selectedEspera = false;
+                                            selectedCulminado = false;
+                                            selectedHabitacion = false;
+                                          });
+                                        }),
+                                    Text(
+                                      "Canceladas",
                                       style: TextStyle(color: Colors.white),
                                     )
                                   ],
@@ -299,7 +365,9 @@ class _ListHotelState extends State<ListHotel> {
                                   ? "En espera"
                                   : reserva.estado == "En la Habitacion"
                                       ? "En la Habitación"
-                                      : "Culminado",
+                                      : reserva.estado == "Culminado"
+                                          ? "Culminado"
+                                          : "Cancelada por la app",
                               style: const TextStyle(
                                   color: Color.fromARGB(255, 255, 255, 255),
                                   fontSize: 14,
@@ -369,7 +437,7 @@ class _ListHotelState extends State<ListHotel> {
                             Container(
                                 width: 170,
                                 child: Text(
-                                  "Habitacion:",
+                                  "Habitación:",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w500),
@@ -379,8 +447,20 @@ class _ListHotelState extends State<ListHotel> {
                                 child: Text(
                                   "${reserva.habitacion} - ${reserva.tiempoReserva} h",
                                   style: TextStyle(color: Colors.white),
-                                ))
+                                )),
                           ],
+                        )
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          "Código: ${reserva.codigo}",
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500),
                         )
                       ],
                     )

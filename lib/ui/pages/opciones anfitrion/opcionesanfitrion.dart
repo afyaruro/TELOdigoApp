@@ -1,23 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:telodigo/data/service/peticionnegocio.dart';
 import 'package:telodigo/domain/models/hoteles.dart';
-import 'package:telodigo/domain/models/mercadopago.dart';
 import 'package:telodigo/ui/pages/home/home.dart';
-import 'package:telodigo/ui/pages/opciones%20anfitrion/payments_recharges.dart';
-
-import 'payment_method.dart';
+import 'package:telodigo/ui/pages/opciones%20anfitrion/recargar.dart';
+import 'package:telodigo/ui/pages/pagos/gestionarPagos.dart';
 
 class OpcionesAnfitrion extends StatelessWidget {
   const OpcionesAnfitrion({super.key});
 
   @override
   Widget build(BuildContext context) {
-    MercadoTransaction mt = MercadoTransaction();
-    List<Hoteles> hoteles = [];
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          color: Color.fromARGB(255, 29, 7, 48),
+          color: const Color.fromARGB(255, 29, 7, 48),
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: Column(
@@ -33,20 +29,14 @@ class OpcionesAnfitrion extends StatelessWidget {
                     height: 100,
                     child: ElevatedButton(
                       onPressed: () async {
-                        var payer = await mt.getUserMercadoPago();
-
-                        PeticionesNegocio.listNegocios().then((value) {
-                          hoteles = value;
-                        });
-                        if (payer['payer']!=null) {
-                          gotoPayRecharge(context, payer, hoteles);
-                        }else{
-                          print(payer['message']);
-                          var payerNew = await mt.registerUserMercadoPago();
-                          print(payerNew['message']);
-                          gotoPayRecharge(context, payerNew, hoteles);
-                        }
-                        
+                        List<Hoteles> hoteles =
+                            await PeticionesNegocio.listRecargas();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Recargar(
+                                      hoteles: hoteles,
+                                    )));
                       },
                       child: const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -67,13 +57,10 @@ class OpcionesAnfitrion extends StatelessWidget {
                     height: 100,
                     child: ElevatedButton(
                       onPressed: () async {
-                        var payer = await mt.getUserMercadoPago();
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => PaymentMethod(
-                                      payer: payer['payer'],
-                                    )));
+                                builder: (context) => const SolicitarPagos()));
                       },
                       child: const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -122,15 +109,5 @@ class OpcionesAnfitrion extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  void gotoPayRecharge(BuildContext context, payer, List<Hoteles> hoteles) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => PaymentsRecharges(
-                payer: payer['payer'],
-                listhotels: hoteles,
-              )));
   }
 }

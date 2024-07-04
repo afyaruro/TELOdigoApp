@@ -39,7 +39,9 @@ class _VerificarCodigoState extends State<VerificarCodigo> {
                       width: 12,
                       height: 12,
                       decoration: BoxDecoration(
-                          color: widget.reserva.metodoPago != "Efectivo"
+                          color: widget.reserva.metodoPago != "Efectivo" &&
+                                  widget.reserva.metodoPago != "Yape" &&
+                                  widget.reserva.metodoPago != "Plin"
                               ? Color(0xFF00FF0A)
                               : const Color.fromARGB(255, 255, 7, 7),
                           borderRadius: BorderRadius.all(Radius.circular(6))),
@@ -48,7 +50,9 @@ class _VerificarCodigoState extends State<VerificarCodigo> {
                       width: 6,
                     ),
                     Text(
-                      widget.reserva.metodoPago != "Efectivo"
+                      widget.reserva.metodoPago != "Efectivo" &&
+                              widget.reserva.metodoPago != "Yape" &&
+                              widget.reserva.metodoPago != "Plin"
                           ? "Pago"
                           : "No ha Pagado",
                       style: const TextStyle(
@@ -110,7 +114,23 @@ class _VerificarCodigoState extends State<VerificarCodigo> {
                               "${widget.reserva.nombreCliente}",
                               style: TextStyle(
                                   color: Colors.white,
-                                  fontWeight: FontWeight.w300),
+                                  fontWeight: FontWeight.w400),
+                            )),
+                        Container(
+                            width: 130,
+                            child: Text(
+                              "Metodo de Pago:",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600),
+                            )),
+                        Container(
+                            width: 130,
+                            child: Text(
+                              "${widget.reserva.metodoPago}",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w400),
                             ))
                       ],
                     )
@@ -209,23 +229,50 @@ class _VerificarCodigoState extends State<VerificarCodigo> {
               ElevatedButton(
                   onPressed: () async {
                     if (controller.text == widget.reserva.codigo) {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            content: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  child: CircularProgressIndicator(),
+                                  width: 30,
+                                  height: 30,
+                                ),
+                                SizedBox(
+                                  width: 30,
+                                ),
+                                Text("Verificando codigo..."),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+
                       await PeticionesReserva.VerificarCodigo(
                           widget.reserva.key,
                           widget.reserva.idHotel,
                           widget.reserva.metodoPago,
-                          context);
+                          context,
+                          widget.reserva.idUserHotel,
+                          widget.reserva.precio,
+                          widget.reserva);
 
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => HomeAnfitrion(
+                              builder: (context) => const HomeAnfitrion(
                                     currentIndex: 2,
                                   )));
                     } else {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return const CustomAlert(
+                          return CustomAlert(
                             title: "Codigo Incorrecto",
                             text:
                                 "El codigo que has proporcionado es incorrecto",

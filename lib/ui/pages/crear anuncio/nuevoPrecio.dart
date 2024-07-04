@@ -107,7 +107,7 @@ class _NuevoPrecioState extends State<NuevoPrecio> {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return const CustomAlert(
+                          return  CustomAlert(
                             title: "Agrega un precio",
                             text: "Por favor agrega un precio para continuar",
                           );
@@ -117,7 +117,7 @@ class _NuevoPrecioState extends State<NuevoPrecio> {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return const CustomAlert(
+                          return  CustomAlert(
                             title: "Valor Invalido",
                             text: "El valor ingresado es invalido",
                           );
@@ -127,7 +127,7 @@ class _NuevoPrecioState extends State<NuevoPrecio> {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return const CustomAlert(
+                          return  CustomAlert(
                             title: "Valor Invalido",
                             text: "El valor ingresado debe ser mayor de 0",
                           );

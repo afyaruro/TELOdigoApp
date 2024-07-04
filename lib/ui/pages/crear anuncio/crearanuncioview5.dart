@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:telodigo/data/controllers/negociocontroller.dart';
 import 'package:telodigo/domain/models/habitaciones.dart';
@@ -18,34 +19,35 @@ class _CrearAnuncioView5State extends State<CrearAnuncioView5> {
 
   bool banderaBtnActive = true;
 
-bool verificarCantidad(List<Habitaciones> habitaciones) {
-  return habitaciones.any((habitacion) => habitacion.cantidad == 0);
-}
-
-Widget btnActive(List<Habitaciones> habitaciones){
-  if(verificarCantidad(habitaciones)){
-    banderaBtnActive = true;
-  } else {
-    banderaBtnActive = false;
+  bool verificarCantidad(List<Habitaciones> habitaciones) {
+    return habitaciones.any((habitacion) => habitacion.cantidad == 0);
   }
-  return Container();
-}
+
+  Widget btnActive(List<Habitaciones> habitaciones) {
+    if (verificarCantidad(habitaciones)) {
+      banderaBtnActive = true;
+    } else {
+      banderaBtnActive = false;
+    }
+    return Container();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 21, 1, 37),
+        backgroundColor: const Color.fromARGB(255, 21, 1, 37),
         foregroundColor: Colors.white,
         centerTitle: true,
         title: const Text(
-          "Paso 5 de 9",
+          "Paso 6 de 10",
           style: TextStyle(
             color: Color.fromARGB(255, 255, 255, 255),
             fontSize: 15,
           ),
         ),
       ),
+      backgroundColor: const Color.fromARGB(255, 21, 1, 37),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
@@ -59,35 +61,45 @@ Widget btnActive(List<Habitaciones> habitaciones){
                   padding: EdgeInsets.symmetric(horizontal: 30),
                   child: Text(
                     "Agrega la cantidad de habitaciones por tipo de cuarto",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white),
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               for (var habitacion in habitaciones)
                 Container(
                   width: 400,
-                  margin: EdgeInsets.symmetric(
-                    horizontal: 30,
-                  ),
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color.fromARGB(151, 102, 42, 121)),
+                  margin:
+                      const EdgeInsets.only(right: 30, left: 30, bottom: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        habitacion.nombre,
-                        style: TextStyle(fontSize: 15),
+                      Flexible(
+                        child: Text(
+                          overflow: TextOverflow.ellipsis,
+                          habitacion.nombre,
+                          style: const TextStyle(
+                              fontSize: 15, color: Colors.white),
+                        ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 40,
                       ),
                       Row(
                         children: [
                           Container(
                               width: 30,
-                              decoration: ShapeDecoration(
-                                color: Color.fromARGB(255, 29, 29, 29),
+                              decoration: const ShapeDecoration(
+                                color: Color.fromARGB(255, 121, 78, 201),
                                 shape: CircleBorder(),
                               ),
                               child: IconButton(
@@ -99,21 +111,24 @@ Widget btnActive(List<Habitaciones> habitaciones){
                                     }
                                   });
                                 },
-                                icon: Icon(Icons.remove),
+                                icon: const Icon(Icons.remove),
                                 color: Colors.white,
                                 iconSize: 15,
                               )),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
-                          Text("${habitacion.cantidad}"),
-                          SizedBox(
+                          Text(
+                            "${habitacion.cantidad}",
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                          const SizedBox(
                             width: 10,
                           ),
                           Container(
                               width: 30,
-                              decoration: ShapeDecoration(
-                                color: Color(0xFF1098E7),
+                              decoration: const ShapeDecoration(
+                                color: Color.fromARGB(255, 121, 78, 201),
                                 shape: CircleBorder(),
                               ),
                               child: IconButton(
@@ -123,17 +138,15 @@ Widget btnActive(List<Habitaciones> habitaciones){
                                         habitacion.cantidad + 1;
                                   });
                                 },
-                                icon: Icon(Icons.add),
+                                icon: const Icon(Icons.add),
                                 color: Colors.white,
                                 iconSize: 15,
                               ))
                         ],
                       ),
-                      
                     ],
                   ),
                 ),
-                
             ],
           ),
         ),
@@ -142,8 +155,11 @@ Widget btnActive(List<Habitaciones> habitaciones){
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
         child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(vertical: 15),
-                backgroundColor: Color(0xFF1098E7)),
+              padding: EdgeInsets.symmetric(vertical: 15),
+              backgroundColor: 
+                  Color(0xFF1098E7),
+              disabledBackgroundColor: Color.fromARGB(50, 77, 14, 179),
+            ),
             onPressed: banderaBtnActive
                 ? null
                 : () {

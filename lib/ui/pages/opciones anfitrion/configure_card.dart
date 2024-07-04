@@ -1,15 +1,52 @@
 // ignore_for_file: deprecated_member_use, use_build_context_synchronously
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:telodigo/data/service/PeticionesReservas.dart';
 import 'package:telodigo/data/service/apimercadopago.dart';
 import 'package:telodigo/domain/models/mercadopago.dart';
-import 'package:telodigo/ui/components/customcomponents/custombuttonborderradius.dart';
+import 'package:telodigo/domain/models/reserva.dart';
+import 'package:telodigo/ui/components/customcomponents/customalert.dart';
 import 'package:telodigo/ui/components/customcomponents/customtextfield.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:telodigo/ui/pages/opciones%20anfitrion/payment_method.dart';
+import 'package:telodigo/data/service/peticionesPagoMP.dart';
 
 class ConfigureCard extends StatefulWidget {
-  const ConfigureCard({super.key});
+  final double saldo;
+  final String id;
+  final String motivo;
+  final Reserva reserva;
+  ConfigureCard(
+      {super.key,
+      required this.saldo,
+      required this.id,
+      required this.motivo,
+      Reserva? reserva})
+      : reserva = reserva ??
+            Reserva(
+                fechaMaximaLLegada: DateTime.now(),
+                fechaFinal: DateTime.now(),
+                minutoMaximoLlegada: 0,
+                horaMaximaLlegada: 0,
+                precio: 0,
+                key: 0,
+                idUserHotel: "",
+                metodoPago: "",
+                codigo: "",
+                estado: "",
+                nombreNegocio: "",
+                direccion: "",
+                longitud: 0,
+                latitud: 0,
+                fotoPrincipal: "",
+                tiempoReserva: 0,
+                habitacion: "",
+                horaInicioReserva: 0,
+                horaFinalReserva: 0,
+                minutoInicioReserva: 0,
+                minutoFinalReserva: 0,
+                idHotel: "",
+                idUser: "",
+                fecha: DateTime.now(),
+                nombreCliente: "");
 
   @override
   State<ConfigureCard> createState() => _ConfigureCardState();
@@ -18,6 +55,9 @@ class ConfigureCard extends StatefulWidget {
 class _ConfigureCardState extends State<ConfigureCard> {
   MercadoPago m = MercadoPago();
   MercadoTransaction mt = MercadoTransaction();
+
+  bool isButtonDisabled = false;
+
   int _selectedIndex = -1;
   bool _itemTap = false;
   final List<List<String>> items = [
@@ -107,53 +147,6 @@ class _ConfigureCardState extends State<ConfigureCard> {
     }
   }
 
-  saveCard() async {
-    bool validator = isAnyFieldEmpty();
-    if (validator) {
-      ///---------------Alerta de caampos vacions---------///
-      print("Alerta de campos vacios");
-    } else {
-      CreditCard card = CreditCard(
-        numCard: removeCharacter(_numCard, " "),
-        nameCard: _nameCard,
-        expireMonthCard: int.parse(_expireCard.split('/')[0]),
-        expireYearCard: completeYear(int.parse(_expireCard.split('/')[1])),
-        cvv: int.parse(_codCard),
-      );
-      card.getPaymentMethod(_selectedIndex);
-      print(card.toJson());
-      var tokenCard = await m.getCardtoken(card.toJson());
-      if (tokenCard['result'] != null) {
-        var payer = await mt.getUserMercadoPago();
-        if (payer['payer'] != null) {
-          var result = await m.createCustomerCard(
-              payer['payer'].id, tokenCard['result']['id']);
-          if (result['result'] != null) {
-            var payer = await mt.getUserMercadoPago();
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => PaymentMethod(
-                          payer: payer['payer'],
-                        )));
-          } else {
-            ///---------------Alerta de error al añadir la targeta---------///
-            print("Alerta de error al añadir la targeta");
-            print(result['message']);
-          }
-        } else {
-          ///---------------Alerta de error al obtener el usuario---------///
-          print("Alerta de error al obtener el usuario");
-          print(payer['message']);
-        }
-      } else {
-        ///---------------Alerta de error al generar el token card---------///
-        print("Alerta de error al generar el token card");
-        print(tokenCard['message']);
-      }
-    }
-  }
-
   void onChanget(String text, TextEditingController controller) {
     setState(() {
       text = controller.text;
@@ -181,7 +174,8 @@ class _ConfigureCardState extends State<ConfigureCard> {
             ),
             Container(
               height: 170,
-              width: MediaQuery.of(context).size.width * .65,
+              width: 400,
+              margin: EdgeInsets.symmetric(horizontal: 30),
               decoration: BoxDecoration(
                   color: Colors.black, borderRadius: BorderRadius.circular(20)),
               child: Padding(
@@ -231,75 +225,50 @@ class _ConfigureCardState extends State<ConfigureCard> {
             SizedBox(
               width: MediaQuery.of(context).size.width * .9,
               height: 76,
-              child: typeCard(),
+              // child: typeCard(),
             ),
             SizedBox(
               height: 20,
             ),
-            CustomTextField5(
-              nombre: "Numero de tarjeta",
-              isPassword: false,
-              controller: numCard,
-              height: 70,
-              width: MediaQuery.of(context).size.width * .9,
-              textFontSize: 12,
-              placeholder: "XXXX XXXX XXXX XXXX",
-              funtion: () {
-                setState(() {
-                  _numCard = numCard.text;
-                });
-              },
-              keyboard: TextInputType.number,
-              inputFormater: [mfNumCard],
+            Container(
+              width: 400,
+              margin: EdgeInsets.symmetric(horizontal: 20),
+              child: CustomTextField5(
+                nombre: "Numero de tarjeta",
+                isPassword: false,
+                controller: numCard,
+                height: 70,
+                width: MediaQuery.of(context).size.width * .9,
+                textFontSize: 12,
+                placeholder: "XXXX XXXX XXXX XXXX",
+                funtion: () {
+                  setState(() {
+                    _numCard = numCard.text;
+                  });
+                },
+                keyboard: TextInputType.number,
+                inputFormater: [mfNumCard],
+              ),
             ),
             Container(
               width: 400,
               margin: EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Flexible(
-                    child: CustomTextField5(
-                      nombre: "Nombre",
-                      isPassword: false,
-                      controller: firstNameCard,
-                      height: 70,
-                      width: MediaQuery.of(context).size.width * .42,
-                      textFontSize: 12,
-                      placeholder: "Nombre",
-                      funtion: () {
-                        setState(() {
-                          _nameCard =
-                              "${firstNameCard.text.toUpperCase()} ${lastNameCard.text.toUpperCase()}";
-                        });
-                      },
-                      keyboard: TextInputType.name,
-                      inputFormater: const [],
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Flexible(
-                    child: CustomTextField5(
-                      nombre: "Apellido",
-                      isPassword: false,
-                      controller: lastNameCard,
-                      height: 70,
-                      width: MediaQuery.of(context).size.width * .42,
-                      textFontSize: 12,
-                      placeholder: "Apellido",
-                      funtion: () {
-                        setState(() {
-                          _nameCard =
-                              "${firstNameCard.text.toUpperCase()} ${lastNameCard.text.toUpperCase()}";
-                        });
-                      },
-                      keyboard: TextInputType.name,
-                      inputFormater: const [],
-                    ),
-                  ),
-                ],
+              child: CustomTextField5(
+                nombre: "Nombre & apellido",
+                isPassword: false,
+                controller: firstNameCard,
+                height: 70,
+                width: MediaQuery.of(context).size.width * .42,
+                textFontSize: 12,
+                placeholder: "Nombre & apellido",
+                funtion: () {
+                  setState(() {
+                    _nameCard =
+                        "${firstNameCard.text.toUpperCase()} ${lastNameCard.text.toUpperCase()}";
+                  });
+                },
+                keyboard: TextInputType.name,
+                inputFormater: const [],
               ),
             ),
             Container(
@@ -332,7 +301,7 @@ class _ConfigureCardState extends State<ConfigureCard> {
                   Flexible(
                     child: CustomTextField5(
                       nombre: "Codigo de seguridad",
-                      isPassword: false,
+                      isPassword: true,
                       controller: codCard,
                       height: 70,
                       width: MediaQuery.of(context).size.width * .42,
@@ -350,72 +319,112 @@ class _ConfigureCardState extends State<ConfigureCard> {
                 ],
               ),
             ),
-            Align(
-              alignment: const Alignment(0, .8),
-              child: CustomButtonsRadiusx(const Color(0xffffffff),
-                  Color.fromARGB(255, 47, 4, 73), "Guardar", () {
-                saveCard();
-              }),
-            )
-          ],
-        ),
-      ),
-    );
-  }
+            Container(
+                width: 400,
+                height: 50,
+                margin: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
+                child: ElevatedButton(
+                  onPressed: isButtonDisabled
+                      ? null
+                      : () async {
+                          setState(() {
+                            isButtonDisabled = true;
+                          });
+                          if (widget.motivo == "Reserva") {
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  content: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        child: CircularProgressIndicator(),
+                                        width: 30,
+                                        height: 30,
+                                      ),
+                                      SizedBox(
+                                        width: 30,
+                                      ),
+                                      Text("Comprobando Dip..."),
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
 
-  Container typeCard() {
-    return Container(
-      constraints: const BoxConstraints(minWidth: 0, maxWidth: double.infinity),
-      height: 100,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 40),
-        child: ListView.builder(
-          padding: const EdgeInsets.all(0),
-          dragStartBehavior: DragStartBehavior.down,
-          scrollDirection: Axis.horizontal,
-          itemCount: items.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    tapOverrideItem(index);
-                    if (_itemTap) {
-                      _selectedIndex = -1;
-                      print("tap override index $index");
-                    } else {
-                      _selectedIndex = index;
-                      print("tap on index $index");
-                    }
-                  });
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Image.asset(items[index][1],
-                          height: 40,
-                          width: 40,
-                          color: _selectedIndex == index
-                              ? const Color(0xFFBEA0D1)
-                              : Colors.white),
-                      const SizedBox(height: 0),
-                      Text(
-                        items[index][0],
-                        style: TextStyle(
-                          color: _selectedIndex == index
-                              ? const Color(0xFFBEA0D1)
-                              : Colors.white,
-                        ),
-                      ),
-                    ],
+                            if (await PeticionesReserva
+                                    .comprobarDisponibilidadReserva2(
+                                        idHotel: widget.reserva.idHotel,
+                                        nombreHabitacion:
+                                            widget.reserva.habitacion) >
+                                0) {
+                              Navigator.of(context).pop();
+                              await PeticionesReserva
+                                  .actualizarCantidadHabitacion(
+                                      idHotel: widget.reserva.idHotel,
+                                      nombreHabitacion:
+                                          widget.reserva.habitacion,
+                                      operacion: "resta");
+
+                              await PagoDirecto.realizarPagoDirecto(
+                                  reserva: widget.reserva,
+                                  idNegocio: widget.id,
+                                  saldo: widget.saldo,
+                                  nombre: firstNameCard.text,
+                                  codigo: codCard.text,
+                                  context: context,
+                                  motivo: widget.motivo,
+                                  tarjeta: numCard.text,
+                                  fecha: expireCard.text);
+                            } else {
+                              Navigator.of(context).pop();
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return CustomAlert(
+                                    title: "Lo sentimos...",
+                                    text:
+                                        "Unos segundos antes alguien ha reservado la última habitación disponible.",
+                                  );
+                                },
+                              );
+                            }
+                          } else {
+                            await PagoDirecto.realizarPagoDirecto(
+                                reserva: widget.reserva,
+                                idNegocio: widget.id,
+                                saldo: widget.saldo,
+                                nombre: firstNameCard.text,
+                                codigo: codCard.text,
+                                context: context,
+                                motivo: widget.motivo,
+                                tarjeta: numCard.text,
+                                fecha: expireCard.text);
+                          }
+                          setState(() {
+                            isButtonDisabled = false;
+                          });
+                        },
+                  child: Text(
+                    "CONFIRMAR",
+                    style: TextStyle(
+                        color: isButtonDisabled
+                            ? Colors.white
+                            : Color.fromARGB(255, 47, 4, 73)),
                   ),
-                ),
-              ),
-            );
-          },
+                  style: ElevatedButton.styleFrom(
+                      disabledBackgroundColor: Color.fromARGB(125, 52, 2, 92),
+                      backgroundColor: const Color(0xffffffff)),
+                )),
+            // CustomButtonsRadiusx(const Color(0xffffffff),
+            //     Color.fromARGB(255, 47, 4, 73), "CONFIRMAR", () async {
+
+            // }),
+          ],
         ),
       ),
     );

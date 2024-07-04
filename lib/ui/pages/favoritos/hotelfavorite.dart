@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:telodigo/data/controllers/negociocontroller.dart';
 import 'package:telodigo/data/controllers/usercontroller.dart';
 import 'package:telodigo/domain/models/favoritos.dart';
 import 'package:telodigo/domain/models/habitaciones.dart';
 import 'package:telodigo/domain/models/hoteles.dart';
 import 'package:telodigo/ui/components/customcomponents/customcarrusel.dart';
 import 'package:telodigo/ui/pages/Reservar/consultardiponibilidad.dart';
+import 'package:telodigo/ui/pages/datos%20generales/datos_generales.dart';
 
 class ViewFavorito extends StatefulWidget {
   final Hoteles hotel;
@@ -22,32 +22,69 @@ class _ViewFavoritoState extends State<ViewFavorito> {
   late Favorito favoritoa;
 
   static final UserController controlleruser = Get.find();
-  static final NegocioController controllerNegocio = Get.find();
+  // static final NegocioController controllerNegocio = Get.find();
 
   @override
   void initState() {
     super.initState();
 
+    // PeticionesReserva.actualizarCulminado(context, "user");
+
     setState(() {
       estrellas = widget.hotel.calificacion;
-      estadoFavorito = IsFavorite();
+      // estadoFavorito = IsFavorite();
       // print("$estadoFavorito");
     });
   }
 
-  bool IsFavorite() {
-    for (var favorito in controllerNegocio.favoritos!) {
-      // print("hola ${favorito.nombre}");
+  String calcularHora(Hoteles hotel) {
+    int hourAbrir = hotel.horaAbrir;
+    int hourCerrar = hotel.horaCerrar;
 
-      if (widget.hotel.id == favorito.idHotel &&
-          controlleruser.usuario!.userName == favorito.idUser) {
-        favoritoa = favorito;
-        return true;
-      }
+    int minuteAbrir = hotel.minutoAbrir;
+
+    int minuteCerrar = hotel.minutoCerrar;
+
+    hourAbrir = hourAbrir % 24;
+    hourCerrar = hourCerrar % 24;
+
+    // Determine AM or PM based on hour
+    // String amPm = hour > 12 ? "PM" : "AM";
+    String amPm = hourAbrir >= 12 ? "PM" : "AM";
+    String amPmFinal = hourCerrar >= 12 ? "PM" : "AM";
+
+    // Adjust hour for 12-hour format
+    if (hourAbrir >= 12) {
+      hourAbrir -= 12;
     }
 
-    return false;
+    if (hourCerrar >= 12) {
+      hourCerrar -= 12;
+    }
+
+    // Format hour and minute with leading zeros
+    String formattedHourAbrir = hourAbrir.toString().padLeft(2, '0');
+    String formattedHourCerrar = hourCerrar.toString().padLeft(2, '0');
+    String formattedMinuteAbrir = minuteAbrir.toString().padLeft(2, '0');
+    String formattedMinuteCerrar = minuteCerrar.toString().padLeft(2, '0');
+
+    // Construct and return the non-military time string
+    return "${formattedHourAbrir}:${formattedMinuteAbrir} $amPm - ${formattedHourCerrar}:${formattedMinuteCerrar} $amPmFinal";
   }
+
+  // bool IsFavorite() {
+  //   for (var favorito in controllerNegocio.favoritos!) {
+  //     // print("hola ${favorito.nombre}");
+
+  //     if (widget.hotel.id == favorito.idHotel &&
+  //         controlleruser.usuario!.userName == favorito.idUser) {
+  //       favoritoa = favorito;
+  //       return true;
+  //     }
+  //   }
+
+  //   return false;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -409,14 +446,34 @@ class _ViewFavoritoState extends State<ViewFavorito> {
                 ),
 
                 //calificacion fija por ahora debo cambiar la calificacion en la variable
+                // Container(
+                //     width: 400,
+                //     child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //       children: [
+                //         EstrellasPoint(estrellas),
+                //       ],
+                //     )),
+
                 Container(
-                    width: 400,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        EstrellasPoint(estrellas),
-                      ],
-                    )),
+                  width: 400,
+                  child: Row(
+                    children: [
+                      Text(
+                        estrellas.toStringAsFixed(1),
+                        style: const TextStyle(
+                            color: Color.fromARGB(255, 255, 255, 255),
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Icon(
+                        Icons.star,
+                        color: Colors.white,
+                        size: 10,
+                      )
+                    ],
+                  ),
+                ),
                 Container(
                   width: 400,
                   child: Text(
@@ -466,16 +523,14 @@ class _ViewFavoritoState extends State<ViewFavorito> {
                         height: 20,
                         color: const Color.fromARGB(221, 255, 255, 255),
                       ),
-                      widget.hotel.horaAbrir == "24 Horas"
-                          ? Text("24 Horas",
-                              style: const TextStyle(
-                                color: Color.fromARGB(255, 255, 255, 255),
-                              ))
-                          : Text(
-                              "${widget.hotel.horaAbrir} - ${widget.hotel.horaCerrar}",
-                              style: const TextStyle(
-                                color: Color.fromARGB(255, 255, 255, 255),
-                              ))
+                      widget.hotel.tipoHorario == "24 Horas"
+                          ? Text(
+                              "24 Horas",
+                              style: TextStyle(color: Colors.white),
+                            )
+                          : Text(calcularHora(widget.hotel),
+                              // "${widget.hotel.horaAbrir.toString().padLeft(2, '0')}:${widget.hotel.minutoAbrir.toString().padLeft(2, '0')} - ${widget.hotel.horaCerrar.toString().padLeft(2, '0')}:${widget.hotel.minutoCerrar.toString().padLeft(2, '0')}",
+                              style: TextStyle(color: Colors.white))
                     ],
                   ),
                 ),
@@ -523,32 +578,109 @@ class _ViewFavoritoState extends State<ViewFavorito> {
                   ),
                 ),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    for (var servicio in widget.hotel.servicios)
-                      Row(
+                widget.hotel.servicios.isEmpty
+                    ? Text(
+                        "No hay servicios",
+                        style: TextStyle(color: Colors.white),
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SizedBox(
-                            width: 10,
-                          ),
-                          listServicios(servicio),
-                          SizedBox(
-                            width: 10,
-                          )
+                          for (var servicio in widget.hotel.servicios)
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                listServicios(servicio),
+                                SizedBox(
+                                  width: 10,
+                                )
+                              ],
+                            ),
                         ],
                       ),
-                  ],
-                ),
                 SizedBox(
                   height: 20,
                 ),
                 ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ConsultarDisponibilidad(hotel: widget.hotel,)));
+                      print(widget.hotel.user);
+                      if (widget.hotel.user == "Admin") {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text(
+                                "¡AÚN ESTAMOS CONVENCIENDO A ESTE TELO!",
+                                style: TextStyle(fontSize: 15),
+                                textAlign: TextAlign.center,
+                              ),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    width: double.infinity,
+                                    child: Text(
+                                        style: TextStyle(fontSize: 12),
+                                        "Este establecimiento no se encuentra disponible por el momento."),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Container(
+                                      width: double.infinity,
+                                      child: Text(
+                                          "Disculpe por las molestias :(")),
+                                ],
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: Text("Aceptar"),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      } else if (controlleruser.usuario!.nombres == "" ||
+                          controlleruser.usuario!.apellidos == "") {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text(
+                                "Configura tu Nombre",
+                                style: TextStyle(fontSize: 15),
+                              ),
+                              content:
+                                  Text("Debes configurar tu nombre y apellido"),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: Text("Configurar"),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                Datos_Generales()));
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      } else {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ConsultarDisponibilidad(
+                                      hotel: widget.hotel,
+                                    )));
+                      }
                     },
                     child: Text("Comprobar Disponibilidad")),
                 SizedBox(

@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:telodigo/ui/pages/crear%20anuncio/crearanuncioview2.dart';
 
 class CrearAnuncioView1 extends StatefulWidget {
@@ -15,37 +13,47 @@ class _CrearAnuncioView1State extends State<CrearAnuncioView1> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 21, 1, 37),
+        backgroundColor: const Color.fromARGB(255, 21, 1, 37),
         foregroundColor: Colors.white,
         centerTitle: true,
-        title: const Text("Paso 1 de 9", style: TextStyle(color: Color.fromARGB(255, 255, 255, 255), fontSize: 15, ),),
+        title: const Text(
+          "Paso 1 de 10",
+          style: TextStyle(
+            color: Color.fromARGB(255, 255, 255, 255),
+            fontSize: 15,
+          ),
+        ),
       ),
+      backgroundColor: const Color.fromARGB(255, 21, 1, 37),
       body: Container(
-        margin: EdgeInsets.only(top: 50),
+        margin: const EdgeInsets.only(top: 50),
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
           child: Column(
             children: [
               Container(
-                  margin: EdgeInsets.symmetric(horizontal: 10),
-                  child: Text(
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                  width: 450,
+                  child: const Text(
                     "Empezar a utilizar",
                     textAlign: TextAlign.start,
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-                  ),
-                  width: 450),
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white),
+                  )),
               Container(
-                margin: EdgeInsets.symmetric(horizontal: 10),
-                child: Text(
+                margin: const EdgeInsets.symmetric(horizontal: 10),
+                width: 450,
+                child: const Text(
                   "TELOdigo es muy sencillo",
                   textAlign: TextAlign.start,
                   style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
-                      color: Color.fromARGB(255, 84, 10, 128)),
+                      color: Color.fromARGB(255, 170, 84, 219)),
                 ),
-                width: 450,
               ),
               const SizedBox(
                 height: 30,
@@ -118,23 +126,26 @@ class ContainerDescribe extends StatelessWidget {
     return Container(
       width: 450,
       height: 120,
-      margin: EdgeInsets.symmetric(horizontal: 10),
-      color: Color.fromARGB(19, 17, 17, 17),
+      margin: const EdgeInsets.symmetric(horizontal: 10),
+      color: const Color.fromARGB(31, 255, 255, 255),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
             width: 250,
-            padding: EdgeInsets.only(top: 30, bottom: 20),
+            padding: const EdgeInsets.only(top: 30, bottom: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   title,
                   textAlign: TextAlign.start,
-                  style: TextStyle(fontSize: 18),
+                  style: const TextStyle(fontSize: 18, color: Colors.white),
                 ),
-                Text(description),
+                Text(
+                  description,
+                  style: const TextStyle(color: Colors.white),
+                ),
               ],
             ),
           ),

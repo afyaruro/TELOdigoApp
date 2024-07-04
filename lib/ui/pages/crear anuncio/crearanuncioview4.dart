@@ -18,29 +18,37 @@ class _CrearAnuncioView4State extends State<CrearAnuncioView4> {
       TextEditingController(text: "");
   final TextEditingController controller_nombreNegocio =
       TextEditingController(text: "");
-  final TextEditingController controller_horaInicio =
-      TextEditingController(text: "");
-  final TextEditingController controller_horaCerrar =
-      TextEditingController(text: "");
+  final TextEditingController horaInicio = TextEditingController(text: "");
+  final TextEditingController horaCerrar = TextEditingController(text: "");
 
   bool isChecked = false;
   static final NegocioController controllerhotel = Get.find();
+
+  final TextEditingController minutoAbrir = TextEditingController(text: "");
+
+  final TextEditingController minutoCerrar = TextEditingController(text: "");
+
+  // late int horaInicio = 0;
+  // late int horaCerrar = 0;
+  // late int minutoInicio = 0;
+  // late int minutoCerrar = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 21, 1, 37),
+        backgroundColor: const Color.fromARGB(255, 21, 1, 37),
         foregroundColor: Colors.white,
         centerTitle: true,
         title: const Text(
-          "Paso 4 de 9",
+          "Paso 5 de 10",
           style: TextStyle(
             color: Color.fromARGB(255, 255, 255, 255),
             fontSize: 15,
           ),
         ),
       ),
+      backgroundColor: const Color.fromARGB(255, 21, 1, 37),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
@@ -53,31 +61,37 @@ class _CrearAnuncioView4State extends State<CrearAnuncioView4> {
                   padding: EdgeInsets.symmetric(horizontal: 30),
                   child: Text(
                     "Muestra información a tus futuros clientes",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white),
                   ),
                 ),
               ),
               Container(
                   width: 400,
-                  margin:
-                      EdgeInsets.only(top: 20, left: 30, right: 30, bottom: 10),
-                  child: Text(
+                  margin: const EdgeInsets.only(
+                      top: 20, left: 30, right: 30, bottom: 10),
+                  child: const Text(
                     "Introduce el nombre de tu negocio",
                     textAlign: TextAlign.start,
+                    style: TextStyle(color: Colors.white),
                   )),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30),
                 child: CustomTextField1(
+                    dimension: 40,
                     nombre: "Ejem. Los Girasoles",
                     controller: controller_nombreNegocio),
               ),
               Container(
                   width: 400,
-                  margin:
-                      EdgeInsets.only(top: 20, left: 30, right: 30, bottom: 10),
-                  child: Text(
+                  margin: const EdgeInsets.only(
+                      top: 20, left: 30, right: 30, bottom: 10),
+                  child: const Text(
                     "Especifica el horario de atención",
                     textAlign: TextAlign.start,
+                    style: TextStyle(color: Colors.white),
                   )),
               Visibility(
                 visible: !isChecked,
@@ -87,11 +101,19 @@ class _CrearAnuncioView4State extends State<CrearAnuncioView4> {
                   children: [
                     HoraMilitarWidget(
                       typeHora: "Hora Inicio",
-                      controller: controller_horaInicio,
+                      horaInicio: horaInicio,
+                      horaCerrar: horaCerrar,
+                      minutoCerrar: minutoCerrar,
+                      minutoInicio: minutoAbrir,
+                      editar: false,
                     ),
                     HoraMilitarWidget(
                       typeHora: "Hora Cierre",
-                      controller: controller_horaCerrar,
+                      horaInicio: horaInicio,
+                      horaCerrar: horaCerrar,
+                      minutoCerrar: minutoCerrar,
+                      minutoInicio: minutoAbrir,
+                      editar: false,
                     ),
                   ],
                 ),
@@ -114,7 +136,8 @@ class _CrearAnuncioView4State extends State<CrearAnuncioView4> {
                     ),
                     const Text(
                       "Horario de atencion 24 horas",
-                      style: TextStyle(color: Color.fromARGB(246, 37, 37, 37)),
+                      style:
+                          TextStyle(color: Color.fromARGB(246, 255, 255, 255)),
                     ),
                   ],
                 ),
@@ -123,25 +146,28 @@ class _CrearAnuncioView4State extends State<CrearAnuncioView4> {
                   width: 400,
                   margin:
                       EdgeInsets.only(top: 20, left: 30, right: 30, bottom: 0),
-                  child: Text(
+                  child: const Text(
                     "¿Tienes tipos de habitaciones?",
                     textAlign: TextAlign.start,
+                    style: TextStyle(color: Colors.white),
                   )),
               Container(
                   width: 400,
                   margin:
                       EdgeInsets.only(top: 0, left: 30, right: 30, bottom: 10),
-                  child: Text(
+                  child: const Text(
                     "Añade tus opciones",
                     textAlign: TextAlign.start,
+                    style: TextStyle(color: Colors.white),
                   )),
               Container(
                 width: 400,
-                margin: EdgeInsets.symmetric(horizontal: 30),
+                margin: const EdgeInsets.symmetric(horizontal: 30),
                 child: Row(
                   children: [
                     Expanded(
                       child: CustomTextField1(
+                        dimension: 25,
                         nombre: "",
                         controller: controller_habitacion,
                       ),
@@ -151,19 +177,19 @@ class _CrearAnuncioView4State extends State<CrearAnuncioView4> {
                     ),
                     Container(
                       width: 40,
-                      decoration: ShapeDecoration(
-                        color: const Color.fromARGB(255, 1, 8, 20),
+                      decoration: const ShapeDecoration(
+                        color: Color.fromARGB(255, 117, 76, 172),
                         shape: CircleBorder(),
                       ),
                       child: IconButton(
                         onPressed: () {
                           if (!controller_habitacion.text.isEmpty) {
                             Habitaciones habitacion = Habitaciones(
-                              precios: [], cantidad: 0,
-                                nombre: controller_habitacion.text, );
+                              precios: [],
+                              cantidad: 0,
+                              nombre: controller_habitacion.text,
+                            );
                             habitaciones.add(habitacion);
-
-                            
 
                             FocusScope.of(context).unfocus();
 
@@ -196,8 +222,12 @@ class _CrearAnuncioView4State extends State<CrearAnuncioView4> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Container(child: Text(habitacion.nombre)),
-                            SizedBox(
+                            Container(
+                                child: Text(
+                              habitacion.nombre,
+                              style: const TextStyle(color: Colors.white),
+                            )),
+                            const SizedBox(
                               width: 5,
                             ),
                             Container(
@@ -209,7 +239,10 @@ class _CrearAnuncioView4State extends State<CrearAnuncioView4> {
                                   habitaciones.remove(habitacion);
                                   setState(() {});
                                 },
-                                icon: Icon(Icons.close),
+                                icon: const Icon(
+                                  Icons.close,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           ],
@@ -233,7 +266,7 @@ class _CrearAnuncioView4State extends State<CrearAnuncioView4> {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return const CustomAlert(
+                    return CustomAlert(
                       title: "Validar Informacion",
                       text: "Por favor ingresar un nombre de hotel",
                     );
@@ -243,7 +276,7 @@ class _CrearAnuncioView4State extends State<CrearAnuncioView4> {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return const CustomAlert(
+                    return CustomAlert(
                       title: "Validar Habitaciones",
                       text: "Aun no has registrado ninguna habitación",
                     );
@@ -251,22 +284,23 @@ class _CrearAnuncioView4State extends State<CrearAnuncioView4> {
                 );
               } else {
                 if (!isChecked) {
-                  if (controller_horaInicio.text.isEmpty) {
+                  if (horaInicio.text.isEmpty || minutoAbrir.text.isEmpty) {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return const CustomAlert(
+                        return CustomAlert(
                           title: "Verifica tu Horario de Atencion",
                           text:
                               "Por favor selecciona una hora para abrir tu negocio",
                         );
                       },
                     );
-                  } else if (controller_horaCerrar.text.isEmpty) {
+                  } else if (horaCerrar.text.isEmpty ||
+                      minutoCerrar.text.isEmpty) {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return const CustomAlert(
+                        return CustomAlert(
                           title: "Verifica tu Horario de Atencion",
                           text:
                               "Por favor selecciona una hora para cerrar tu negocio",
@@ -274,31 +308,39 @@ class _CrearAnuncioView4State extends State<CrearAnuncioView4> {
                       },
                     );
                   } else {
-                    controllerhotel.informacionBasica(
+                    print(horaInicio.text);
+
+                    await controllerhotel.informacionBasica(
                         nombreNegocio: controller_nombreNegocio.text,
-                        horaAbrir: controller_horaInicio.text,
-                        horaCerrar: controller_horaCerrar.text,
+                        horaAbrir: int.parse(horaInicio.text),
+                        horaCerrar: int.parse(horaCerrar.text),
+                        minutoAbrir: int.parse(minutoAbrir.text),
+                        minutoCerrar: int.parse(minutoCerrar.text),
+                        tipoHorario: "Horario",
                         habitaciones: habitaciones);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => CrearAnuncioView5()));
+                            builder: (context) => const CrearAnuncioView5()));
                   }
                 } else {
                   await controllerhotel.informacionBasica(
                       nombreNegocio: controller_nombreNegocio.text,
-                      horaAbrir: "24 Horas",
-                      horaCerrar: "24 Horas",
+                      horaAbrir: 0,
+                      horaCerrar: 0,
+                      minutoAbrir: 0,
+                      minutoCerrar: 0,
+                      tipoHorario: "24 Horas",
                       habitaciones: habitaciones);
 
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => CrearAnuncioView5()));
+                          builder: (context) => const CrearAnuncioView5()));
                 }
               }
             },
-            child: Text(
+            child: const Text(
               "Siguiente",
               style: TextStyle(color: Colors.white),
             )),
@@ -309,9 +351,21 @@ class _CrearAnuncioView4State extends State<CrearAnuncioView4> {
 
 class HoraMilitarWidget extends StatefulWidget {
   final String typeHora;
-  final TextEditingController controller;
+  final TextEditingController horaInicio;
+  final TextEditingController horaCerrar;
+  final TextEditingController minutoInicio;
+  final TextEditingController minutoCerrar;
+  final bool editar;
+  // final TextEditingController controller;
 
-  const HoraMilitarWidget({required this.typeHora, required this.controller});
+  HoraMilitarWidget({
+    required this.typeHora,
+    required this.horaInicio,
+    required this.horaCerrar,
+    required this.minutoInicio,
+    required this.minutoCerrar, required this.editar,
+  });
+
   @override
   _HoraMilitarWidgetState createState() => _HoraMilitarWidgetState();
 }
@@ -332,26 +386,46 @@ class _HoraMilitarWidgetState extends State<HoraMilitarWidget> {
         if (pickedTime != null) {
           setState(() {
             _selectedTime = pickedTime;
-            widget.controller.text = '${_selectedTime!.hour}:${_selectedTime!.minute}';
+            if (widget.typeHora == "Hora Inicio") {
+              widget.horaInicio.text = _selectedTime!.hour.toString();
+              widget.minutoInicio.text = _selectedTime!.minute.toString();
+            } else {
+              widget.horaCerrar.text = _selectedTime!.hour.toString();
+              widget.minutoCerrar.text = _selectedTime!.minute.toString();
+            }
+            // widget.controller.text =
+            //     '${_selectedTime!.hour}:${_selectedTime!.minute}';
           });
         }
       },
       child: IntrinsicWidth(
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey),
+            border: Border.all(color: Colors.white),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Row(
             children: [
-              Container(child: Icon(Icons.access_time)),
-              SizedBox(width: 8),
-              Text(
+              Container(
+                  child: const Icon(
+                Icons.access_time,
+                color: Colors.white,
+              )),
+              const SizedBox(width: 8),
+              widget.editar ? Text(
+                widget.typeHora == "Hora Inicio"
+                        ? '${widget.horaInicio.text.toString().padLeft(2, '0')}:${widget.minutoInicio.text.toString().padLeft(2, '0')}'
+                        : '${widget.horaCerrar.text.toString().padLeft(2, '0')}:${widget.minutoCerrar.text.toString().padLeft(2, '0')}',
+                   
+                style: const TextStyle(fontSize: 16, color: Colors.white),
+              ) : Text(
                 _selectedTime != null
-                    ? '${_selectedTime!.hour}:${_selectedTime!.minute}'
+                    ? widget.typeHora == "Hora Inicio"
+                        ? '${widget.horaInicio.text.toString().padLeft(2, '0')}:${widget.minutoInicio.text.toString().padLeft(2, '0')}'
+                        : '${widget.horaCerrar.text.toString().padLeft(2, '0')}:${widget.minutoCerrar.text.toString().padLeft(2, '0')}'
                     : widget.typeHora,
-                style: TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 16, color: Colors.white),
               ),
             ],
           ),
@@ -364,10 +438,12 @@ class _HoraMilitarWidgetState extends State<HoraMilitarWidget> {
 class CustomTextField1 extends StatefulWidget {
   final String nombre;
   final TextEditingController controller;
+  final int dimension;
 
   const CustomTextField1({
     required this.nombre,
     required this.controller,
+    required this.dimension,
   });
 
   @override
@@ -379,31 +455,38 @@ class _CustomTextField1State extends State<CustomTextField1> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5),
-      height: 50,
+      // padding: EdgeInsets.symmetric(vertical: 2),
       width: 400,
+      // height: 70,
       child: TextField(
+        maxLength: widget.dimension,
         controller: widget.controller,
         textAlignVertical: TextAlignVertical.top,
         decoration: InputDecoration(
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20.0),
-            borderSide: BorderSide(color: Color.fromARGB(255, 19, 18, 18)),
+            borderSide:
+                const BorderSide(color: Color.fromARGB(255, 255, 255, 255)),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20.0),
-            borderSide: BorderSide(color: Color.fromARGB(255, 19, 18, 18)),
+            borderSide:
+                const BorderSide(color: Color.fromARGB(255, 255, 255, 255)),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20.0),
             borderSide:
-                BorderSide(color: const Color.fromARGB(255, 19, 18, 18)),
+                const BorderSide(color: Color.fromARGB(255, 255, 255, 255)),
           ),
           labelText: widget.nombre,
-          labelStyle: TextStyle(
-              color: const Color.fromARGB(255, 19, 18, 18), fontSize: 13),
+          labelStyle: const TextStyle(
+              color: Color.fromARGB(255, 255, 255, 255), fontSize: 13),
+          counterStyle: const TextStyle(
+            color: Color.fromARGB(255, 255, 255, 255),
+          ),
         ),
-        style: TextStyle(
-          color: const Color.fromARGB(255, 0, 0, 0),
+        style: const TextStyle(
+          color: Color.fromARGB(255, 255, 255, 255),
         ),
       ),
     );
