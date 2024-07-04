@@ -81,8 +81,13 @@ class ErrorAnuncioCreate extends StatelessWidget {
                         "longitud": controllerhotel.longitud,
                         "latitud": controllerhotel.latitud,
                         "direccion": controllerhotel.direccion,
+
                         "horaAbrir": controllerhotel.horaAbrir,
                         "horaCerrar": controllerhotel.horaCerrar,
+                        "minutoAbrir": controllerhotel.minutoAbrir,
+                        "minutoCerrar": controllerhotel.minutoCerrar,
+                        "tipoHorario": controllerhotel.tipoHorario,
+                        
                         "metodosPago": controllerhotel.metodosPago,
                         "servicios": servicios,
                         "fotos": controllerhotel.images
@@ -105,14 +110,15 @@ class ErrorAnuncioCreate extends StatelessWidget {
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                   ErrorAnuncioCreate(servicios: servicios,)), //debe mandar ya adentro de la app
+                              builder: (context) => ErrorAnuncioCreate(
+                                    servicios: servicios,
+                                  )), //debe mandar ya adentro de la app
                           (Route<dynamic> route) => false,
                         );
                       }
                     },
                     child: Text(
-                      "Volver a intentar",
+                      "Vuelve a intentarlo",
                       style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
                     )),
               ),
@@ -135,7 +141,7 @@ class ErrorAnuncioCreate extends StatelessWidget {
                       );
                     },
                     child: Text(
-                      "Regresar a home",
+                      "Cancelar",
                       style: TextStyle(color: Colors.white),
                     )),
               ),

@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:telodigo/data/service/PeticionesReservas.dart';
 import 'package:telodigo/domain/models/reserva.dart';
 import 'package:telodigo/ui/pages/Reservar/verificarcodigo.dart';
@@ -17,6 +15,14 @@ class _ListReservasUserAnfitrionState extends State<ListReservasUserAnfitrion> {
   List<Reserva> reservas = [];
   String _searchText = "";
   TextEditingController controller = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    PeticionesReserva.cancelarReservasAnfitrion(context);
+    PeticionesReserva.culminadoAnfitrion(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +57,7 @@ class _ListReservasUserAnfitrionState extends State<ListReservasUserAnfitrion> {
                 ),
               ),
               FutureBuilder<List<Reserva>>(
-                future: PeticionesReserva.listReservasAnfitrion(),
+                future: PeticionesReserva.listReservasAnfitrion(context),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Container(
@@ -81,7 +87,7 @@ class _ListReservasUserAnfitrionState extends State<ListReservasUserAnfitrion> {
                                 padding: EdgeInsets.all(20),
                                 child: Center(
                                   child: Text(
-                                    "No se encontraron reservas con el criterio de búsqueda",
+                                    "No tienes reservas",
                                     style: TextStyle(
                                       color: Colors.white,
                                     ),
@@ -132,7 +138,9 @@ Widget ListHotel(BuildContext context, List<Reserva> reservaList) {
                               width: 12,
                               height: 12,
                               decoration: BoxDecoration(
-                                  color: reserva.metodoPago != "Efectivo"
+                                  color: reserva.metodoPago != "Efectivo" &&
+                                          reserva.metodoPago != "Yape" &&
+                                          reserva.metodoPago != "Plin"
                                       ? Color(0xFF00FF0A)
                                       : const Color.fromARGB(255, 255, 7, 7),
                                   borderRadius:
@@ -142,7 +150,9 @@ Widget ListHotel(BuildContext context, List<Reserva> reservaList) {
                               width: 6,
                             ),
                             Text(
-                              reserva.metodoPago != "Efectivo"
+                              reserva.metodoPago != "Efectivo" &&
+                                      reserva.metodoPago != "Yape" &&
+                                      reserva.metodoPago != "Plin"
                                   ? "Pago"
                                   : "No ha Pagado",
                               style: const TextStyle(

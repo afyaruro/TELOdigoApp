@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:telodigo/data/service/PeticionesReservas.dart';
+import 'package:telodigo/data/service/peticionesReporte.dart';
 import 'package:telodigo/data/service/peticionnegocio.dart';
 import 'package:telodigo/domain/models/hoteles.dart';
 import 'package:telodigo/ui/pages/favoritos/hotelfavorite.dart';
@@ -16,6 +18,15 @@ class _FavoritosState extends State<Favoritos> {
   List<Hoteles> hoteles = [];
 
   @override
+  void initState() {
+    super.initState();
+
+    PeticionesReserva.cancelarReservas(context);
+    PeticionesReserva.calificar(context);
+    PeticionesReserva.culminado(context);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder<List<Hoteles>>(
@@ -26,8 +37,10 @@ class _FavoritosState extends State<Favoritos> {
               color: Color.fromARGB(255, 29, 7, 48),
               child: Center(
                 // child: CircularProgressIndicator(),
-                child: Text("Cargando tus favoritos...", style: TextStyle(color: Colors.white),),
-
+                child: Text(
+                  "Cargando tus favoritos...",
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             );
           } else if (snapshot.hasError) {
@@ -90,6 +103,41 @@ class ListHotel extends StatefulWidget {
 class _ListHotelState extends State<ListHotel> {
   late Hoteles? selectedHotel;
 
+  String calcularHora(Hoteles hotel) {
+    int hourAbrir = hotel.horaAbrir;
+    int hourCerrar = hotel.horaCerrar;
+
+    int minuteAbrir = hotel.minutoAbrir;
+
+    int minuteCerrar = hotel.minutoCerrar;
+
+    hourAbrir = hourAbrir % 24;
+    hourCerrar = hourCerrar % 24;
+
+    // Determine AM or PM based on hour
+    // String amPm = hour > 12 ? "PM" : "AM";
+    String amPm = hourAbrir >= 12 ? "PM" : "AM";
+    String amPmFinal = hourCerrar >= 12 ? "PM" : "AM";
+
+    // Adjust hour for 12-hour format
+    if (hourAbrir >= 12) {
+      hourAbrir -= 12;
+    }
+
+    if (hourCerrar >= 12) {
+      hourCerrar -= 12;
+    }
+
+    // Format hour and minute with leading zeros
+    String formattedHourAbrir = hourAbrir.toString().padLeft(2, '0');
+    String formattedHourCerrar = hourCerrar.toString().padLeft(2, '0');
+    String formattedMinuteAbrir = minuteAbrir.toString().padLeft(2, '0');
+    String formattedMinuteCerrar = minuteCerrar.toString().padLeft(2, '0');
+
+    // Construct and return the non-military time string
+    return "${formattedHourAbrir}:${formattedMinuteAbrir} $amPm - ${formattedHourCerrar}:${formattedMinuteCerrar} $amPmFinal";
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -98,7 +146,8 @@ class _ListHotelState extends State<ListHotel> {
         children: [
           for (Hoteles hotel in widget.hotelList)
             InkWell(
-              onTap: () {
+              onTap: () async {
+                PeticionesReporte.reporteViewAdd(hotel.user);
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -109,7 +158,7 @@ class _ListHotelState extends State<ListHotel> {
               child: Container(
                 width: MediaQuery.of(context).size.width,
                 margin: EdgeInsets.only(top: 5),
-                color: Color.fromARGB(48, 49, 49, 49),
+                color: Color(0xFF3B2151),
                 child: Row(
                   children: [
                     Image.network(
@@ -166,25 +215,37 @@ class _ListHotelState extends State<ListHotel> {
                                   },
                                   icon: Icon(
                                     Icons.delete,
-                                    color: Color.fromARGB(255, 174, 171, 180),
+                                    color: Color.fromARGB(255, 255, 255, 255),
                                   ))
                             ],
                           ),
                           Container(
-                              child: hotel.horaAbrir == "24 Horas"
-                                  ? Text(
-                                      "Servicio: ${hotel.horaAbrir}",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w500),
+                              child: hotel.tipoHorario == "24 Horas"
+                                  ? Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text("Horario de Atención:",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w500)),
+                                        Text(
+                                          "24 Horas",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ],
                                     )
-                                  : Text(
-                                      "Servicio: ${hotel.horaAbrir} - ${hotel.horaCerrar}",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w500),
+                                  : Column(
+                                      children: [
+                                        Text("Horario de Atención:",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w500)),
+                                        Text(calcularHora(hotel),
+                                            // "Servicio: ${hotel.horaAbrir.toString().padLeft(2, '0')}:${hotel.minutoAbrir.toString().padLeft(2, '0')} - ${hotel.horaCerrar.toString().padLeft(2, '0')}:${hotel.minutoCerrar.toString().padLeft(2, '0')}",
+                                            style:
+                                                TextStyle(color: Colors.white)),
+                                      ],
                                     )),
                           Container(
                             child: Text(

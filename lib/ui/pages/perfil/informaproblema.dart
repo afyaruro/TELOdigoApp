@@ -1,4 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:telodigo/data/controllers/usercontroller.dart';
+import 'package:telodigo/domain/models/informe.dart';
+import 'package:telodigo/ui/pages/home/home.dart';
 
 class InformaProblema extends StatefulWidget {
   const InformaProblema({super.key});
@@ -8,6 +13,8 @@ class InformaProblema extends StatefulWidget {
 }
 
 class _InformaProblemaState extends State<InformaProblema> {
+  TextEditingController controller = TextEditingController();
+  bool isButtonDisabled = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +43,7 @@ class _InformaProblemaState extends State<InformaProblema> {
                 borderRadius: BorderRadius.circular(8.0),
               ),
               child: TextField(
-                // controller: _controller,
+                controller: controller,
                 maxLines: null,
                 style: TextStyle(color: Colors.white),
                 decoration: InputDecoration(
@@ -46,10 +53,93 @@ class _InformaProblemaState extends State<InformaProblema> {
                   contentPadding: EdgeInsets.all(8.0),
                 ),
               ),
-            )
+            ),
+           
+            ElevatedButton(
+              onPressed: isButtonDisabled
+                  ? null
+                  : () {
+                      if (controller.text.isEmpty) {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text(
+                                "Error al validar",
+                                style: TextStyle(fontSize: 15),
+                              ),
+                              content: const Text(
+                                  "Por favor, digite un mensaje en el cual informe su problema."),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: const Text("Aceptar"),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      } else {
+                        setState(() {
+                          isButtonDisabled = true;
+                        });
+
+                        crearInforme(controller.text).then((_) {
+                          Future.delayed(Duration(seconds: 5), () {
+                            setState(() {
+                              isButtonDisabled = false;
+                            });
+                          });
+                        });
+                      }
+                    },
+              child: const Text("Enviar"),
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  Future crearInforme(String mensaje) async {
+    final UserController controlleruser = Get.find();
+    final CollectionReference collection =
+        FirebaseFirestore.instance.collection("InformeProblema");
+    final nuevoReporte = Informe(
+      correo: controlleruser.usuario!.correo,
+      mensaje: mensaje,
+      fecha: DateTime.now(),
+    );
+
+    await collection.add(nuevoReporte.toJson());
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            "¡Enviado Correctamente!",
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+          ),
+          content: const Text("Hemos recibido su informe de error correctamente. Muy pronto estaremos contactándonos con usted."),
+          actions: [
+            TextButton(
+              child: const Text("Aceptar"),
+              onPressed: () {
+                // Navigator.of(context).pop();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const HomeUser(
+                              currentIndex: 4,
+                            )));
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

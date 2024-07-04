@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:telodigo/domain/models/habitaciones.dart';
 import 'package:telodigo/domain/models/hoteles.dart';
 import 'package:telodigo/ui/components/customcomponents/customcarrusel.dart';
+import 'package:telodigo/ui/pages/Editar%20Establecimiento/editar.dart';
 
 class ViewHotel extends StatefulWidget {
   final Hoteles hotel;
@@ -20,6 +21,41 @@ class _ViewHotelState extends State<ViewHotel> {
     setState(() {
       estrellas = widget.hotel.calificacion;
     });
+  }
+
+  String calcularHoraReserva(Hoteles hotel) {
+    int hourAbrir = hotel.horaAbrir;
+    int hourCerrar = hotel.horaCerrar;
+
+    int minuteAbrir = hotel.minutoAbrir;
+
+    int minuteCerrar = hotel.minutoCerrar;
+
+    hourAbrir = hourAbrir % 24;
+    hourCerrar = hourCerrar % 24;
+
+    // Determine AM or PM based on hour
+    // String amPm = hour > 12 ? "PM" : "AM";
+    String amPm = hourAbrir >= 12 ? "PM" : "AM";
+    String amPmFinal = hourCerrar >= 12 ? "PM" : "AM";
+
+    // Adjust hour for 12-hour format
+    if (hourAbrir >= 12) {
+      hourAbrir -= 12;
+    }
+
+    if (hourCerrar >= 12) {
+      hourCerrar -= 12;
+    }
+
+    // Format hour and minute with leading zeros
+    String formattedHourAbrir = hourAbrir.toString().padLeft(2, '0');
+    String formattedHourCerrar = hourCerrar.toString().padLeft(2, '0');
+    String formattedMinuteAbrir = minuteAbrir.toString().padLeft(2, '0');
+    String formattedMinuteCerrar = minuteCerrar.toString().padLeft(2, '0');
+
+    // Construct and return the non-military time string
+    return "${formattedHourAbrir}:${formattedMinuteAbrir} $amPm - ${formattedHourCerrar}:${formattedMinuteCerrar} $amPmFinal";
   }
 
   @override
@@ -329,10 +365,14 @@ class _ViewHotelState extends State<ViewHotel> {
           color: Color.fromARGB(255, 105, 47, 170),
         );
       } else if (servicio == "Cochera") {
-        return Container(width: 23, child: Image.asset("assets/garage.png"));
+        return Icon(
+          Icons.garage_rounded,
+          color: Color.fromARGB(255, 105, 47, 170),
+        );
       }
       return Container();
     }
+
 /*  */
     return Scaffold(
       appBar: AppBar(
@@ -358,9 +398,13 @@ class _ViewHotelState extends State<ViewHotel> {
                           width: 12,
                           height: 12,
                           decoration: BoxDecoration(
-                              color: widget.hotel.saldo > 5.0
-                                  ? Color(0xFF00FF0A)
-                                  : Colors.amber,
+                              color: widget.hotel.estado == "por verificar"
+                                  ? Color.fromARGB(255, 255, 115, 0)
+                                  : widget.hotel.estado == "rechazado"
+                                      ? const Color.fromARGB(255, 194, 18, 6)
+                                      : widget.hotel.saldo > 5.0
+                                          ? Color(0xFF00FF0A)
+                                          : Colors.amber,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(6))),
                         ),
@@ -368,7 +412,13 @@ class _ViewHotelState extends State<ViewHotel> {
                           width: 6,
                         ),
                         Text(
-                          widget.hotel.saldo > 5.0 ? "Publicado" : "Recargar",
+                          widget.hotel.estado == "por verificar"
+                              ? "Por verificar"
+                              : widget.hotel.estado == "rechazado"
+                                  ? "Rechazado"
+                                  : widget.hotel.saldo > 5.0
+                                      ? "Publicado"
+                                      : "Recargar",
                           style: const TextStyle(
                               color: Color.fromARGB(255, 255, 255, 255),
                               fontSize: 14,
@@ -377,7 +427,15 @@ class _ViewHotelState extends State<ViewHotel> {
                       ],
                     ),
                     TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => EditarEstablecimiento(
+                                        estrellas: estrellas,
+                                        hotel: widget.hotel,
+                                      )));
+                        },
                         child: Text(
                           "Editar",
                           style: TextStyle(
@@ -391,7 +449,27 @@ class _ViewHotelState extends State<ViewHotel> {
                 ImageCarousel(
                   imageUrls: widget.hotel.fotos,
                 ),
-                Container(width: 400, child: EstrellasPoint(estrellas)),
+
+                // Container(width: 400, child: EstrellasPoint(estrellas)),
+                Container(
+                  width: 400,
+                  child: Row(
+                    children: [
+                      Text(
+                        estrellas.toStringAsFixed(1),
+                        style: const TextStyle(
+                            color: Color.fromARGB(255, 255, 255, 255),
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Icon(
+                        Icons.star,
+                        color: Colors.white,
+                        size: 10,
+                      )
+                    ],
+                  ),
+                ),
                 Container(
                   width: 400,
                   child: Text(
@@ -438,13 +516,13 @@ class _ViewHotelState extends State<ViewHotel> {
                         height: 20,
                         color: const Color.fromARGB(221, 255, 255, 255),
                       ),
-                      widget.hotel.horaAbrir == "24 Horas"
+                      widget.hotel.tipoHorario == "24 Horas"
                           ? Text(
                               "24 Horas",
                               style: TextStyle(color: Colors.white),
                             )
-                          : Text(
-                              "${widget.hotel.horaAbrir} - ${widget.hotel.horaCerrar}",
+                          : Text(calcularHoraReserva(widget.hotel),
+                              // "${widget.hotel.horaAbrir.toString().padLeft(2, '0')}:${widget.hotel.minutoAbrir.toString().padLeft(2, '0')} - ${widget.hotel.horaCerrar.toString().padLeft(2, '0')}:${widget.hotel.minutoCerrar.toString().padLeft(2, '0')}",
                               style: TextStyle(color: Colors.white))
                     ],
                   ),
@@ -487,23 +565,28 @@ class _ViewHotelState extends State<ViewHotel> {
                         fontWeight: FontWeight.bold),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    for (var servicio in widget.hotel.servicios)
-                      Row(
+                widget.hotel.servicios.isEmpty
+                    ? Text(
+                        "No hay servicios",
+                        style: TextStyle(color: Colors.white),
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SizedBox(
-                            width: 10,
-                          ),
-                          listServicios(servicio),
-                          SizedBox(
-                            width: 10,
-                          )
+                          for (var servicio in widget.hotel.servicios)
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                listServicios(servicio),
+                                SizedBox(
+                                  width: 10,
+                                )
+                              ],
+                            ),
                         ],
-                      ),
-                  ],
-                )
+                      )
               ],
             ),
           ),

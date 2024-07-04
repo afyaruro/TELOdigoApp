@@ -63,7 +63,7 @@ class _changePasswordState extends State<changePassword> {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return const CustomAlert(
+                        return  CustomAlert(
                           title: "Valida tu Informacion",
                           text: "Ingresa un correo electronico",
                         );

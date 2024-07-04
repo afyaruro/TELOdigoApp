@@ -2,14 +2,18 @@
 
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:telodigo/data/controllers/usercontroller.dart';
 import 'package:telodigo/ui/components/customcomponents/exitconfirmation.dart';
+import 'package:telodigo/ui/pages/anuncios%20anfitrion/anunciosanfitrion.dart';
 import 'package:telodigo/ui/pages/home%20anfitrion/homeanfitrion.dart';
 
 class AnuncioCreado extends StatelessWidget {
   const AnuncioCreado({super.key});
 
   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {
+    final UserController controlleruser = Get.find();
     return WillPopScope(
       onWillPop: () async {
         // Mostrar la alerta y esperar la respuesta del usuario
@@ -39,7 +43,7 @@ class AnuncioCreado extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 50.0, vertical: 30),
                 child: Center(
                     child: Text(
-                  "Felicidades ha conseguido registrar su negocio exitosamente ",
+                  "¡Felicidades, has conseguido registrar tu negocio exitosamente!",
                   style: TextStyle(
                       color: Color.fromARGB(225, 0, 0, 0),
                       fontSize: 15,
@@ -53,7 +57,7 @@ class AnuncioCreado extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 50.0, vertical: 10),
                 child: Center(
                     child: Text(
-                  "Te recordamos que para que tu negocio sea visualizado por los otros usuarios debes tener recargado mas de 5 soles",
+                  "Te recordamos que para que tu negocio sea visible para otros usuarios, debes haber recargado más de 5 soles.",
                   style: TextStyle(
                       color: Color.fromARGB(225, 0, 0, 0),
                       fontSize: 15,
@@ -71,13 +75,19 @@ class AnuncioCreado extends StatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: 15),
                   backgroundColor: Color(0xFF1098E7)),
               onPressed: () {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          const HomeAnfitrion()), //debe mandar ya adentro de la app
-                  (Route<dynamic> route) => false,
-                );
+                controlleruser.usuario!.userName == "Admin"
+                    ? Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AnunciosAnfitrion()),
+                        (Route<dynamic> route) => false,
+                      )
+                    : Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const HomeAnfitrion()),
+                        (Route<dynamic> route) => false,
+                      );
               },
               child: Text(
                 "Siguiente",

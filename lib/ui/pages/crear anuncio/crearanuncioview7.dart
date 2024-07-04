@@ -31,17 +31,18 @@ class _CrearAnuncioView7State extends State<CrearAnuncioView7> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 21, 1, 37),
+        backgroundColor: const Color.fromARGB(255, 21, 1, 37),
         foregroundColor: Colors.white,
         centerTitle: true,
         title: const Text(
-          "Paso 7 de 9",
+          "Paso 8 de 10",
           style: TextStyle(
             color: Color.fromARGB(255, 255, 255, 255),
             fontSize: 15,
           ),
         ),
       ),
+      backgroundColor: const Color.fromARGB(255, 21, 1, 37),
       body: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
@@ -54,9 +55,9 @@ class _CrearAnuncioView7State extends State<CrearAnuncioView7> {
                 child: Text(
                   "Añade tus métodos de pago",
                   style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                  ),
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white),
                 ),
               ),
             ),
@@ -67,6 +68,7 @@ class _CrearAnuncioView7State extends State<CrearAnuncioView7> {
                 child: Text(
                   "¿Cómo pueden pagarte los clientes?",
                   style: TextStyle(
+                    color: Colors.white,
                     fontSize: 14,
                   ),
                 ),
@@ -79,16 +81,19 @@ class _CrearAnuncioView7State extends State<CrearAnuncioView7> {
                 padding: EdgeInsets.symmetric(horizontal: 30),
                 child: Text(
                   "Selecciona los método de pago que tienes disponible",
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                  style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white),
                 ),
               ),
             ),
             Container(
                 width: 400,
-                margin: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
                 child: Column(
                   children: [
-                    
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -97,9 +102,10 @@ class _CrearAnuncioView7State extends State<CrearAnuncioView7> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
+                              const Text(
                                 "Efectivo",
-                                style: TextStyle(fontSize: 14),
+                                style: TextStyle(
+                                    fontSize: 14, color: Colors.white),
                               ),
                               Checkbox(
                                 value: checkEfectivo,
@@ -117,15 +123,63 @@ class _CrearAnuncioView7State extends State<CrearAnuncioView7> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                "Tarjeta de Credito",
-                                style: TextStyle(fontSize: 14),
+                              const Text(
+                                "Tarjeta de crédito",
+                                style: TextStyle(
+                                    fontSize: 14, color: Colors.white),
                               ),
                               Checkbox(
                                 value: checkTarjeta,
                                 onChanged: (newbool) {
                                   setState(() {
                                     checkTarjeta = newbool!;
+                                  });
+                                },
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          width: 100,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                "Yape",
+                                style: TextStyle(
+                                    fontSize: 14, color: Colors.white),
+                              ),
+                              Checkbox(
+                                value: checkYape,
+                                onChanged: (newbool) {
+                                  setState(() {
+                                    checkYape = newbool!;
+                                  });
+                                },
+                              )
+                            ],
+                          ),
+                        ),
+                        Container(
+                          width: 170,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                "Plin",
+                                style: TextStyle(
+                                    fontSize: 14, color: Colors.white),
+                              ),
+                              Checkbox(
+                                value: checkPlin,
+                                onChanged: (newbool) {
+                                  setState(() {
+                                    checkPlin = newbool!;
                                   });
                                 },
                               )
@@ -141,8 +195,10 @@ class _CrearAnuncioView7State extends State<CrearAnuncioView7> {
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
         child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(vertical: 15),
-                backgroundColor: Color(0xFF1098E7)),
+                disabledBackgroundColor:
+                    const Color.fromARGB(255, 200, 200, 200).withOpacity(0.12),
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                backgroundColor: const Color(0xFF1098E7)),
             onPressed: btnAcive()
                 ? null
                 : () {
@@ -161,7 +217,7 @@ class _CrearAnuncioView7State extends State<CrearAnuncioView7> {
 
                     controllerhotel.NewMetodoPago(metodos);
                     metodos = [];
-                    
+
                     Navigator.push(
                         context,
                         MaterialPageRoute(

@@ -18,17 +18,18 @@ class _CrearAnuncioView3State extends State<CrearAnuncioView3> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 21, 1, 37),
+        backgroundColor: const Color.fromARGB(255, 21, 1, 37),
         foregroundColor: Colors.white,
         centerTitle: true,
         title: const Text(
-          "Paso 3 de 9",
+          "Paso 4 de 10",
           style: TextStyle(
             color: Color.fromARGB(255, 255, 255, 255),
             fontSize: 15,
           ),
         ),
       ),
+      backgroundColor: const Color.fromARGB(255, 21, 1, 37),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
@@ -41,24 +42,30 @@ class _CrearAnuncioView3State extends State<CrearAnuncioView3> {
                   padding: EdgeInsets.symmetric(horizontal: 30),
                   child: Text(
                     "Proporciona tu ubicación a tus futuros clientes",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white),
                   ),
                 ),
               ),
               Container(
                   width: 400,
-                  margin: EdgeInsets.only(
+                  margin: const EdgeInsets.only(
                     top: 5,
                     left: 30,
                     right: 30,
                   ),
-                  child: Text(
+                  child: const Text(
                     "Dirección del Establecimiento",
                     textAlign: TextAlign.start,
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500, color: Colors.white),
                   )),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: CustomTextField1(nombre: "", controller: controller),
+                child: CustomTextField1(
+                    dimension: 40, nombre: "", controller: controller),
               ),
             ],
           ),
@@ -68,8 +75,11 @@ class _CrearAnuncioView3State extends State<CrearAnuncioView3> {
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
         child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(vertical: 15),
-                backgroundColor: Color.fromARGB(255, 16, 152, 231)),
+              padding: const EdgeInsets.symmetric(vertical: 15),
+              backgroundColor: const Color.fromARGB(255, 16, 152, 231),
+              disabledBackgroundColor:
+                  const Color.fromARGB(255, 200, 200, 200).withOpacity(0.12),
+            ),
             onPressed: controller.text != ""
                 ? () {
                     controllerhotel.NewDireccion(controller.text);
@@ -80,7 +90,7 @@ class _CrearAnuncioView3State extends State<CrearAnuncioView3> {
                             builder: (context) => const CrearAnuncioMap()));
                   }
                 : null,
-            child: Text(
+            child: const Text(
               "Siguiente",
               style: TextStyle(color: Colors.white),
             )),

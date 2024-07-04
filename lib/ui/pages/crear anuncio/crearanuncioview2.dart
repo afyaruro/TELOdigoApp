@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:telodigo/data/controllers/negociocontroller.dart';
-import 'package:telodigo/ui/pages/crear%20anuncio/crearanuncioview3.dart';
+import 'package:telodigo/ui/pages/crear%20anuncio/categorias.dart';
 
 class CrearAnuncioView2 extends StatefulWidget {
   const CrearAnuncioView2({super.key});
@@ -23,11 +23,18 @@ class _CrearAnuncioView2State extends State<CrearAnuncioView2> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 21, 1, 37),
+        backgroundColor: const Color.fromARGB(255, 21, 1, 37),
         foregroundColor: Colors.white,
         centerTitle: true,
-        title: const Text("Paso 2 de 9", style: TextStyle(color: Color.fromARGB(255, 255, 255, 255), fontSize: 15, ),),
+        title: const Text(
+          "Paso 2 de 10",
+          style: TextStyle(
+            color: Color.fromARGB(255, 255, 255, 255),
+            fontSize: 15,
+          ),
+        ),
       ),
+      backgroundColor: const Color.fromARGB(255, 21, 1, 37),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
@@ -39,7 +46,10 @@ class _CrearAnuncioView2State extends State<CrearAnuncioView2> {
                 padding: EdgeInsets.symmetric(horizontal: 50),
                 child: Text(
                   "¿Cuál de estas opciones describe mejor tu espacio?",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white),
                 ),
               ),
               const SizedBox(
@@ -147,7 +157,12 @@ class _CrearAnuncioView2State extends State<CrearAnuncioView2> {
               ),
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromARGB(255, 16, 152, 231)),
+                    backgroundColor: const Color.fromARGB(255, 16, 152, 231),
+                    disabledForegroundColor:
+                        const Color.fromARGB(255, 200, 200, 200)
+                            .withOpacity(0.38),
+                    
+                  ),
                   onPressed: btnVisible
                       ? () {
                           if (btnDepartamento) {
@@ -168,10 +183,10 @@ class _CrearAnuncioView2State extends State<CrearAnuncioView2> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      const CrearAnuncioView3()));
+                                      CrearAnuncioViewCategorias( )));
                         }
                       : null,
-                  child: Text(
+                  child: const Text(
                     "Siguiente",
                     style: TextStyle(color: Colors.white),
                   )),
@@ -202,16 +217,15 @@ class CustomButtonOptionView extends StatelessWidget {
         onPressed: () => action(),
         style: ElevatedButton.styleFrom(
           backgroundColor: btn
-              ? Color.fromARGB(255, 0, 0, 0)
+              ? const Color.fromARGB(255, 80, 27, 167)
               : const Color.fromARGB(255, 255, 255, 255),
         ),
         child: Text(
           nombreBtn,
           style: TextStyle(
-            color: btn
-                ? Color.fromARGB(255, 255, 255, 255)
-                : Color.fromARGB(255, 0, 0, 0),
-          ),
+              color: btn
+                  ? const Color.fromARGB(255, 255, 255, 255)
+                  : const Color.fromARGB(255, 80, 27, 167)),
         ),
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:telodigo/domain/models/habitaciones.dart';
 import 'package:telodigo/domain/models/hoteles.dart';
 
@@ -29,7 +30,7 @@ class _CantHabitacionesState extends State<CantHabitaciones> {
 
       QuerySnapshot querySnapshot = await collection
           .where('user', isEqualTo: widget.hotel.user)
-          .where('nombre', isEqualTo: widget.hotel.nombre)
+          .where('id', isEqualTo: widget.hotel.id)
           .get();
 
       DocumentSnapshot document = querySnapshot.docs.first;
@@ -127,9 +128,15 @@ class _CantHabitacionesState extends State<CantHabitaciones> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            habitacion.nombre,
-                            style: TextStyle(fontSize: 15, color: Colors.white),
+                          Flexible(
+                            child: Text(
+                              habitacion.nombre,
+                              style:
+                                  TextStyle(fontSize: 15, color: Colors.white),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10,
                           ),
                           Container(
                             child: Text(
@@ -143,6 +150,9 @@ class _CantHabitacionesState extends State<CantHabitaciones> {
                                     color: Color.fromARGB(255, 194, 194, 194),
                                     width: 1),
                                 borderRadius: BorderRadius.circular(10)),
+                          ),
+                          SizedBox(
+                            width: 10,
                           ),
                           Row(
                             children: [

@@ -95,7 +95,7 @@ class PeticionesChangePassword {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return const CustomAlert(
+            return  CustomAlert(
               title: "Error Correo",
               text: "No existe ningun usuario registrado con este correo",
             );
@@ -108,7 +108,7 @@ class PeticionesChangePassword {
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          return const CustomAlert(
+          return  CustomAlert(
             title: "Error",
             text: "Error al actualizar la contraseña",
           );

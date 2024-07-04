@@ -7,6 +7,7 @@ class Usuario {
   final String fechaNacimiento;
   final String foto;
   final bool modoOscuro;
+   double saldoCuenta;
 
   Usuario(
       {required this.userName,
@@ -17,10 +18,12 @@ class Usuario {
       required this.fechaNacimiento,
       required this.foto,
       required this.modoOscuro,
+      required this.saldoCuenta,
       });
 
   factory Usuario.desdeDoc(Map<String, dynamic> data) {
     return Usuario(
+      saldoCuenta: data['saldoCuenta'] ?? '',
       userName: data['userName'] ?? '',
       password: data['password'] ?? '',
       nombres: data['nombres'] ?? '',
@@ -40,6 +43,7 @@ class Usuario {
         "correo": correo,
         "fechaNacimiento": fechaNacimiento,
         "foto": foto,
-        "modoOscuro": modoOscuro
+        "modoOscuro": modoOscuro,
+        "saldoCuenta": saldoCuenta
       };
 }

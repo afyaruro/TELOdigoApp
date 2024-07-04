@@ -30,133 +30,133 @@ class _sign_upState extends State<sign_up> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 0, 0, 0),
-
+        backgroundColor: Color.fromARGB(255, 0, 0, 0),
         body: CustomBackgroundLogin(
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.1,
-            ),
-            Container(
-              padding: const EdgeInsets.only(
-                  left: 50, right: 50, top: 50, bottom: 50),
-              child: const Image(
-                image: AssetImage('assets/logo.png'),
-                height: 100,
-              ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0,
-            ),
-            CustomOption(false, context),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.05,
-            ),
-            CustomTextField1(
-                nombre: "Correo Electrónico",
-                isPassword: false,
-                controller: controller_correo),
-            CustomDatePicker(controller: controller_fecha),
-            CustomTextField1(
-                nombre: "Usuario",
-                isPassword: false,
-                controller: controller_userName),
-            CustomTextField1(
-                nombre: "Contraseña",
-                isPassword: true,
-                controller: controller_password),
-            Container(
-              width: 400,
-              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              child: Row(
-                children: [
-                  Checkbox(
-                    value: isChecked,
-                    onChanged: (newbool) {
-                      setState(() {
-                        isChecked = newbool!;
-                      });
-                    },
-                    activeColor: const Color.fromARGB(255, 190, 160, 209),
-                    checkColor: Colors.white,
-                    hoverColor: Color.fromARGB(255, 156, 110, 187),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.1,
+                ),
+                Container(
+                  padding: const EdgeInsets.only(
+                      left: 50, right: 50, top: 50, bottom: 50),
+                  child: const Image(
+                    image: AssetImage('assets/logo.png'),
+                    height: 100,
                   ),
-                  const Text(
-                    "Acepto los ",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      splashColor: Color.fromARGB(123, 206, 206, 206),
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-                        child: const Text(
-                          "terminos y condiciones",
-                          style: TextStyle(
-                              color: Color.fromARGB(255, 156, 110, 187)),
-                        ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0,
+                ),
+                CustomOption(false, context),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.05,
+                ),
+                CustomTextField1(
+                    nombre: "Correo Electrónico",
+                    isPassword: false,
+                    controller: controller_correo),
+                CustomDatePicker(controller: controller_fecha),
+                CustomTextField1(
+                    nombre: "Usuario",
+                    isPassword: false,
+                    controller: controller_userName),
+                CustomTextField1(
+                    nombre: "Contraseña",
+                    isPassword: true,
+                    controller: controller_password),
+                Container(
+                  width: 400,
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                  child: Row(
+                    children: [
+                      Checkbox(
+                        value: isChecked,
+                        onChanged: (newbool) {
+                          setState(() {
+                            isChecked = newbool!;
+                          });
+                        },
+                        activeColor: const Color.fromARGB(255, 190, 160, 209),
+                        checkColor: Colors.white,
+                        hoverColor: Color.fromARGB(255, 156, 110, 187),
                       ),
-                      onTap: () async {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const terminos_condiciones()));
-                     
-                      },
-                    ),
-                  )
-                ],
-              ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.02,
-            ),
-            CustomButtonsRadiusx(
-              const Color(0xffffffff),
-              const Color(0xff3B2151),
-              "¡REGISTRARME!",
-              () async {
-                bool resp = await newUser(
-                    userName: controller_userName.text,
-                    password: controller_password.text,
-                    correo: controller_correo.text,
-                    context: context,
-                    isChecked: isChecked,
-                    fechaNacimiento: controller_fecha.text);
+                      const Text(
+                        "Acepto los ",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          splashColor: Color.fromARGB(123, 206, 206, 206),
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.only(top: 10.0, bottom: 10.0),
+                            child: const Text(
+                              "términos y condiciones",
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 156, 110, 187)),
+                            ),
+                          ),
+                          onTap: () async {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const terminos_condiciones()));
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.02,
+                ),
+                CustomButtonsRadiusx(
+                  const Color(0xffffffff),
+                  const Color(0xff3B2151),
+                  "¡REGISTRARME!",
+                  () async {
+                    bool resp = await newUser(
+                        userName: controller_userName.text,
+                        password: controller_password.text,
+                        correo: controller_correo.text,
+                        context: context,
+                        isChecked: isChecked,
+                        fechaNacimiento: controller_fecha.text);
 
-                if (resp == true || resp == false) {
-                  FocusScope.of(context).requestFocus(FocusNode());
-                }
+                    if (resp == true || resp == false) {
+                      FocusScope.of(context).requestFocus(FocusNode());
+                    }
 
-                if (resp) {
-                  setState(() {
-                    controller_fecha.text = "Fecha de Nacimiento";
-                    controller_userName.text = "";
-                    controller_password.text = "";
-                    controller_correo.text = "";
-                    isChecked = false;
-                  });
+                    if (resp) {
+                      setState(() {
+                        controller_fecha.text = "Fecha de Nacimiento";
+                        controller_userName.text = "";
+                        controller_password.text = "";
+                        controller_correo.text = "";
+                        isChecked = false;
+                      });
 
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const CreateCuenta()),
-                    (Route<dynamic> route) => false,
-                  );
-                }
-              },
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const CreateCuenta()),
+                        (Route<dynamic> route) => false,
+                      );
+                    }
+                  },
+                ),
+                const SizedBox(
+                  height: 50,
+                )
+              ],
             ),
-            const SizedBox(
-              height: 50,
-            )
-          ],
-        ),
-      ),
-    ));
+          ),
+        ));
   }
 }

@@ -5,13 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:telodigo/data/controllers/negociocontroller.dart';
 import 'package:telodigo/data/controllers/usercontroller.dart';
+import 'package:telodigo/data/service/PeticionesReservas.dart';
 import 'package:telodigo/domain/models/favoritos.dart';
 import 'package:telodigo/domain/models/habitaciones.dart';
 import 'package:telodigo/domain/models/hoteles.dart';
 import 'package:telodigo/domain/models/images.dart';
 import 'package:telodigo/ui/components/customcomponents/customalert.dart';
 import 'package:firebase_storage/firebase_storage.dart' as fs;
-import 'package:telodigo/ui/pages/prueba/prueba.dart';
+import 'package:telodigo/data/service/peticionesImagenes.dart';
 
 class PeticionesNegocio {
   static final CollectionReference collection =
@@ -36,9 +37,15 @@ class PeticionesNegocio {
     for (DocumentSnapshot data in documents) {
       final String direccion = data["direccion"];
 
-      final String horaAbrir = data["horaAbrir"];
+      final int horaAbrir = data["horaAbrir"];
 
-      final String horaCerrar = data["horaCerrar"];
+      final int horaCerrar = data["horaCerrar"];
+
+      final int minutoAbrir = data["minutoAbrir"];
+
+      final int minutoCerrar = data["minutoCerrar"];
+
+      final String tipoHorario = data["tipoHorario"];
 
       final double latitud = data["latitud"];
 
@@ -66,9 +73,105 @@ class PeticionesNegocio {
 
       final double calificacion = data["calificacion"];
 
-      final int id = data["id"];
+      final String id = data["id"];
+
+      final List<String> categorias =
+          (data["categorias"] as List).cast<String>();
+
+      final String estado = data["estado"] ?? "";
 
       Hoteles hotel = Hoteles(
+          minutoAbrir: minutoAbrir,
+          minutoCerrar: minutoCerrar,
+          tipoHorario: tipoHorario,
+          estado: estado,
+          categorias: categorias,
+          id: id,
+          saldo: saldo,
+          user: controlleruser.usuario!.userName,
+          fotos: fotos,
+          servicios: servicios,
+          metodosPago: metodosPago,
+          direccion: direccion,
+          nombre: nombre,
+          tipoEspacio: tipoEspacio,
+          habitaciones: habitaciones,
+          latitud: latitud,
+          longitud: longitud,
+          horaAbrir: horaAbrir,
+          horaCerrar: horaCerrar,
+          calificacion: calificacion);
+
+      // print(calificacion);
+      hoteles.add(hotel);
+    }
+
+    controllernegocio.ListHotel(hoteles);
+    return hoteles;
+  }
+
+  static Future<List<Hoteles>> listRecargas() async {
+    final QuerySnapshot querySnapshot = await collection
+        .where('user', isEqualTo: controlleruser.usuario!.userName)
+        .where('estado', isEqualTo: "verificado")
+        .get();
+
+    List<Hoteles> hoteles = [];
+
+    final List<DocumentSnapshot> documents = querySnapshot.docs;
+
+    for (DocumentSnapshot data in documents) {
+      final String direccion = data["direccion"];
+
+      final int horaAbrir = data["horaAbrir"];
+
+      final int horaCerrar = data["horaCerrar"];
+
+      final int minutoAbrir = data["minutoAbrir"];
+
+      final int minutoCerrar = data["minutoCerrar"];
+
+      final String tipoHorario = data["tipoHorario"];
+
+      final double latitud = data["latitud"];
+
+      final double longitud = data["longitud"];
+
+      final String nombre = data["nombre"];
+
+      final double saldo = data["saldo"];
+
+      final String tipoEspacio = data["tipoEspacio"];
+
+      final List<String> servicios = (data["servicios"] as List).cast<String>();
+
+      final List<String> metodosPago =
+          (data["metodosPago"] as List).cast<String>();
+
+      final List<dynamic> fotosJson = (data["fotos"] as List).cast<dynamic>();
+      final List<Imagens> fotos =
+          fotosJson.map((json) => Imagens.fromJson(json)).toList();
+
+      final List<dynamic> habitacionesJson =
+          (data["habitaciones"] as List).cast<dynamic>();
+      final List<Habitaciones> habitaciones =
+          habitacionesJson.map((json) => Habitaciones.fromMap(json)).toList();
+
+      final double calificacion = data["calificacion"];
+
+      final String id = data["id"];
+
+      final List<String> categorias =
+          (data["categorias"] as List).cast<String>();
+
+      final String estado = data["estado"] ?? "";
+
+      Hoteles hotel = Hoteles(
+          minutoAbrir: minutoAbrir,
+          minutoCerrar: minutoCerrar,
+          tipoHorario: tipoHorario,
+          estado: estado,
+          categorias: categorias,
           id: id,
           saldo: saldo,
           user: controlleruser.usuario!.userName,
@@ -124,7 +227,8 @@ class PeticionesNegocio {
       var url = "";
       Imagens img;
       for (var imagen in files) {
-        url = await PeticionesMesa.cargarfoto(imagen, "User${hotel['user']}Id${hotel['id']}Nombre${hotel['nombre']}Cant${cant}");
+        url = await PeticionesImagenes.cargarfoto(imagen,
+            "User${hotel['user']}Id${hotel['id']}Nombre${hotel['nombre']}Cant${cant}");
 
         img = Imagens(image: url);
 
@@ -137,13 +241,13 @@ class PeticionesNegocio {
           controllernegocio.images?.map((foto) => foto.toJson()).toList();
 
       await collection.doc().set(hotel).timeout(
-        Duration(seconds: 10),
+        Duration(minutes: 5),
         onTimeout: () async {
           Navigator.pop(context);
           showDialog(
             context: context,
             builder: (BuildContext context) {
-              return const CustomAlert(
+              return CustomAlert(
                 title: "Error de Conexion",
                 text: "La operación ha tardado demasiado en completarse",
               );
@@ -155,13 +259,19 @@ class PeticionesNegocio {
         },
       );
 
-      final int id = hotel["id"];
+      final String id = hotel["id"];
 
       final String direccion = hotel["direccion"];
 
-      final String horaAbrir = hotel["horaAbrir"];
+      final int horaAbrir = hotel["horaAbrir"];
 
-      final String horaCerrar = hotel["horaCerrar"];
+      final int horaCerrar = hotel["horaCerrar"];
+
+      final int minutoAbrir = hotel["minutoAbrir"];
+
+      final int minutoCerrar = hotel["minutoCerrar"];
+
+      final String tipoHorario = hotel["tipoHorario"];
 
       final double latitud = hotel["latitud"];
 
@@ -192,8 +302,17 @@ class PeticionesNegocio {
 
       final String user = hotel["user"];
 
+      final List<String> categorias =
+          (hotel["categorias"] as List).cast<String>();
+
+      final String estado = hotel["estado"] ?? "";
 
       Hoteles hotelcreado = Hoteles(
+          minutoAbrir: minutoAbrir,
+          minutoCerrar: minutoCerrar,
+          tipoHorario: tipoHorario,
+          estado: estado,
+          categorias: categorias,
           id: id,
           saldo: saldo,
           user: user,
@@ -210,7 +329,9 @@ class PeticionesNegocio {
           horaCerrar: horaCerrar,
           calificacion: calificacion);
 
-      controllernegocio.AddHotel(hotelcreado);
+      // controllernegocio.AddHotel(hotelcreado);
+      PeticionesReserva.guardarCalificacion(
+          hotelcreado.id, 3, hotelcreado.user);
 
       return "create";
     } catch (error) {
@@ -219,8 +340,17 @@ class PeticionesNegocio {
     }
   }
 
-  static Future<List<Hoteles>> listNegociosClientes() async {
-    final QuerySnapshot querySnapshot = await collection.limit(100).get();
+  static Future<List<Hoteles>> listNegociosClientes(
+      String nombreNegocio) async {
+    // final QuerySnapshot querySnapshot = await collection.get();
+    // hoteles = querySnapshot.data ?? [];
+    // List<Hoteles> filteredHoteles = reservas
+    //     .where((reserva) =>
+    //         reserva.idUser.toLowerCase().contains(_searchText.toLowerCase()))
+    //     .toList();
+
+    final QuerySnapshot querySnapshot =
+        await collection.where('estado', isEqualTo: "verificado").get();
 
     List<Hoteles> hoteles = [];
 
@@ -229,9 +359,15 @@ class PeticionesNegocio {
     for (DocumentSnapshot data in documents) {
       final String direccion = data["direccion"];
 
-      final String horaAbrir = data["horaAbrir"];
+      final int horaAbrir = data["horaAbrir"];
 
-      final String horaCerrar = data["horaCerrar"];
+      final int horaCerrar = data["horaCerrar"];
+
+      final int minutoAbrir = data["minutoAbrir"];
+
+      final int minutoCerrar = data["minutoCerrar"];
+
+      final String tipoHorario = data["tipoHorario"];
 
       final double latitud = data["latitud"];
 
@@ -261,11 +397,20 @@ class PeticionesNegocio {
 
       final String user = data["user"];
 
+      final String id = data["id"];
 
-      final int id = data["id"];
+      final List<String> categorias =
+          (data["categorias"] as List).cast<String>();
+
+      final String estado = data["estado"] ?? "";
 
       if (saldo > 5.0) {
         Hoteles hotel = Hoteles(
+            minutoAbrir: minutoAbrir,
+            minutoCerrar: minutoCerrar,
+            tipoHorario: tipoHorario,
+            estado: estado,
+            categorias: categorias,
             id: id,
             saldo: saldo,
             user: user,
@@ -288,12 +433,22 @@ class PeticionesNegocio {
       }
     }
 
+    List<Hoteles> filteredHoteles = hoteles
+        .where((hotel) =>
+            hotel.nombre.toLowerCase().contains(nombreNegocio.toLowerCase()))
+        .toList();
+
     // controllernegocio.ListHotel2(hoteles);
-    return hoteles;
+    // return hoteles;
+    return filteredHoteles;
   }
 
- static Future<List<Hoteles>> listNegociosPrincipal(String request) async {
-    final QuerySnapshot querySnapshot = await collection.where('tipoEspacio', isEqualTo: request).limit(10).get();
+  static Future<List<Hoteles>> listNegociosPrincipal(
+      String request, String filtro) async {
+    final QuerySnapshot querySnapshot = await collection
+        .where('categorias', arrayContains: request)
+        .where('estado', isEqualTo: "verificado")
+        .get();
 
     List<Hoteles> hoteles = [];
 
@@ -302,9 +457,15 @@ class PeticionesNegocio {
     for (DocumentSnapshot data in documents) {
       final String direccion = data["direccion"];
 
-      final String horaAbrir = data["horaAbrir"];
+      final int horaAbrir = data["horaAbrir"];
 
-      final String horaCerrar = data["horaCerrar"];
+      final int horaCerrar = data["horaCerrar"];
+
+      final int minutoAbrir = data["minutoAbrir"];
+
+      final int minutoCerrar = data["minutoCerrar"];
+
+      final String tipoHorario = data["tipoHorario"];
 
       final double latitud = data["latitud"];
 
@@ -334,10 +495,19 @@ class PeticionesNegocio {
 
       final String user = data["user"];
 
-      final int id = data["id"];
+      final String id = data["id"];
+
+      final List<String> categorias =
+          (data["categorias"] as List).cast<String>();
+      final String estado = data["estado"] ?? "";
 
       if (saldo > 5.0) {
         Hoteles hotel = Hoteles(
+            minutoAbrir: minutoAbrir,
+            minutoCerrar: minutoCerrar,
+            tipoHorario: tipoHorario,
+            estado: estado,
+            categorias: categorias,
             id: id,
             saldo: saldo,
             user: user,
@@ -360,13 +530,88 @@ class PeticionesNegocio {
       }
     }
 
+    List<Hoteles> filteredHoteles = hoteles
+        .where((hotel) =>
+            hotel.nombre.toLowerCase().contains(filtro.toLowerCase()))
+        .toList();
+
     // controllernegocio.ListHotel2(hoteles);
-    return hoteles;
+    // return hoteles;
+    return filteredHoteles;
+
+    // return hoteles;
   }
 
+  static Future<Hoteles?> FirstNegocioCategory(String categoria) async {
+    final QuerySnapshot querySnapshot = await collection
+        .where('categorias', arrayContains: categoria)
+        // .where('saldo', isGreaterThan: 5.0)
+        .limit(1)
+        .get();
+
+    if (querySnapshot.docs.isEmpty) {
+      return null;
+    }
+
+    final DocumentSnapshot data = querySnapshot.docs.first;
+
+    final String direccion = data["direccion"];
+    final int horaAbrir = data["horaAbrir"];
+
+    final int horaCerrar = data["horaCerrar"];
+
+    final int minutoAbrir = data["minutoAbrir"];
+
+    final int minutoCerrar = data["minutoCerrar"];
+
+    final String tipoHorario = data["tipoHorario"];
+    final double latitud = data["latitud"];
+    final double longitud = data["longitud"];
+    final String nombre = data["nombre"];
+    final double saldo = data["saldo"];
+    final String tipoEspacio = data["tipoEspacio"];
+    final List<String> servicios = (data["servicios"] as List).cast<String>();
+    final List<String> metodosPago =
+        (data["metodosPago"] as List).cast<String>();
+    final List<dynamic> fotosJson = (data["fotos"] as List).cast<dynamic>();
+    final List<Imagens> fotos =
+        fotosJson.map((json) => Imagens.fromJson(json)).toList();
+    final List<dynamic> habitacionesJson =
+        (data["habitaciones"] as List).cast<dynamic>();
+    final List<Habitaciones> habitaciones =
+        habitacionesJson.map((json) => Habitaciones.fromMap(json)).toList();
+    final double calificacion = data["calificacion"];
+    final String user = data["user"];
+    final String id = data["id"];
+    final List<String> categorias = (data["categorias"] as List).cast<String>();
+    final String estado = data["estado"] ?? "";
+
+    Hoteles hotel = Hoteles(
+        minutoAbrir: minutoAbrir,
+        minutoCerrar: minutoCerrar,
+        tipoHorario: tipoHorario,
+        estado: estado,
+        categorias: categorias,
+        id: id,
+        saldo: saldo,
+        user: user,
+        fotos: fotos,
+        servicios: servicios,
+        metodosPago: metodosPago,
+        direccion: direccion,
+        nombre: nombre,
+        tipoEspacio: tipoEspacio,
+        habitaciones: habitaciones,
+        latitud: latitud,
+        longitud: longitud,
+        horaAbrir: horaAbrir,
+        horaCerrar: horaCerrar,
+        calificacion: calificacion);
+
+    return hotel;
+  }
 
   static Future<List<Hoteles>> listMapHoteles() async {
-
     QuerySnapshot querySnapshot = await collection.limit(50).get();
     // final QuerySnapshot querySnapshot = await collection
     //     .get();
@@ -378,10 +623,8 @@ class PeticionesNegocio {
     print("Hota");
 
     for (DocumentSnapshot data in documents) {
-
       print("${data['nombre']}");
       if (data.data() != null) {
-
         Map<String, dynamic> jsonData = data.data()! as Map<String, dynamic>;
         Hoteles reserva = Hoteles.desdeDoc(jsonData);
         reservas.add(reserva);
@@ -391,40 +634,21 @@ class PeticionesNegocio {
     return reservas;
   }
 
-  
-
-
-
-
   static Future<String> nuevoFavorito(
       Map<String, dynamic> favorito, BuildContext context) async {
     try {
-      await collectionFavorite.doc().set(favorito).timeout(
-        Duration(seconds: 15),
-        onTimeout: () async {
-          throw TimeoutException(
-              "La operación ha tardado demasiado en completarse");
-        },
-      );
+      String idUnico = '${favorito["idHotel"]}_${favorito["idUser"]}';
 
-      final String nombre = favorito["nombre"];
-
-      final int idHotel = favorito["idHotel"];
-
-      final String idUser = favorito["idUser"];
-
-      Favorito fav = Favorito(nombre: nombre, idHotel: idHotel, idUser: idUser);
-
-      controllernegocio.AddFavorito(fav);
+      await collectionFavorite.doc(idUnico).set(favorito);
 
       return "create";
     } catch (error) {
-      print("Error al agregar usuario: $error");
+      print("Error al agregar el favorito: $error");
       return "error";
     }
   }
 
-  static Future<void> EliminarFavorito(int idHotel, String nombre) async {
+  static Future<void> EliminarFavorito(String idHotel, String nombre) async {
     collectionFavorite
         .where('idHotel', isEqualTo: idHotel)
         .where('idUser', isEqualTo: controlleruser.usuario!.userName)
@@ -437,8 +661,6 @@ class PeticionesNegocio {
         querySnapshot.docs.forEach((doc) => batch.delete(doc.reference));
 
         batch.commit().then((_) => print('Favorite deleted'));
-
-         
       } else {
         print('No favorite found to delete');
       }
@@ -457,7 +679,7 @@ class PeticionesNegocio {
     for (DocumentSnapshot data in documents) {
       final String nombre = data["nombre"];
 
-      final int idHotel = data["idHotel"];
+      final String idHotel = data["idHotel"];
 
       final String idUser = data["idUser"];
 
@@ -480,9 +702,15 @@ class PeticionesNegocio {
       for (DocumentSnapshot data in documents) {
         final String direccion = data["direccion"];
 
-        final String horaAbrir = data["horaAbrir"];
+        final int horaAbrir = data["horaAbrir"];
 
-        final String horaCerrar = data["horaCerrar"];
+        final int horaCerrar = data["horaCerrar"];
+
+        final int minutoAbrir = data["minutoAbrir"];
+
+        final int minutoCerrar = data["minutoCerrar"];
+
+        final String tipoHorario = data["tipoHorario"];
 
         final double latitud = data["latitud"];
 
@@ -511,13 +739,25 @@ class PeticionesNegocio {
 
         final double calificacion = data["calificacion"];
 
-        final int id = data["id"];
+        final String id = data["id"];
+
+        final String user = data["user"];
+
+        final String estado = data["estado"] ?? "";
+
+        final List<String> categorias =
+            (data["categorias"] as List).cast<String>();
 
         if (saldo > 5.0) {
           Hoteles hotel = Hoteles(
+              minutoAbrir: minutoAbrir,
+              minutoCerrar: minutoCerrar,
+              tipoHorario: tipoHorario,
+              estado: estado,
+              categorias: categorias,
               id: id,
               saldo: saldo,
-              user: controlleruser.usuario!.userName,
+              user: user,
               fotos: fotos,
               servicios: servicios,
               metodosPago: metodosPago,
@@ -541,5 +781,34 @@ class PeticionesNegocio {
     controllernegocio.HotelesFavorito(hoteles);
 
     return hoteles;
+  }
+
+  static Future<bool> isFavorito(String idHotel) async {
+    final QuerySnapshot querySnapshot = await collectionFavorite
+        .where('idUser', isEqualTo: controlleruser.usuario!.userName)
+        .where('idHotel', isEqualTo: idHotel)
+        .limit(1)
+        .get();
+
+    // Verificar si hay documentos en la respuesta
+    if (querySnapshot.docs.isNotEmpty) {
+      return true; // El hotel es favorito
+    }
+
+    return false; // El hotel no es favorito
+  }
+
+  static Future<void> eliminarFavorito(String idHotel) async {
+    final QuerySnapshot querySnapshot = await collectionFavorite
+        .where('idUser', isEqualTo: controlleruser.usuario!.userName)
+        .where('idHotel', isEqualTo: idHotel)
+        .limit(1)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      final String docId = querySnapshot.docs.first.id;
+
+      await collectionFavorite.doc(docId).delete();
+    }
   }
 }

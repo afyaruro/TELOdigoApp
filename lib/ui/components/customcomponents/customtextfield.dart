@@ -322,7 +322,7 @@ class CustomTextField6 extends StatefulWidget {
   final double height;
   final double width;
   final double textFontSize;
-  VoidCallback funtion;
+  // VoidCallback funtion;
   TextInputType keyboard;
 
   CustomTextField6({
@@ -331,7 +331,7 @@ class CustomTextField6 extends StatefulWidget {
     required this.height,
     required this.width,
     required this.textFontSize,
-    required this.funtion,
+    // required this.funtion,
     required this.keyboard,
   });
 
@@ -357,11 +357,11 @@ class _CustomTextField6State extends State<CustomTextField6> {
             Align(
               alignment: const Alignment(0, 0),
               child: TextField(
-                onChanged: (text) {
-                  setState(() {
-                    widget.funtion();
-                  });
-                },
+                // onChanged: (text) {
+                //   setState(() {
+                //     widget.funtion();
+                //   });
+                // },
                 keyboardType: widget.keyboard,
                 controller: widget.controller,
                 textAlignVertical: TextAlignVertical.center,
