@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:telodigo/data/controllers/usercontroller.dart';
 import 'package:telodigo/data/service/PeticionesReservas.dart';
 import 'package:telodigo/domain/models/habitaciones.dart';
 import 'package:telodigo/domain/models/hoteles.dart';
@@ -22,82 +25,50 @@ class _ConsultarDisponibilidadState extends State<ConsultarDisponibilidad> {
   TextEditingController selectedMinutosReserva =
       TextEditingController(text: "");
   int selectedNumeroHabitaciones = 0;
+  static final UserController controlleruser = Get.find();
 
-  String calcularHoraActual(int espera) {
-    int hour = DateTime.now().hour + espera;
-    int minute = DateTime.now().minute;
+  String calcularHoraActual(int esperaEnMinutos) {
+    DateTime ahora = DateTime.now();
+    DateTime nuevaHora = ahora.add(Duration(minutes: esperaEnMinutos));
+    int hour = nuevaHora.hour;
+    int minute = nuevaHora.minute;
 
-    hour = hour % 24;
-
-    if (espera == 0) {
-      selectedHoraReserva.text = hour.toString();
-      selectedMinutosReserva.text = minute.toString();
-    }
-
-    // Determine AM or PM based on hour
-    // String amPm = hour > 12 ? "PM" : "AM";
     String amPm = hour >= 12 ? "PM" : "AM";
 
-    // Adjust hour for 12-hour format
-    if (hour >= 12) {
+    if (hour > 12) {
       hour -= 12;
+    } else if (hour == 0) {
+      hour = 12;
     }
 
-    // Format hour and minute with leading zeros
     String formattedHour = hour.toString().padLeft(2, '0');
     String formattedMinute = minute.toString().padLeft(2, '0');
 
-    // Construct and return the non-military time string
-    return "${formattedHour}:${formattedMinute} $amPm";
+    return "$formattedHour:$formattedMinute $amPm";
   }
-
-  // String calcularHoraActual2(int espera) {
-  //   DateTime now = DateTime.now();
-  //   int hour = now.hour + espera;
-  //   int minute = now.minute;
-
-  //   // Adjust hour to ensure it's within 0-23 range
-  //   hour = hour % 24;
-
-  //   // Determine AM or PM based on hour
-  //   String amPm = hour >= 12 ? "PM" : "AM";
-
-  //   // Adjust hour for 12-hour format
-  //   if (hour == 0) {
-  //     hour = 12; // Midnight edge case
-  //   } else if (hour > 12) {
-  //     hour -= 12;
-  //   }
-
-  //   // Format hour and minute with leading zeros
-  //   String formattedHour = hour.toString().padLeft(2, '0');
-  //   String formattedMinute = minute.toString().padLeft(2, '0');
-
-  //   // Construct and return the non-military time string
-  //   return "${formattedHour}:${formattedMinute} $amPm";
-  // }
 
   @override
   void initState() {
-    // PeticionesReserva.actualizarCulminado(context, "user");
+    super.initState();
+    selectedNombreHabitacion = widget.hotel.habitaciones[0].nombre;
+    selectedHorasHabitacion = widget.hotel.habitaciones[0].precios[0].hora;
+    selectedPrecioHabitacion = widget.hotel.habitaciones[0].precios[0].precio;
+    selectedNumeroHabitaciones = widget.hotel.habitaciones[0].cantidad;
+    listaPrecios = widget.hotel.habitaciones[0].precios;
 
-    setState(() {
-      selectedNombreHabitacion = widget.hotel.habitaciones[0].nombre;
-      selectedHorasHabitacion = widget.hotel.habitaciones[0].precios[0].hora;
-      selectedPrecioHabitacion = widget.hotel.habitaciones[0].precios[0].precio;
-      selectedNumeroHabitaciones = widget.hotel.habitaciones[0].cantidad;
-      listaPrecios = widget.hotel.habitaciones[0].precios;
-    });
+    DateTime now = DateTime.now();
+    selectedHoraReserva.text = now.hour.toString();
+    selectedMinutosReserva.text = now.minute.toString();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 29, 7, 48),
+        backgroundColor: const Color.fromARGB(255, 29, 7, 48),
         foregroundColor: Colors.white,
       ),
-      backgroundColor: Color.fromARGB(255, 29, 7, 48),
+      backgroundColor: const Color.fromARGB(255, 29, 7, 48),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
@@ -126,12 +97,12 @@ class _ConsultarDisponibilidadState extends State<ConsultarDisponibilidad> {
               ),
               Container(
                 width: 400,
-                margin: EdgeInsets.only(top: 20, left: 30, right: 30),
+                margin: const EdgeInsets.only(top: 20, left: 30, right: 30),
                 child: Center(
                   child: Text(
                     textAlign: TextAlign.center,
-                    "${widget.hotel.nombre}",
-                    style: TextStyle(
+                    widget.hotel.nombre,
+                    style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
                         fontSize: 20),
@@ -140,8 +111,8 @@ class _ConsultarDisponibilidadState extends State<ConsultarDisponibilidad> {
               ),
               Container(
                 width: 400,
-                margin: EdgeInsets.only(top: 20, left: 30, right: 30),
-                child: Center(
+                margin: const EdgeInsets.only(top: 20, left: 30, right: 30),
+                child: const Center(
                   child: Text(
                     "Precio mínimo estándar",
                     style: TextStyle(
@@ -153,11 +124,11 @@ class _ConsultarDisponibilidadState extends State<ConsultarDisponibilidad> {
               ),
               Container(
                 width: 400,
-                margin: EdgeInsets.only(top: 0, left: 30, right: 30),
+                margin: const EdgeInsets.only(top: 0, left: 30, right: 30),
                 child: Center(
                   child: Text(
                     "S/ $selectedPrecioHabitacion",
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
                         fontSize: 25),
@@ -166,28 +137,28 @@ class _ConsultarDisponibilidadState extends State<ConsultarDisponibilidad> {
               ),
               Container(
                 width: 400,
-                margin: EdgeInsets.only(top: 0, left: 30, right: 30),
+                margin: const EdgeInsets.only(top: 0, left: 30, right: 30),
                 child: Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Flexible(
                         child: Text(
-                          "$selectedNombreHabitacion",
-                          style: TextStyle(
+                          selectedNombreHabitacion,
+                          style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w500,
                               fontSize: 18),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 30,
                       ),
                       Text(
                         selectedHorasHabitacion == 1
                             ? "$selectedHorasHabitacion Hora"
                             : "$selectedHorasHabitacion Horas",
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w500,
                             fontSize: 18),
@@ -198,8 +169,8 @@ class _ConsultarDisponibilidadState extends State<ConsultarDisponibilidad> {
               ),
               Container(
                 width: 400,
-                margin: EdgeInsets.only(top: 0, left: 30, right: 30),
-                child: Center(
+                margin: const EdgeInsets.only(top: 0, left: 30, right: 30),
+                child: const Center(
                   child: Text(
                     "Incluye IGV y comisión de la App",
                     style: TextStyle(
@@ -209,7 +180,7 @@ class _ConsultarDisponibilidadState extends State<ConsultarDisponibilidad> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Padding(
@@ -227,12 +198,13 @@ class _ConsultarDisponibilidadState extends State<ConsultarDisponibilidad> {
                         child: DropdownButton<String>(
                           isExpanded: true,
                           borderRadius: BorderRadius.circular(20),
-                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
                           iconEnabledColor:
                               const Color.fromARGB(255, 255, 255, 255),
-                          style: TextStyle(color: Colors.white),
+                          style: const TextStyle(color: Colors.white),
                           value: selectedNombreHabitacion,
-                          dropdownColor: Color.fromARGB(255, 108, 108, 150),
+                          dropdownColor:
+                              const Color.fromARGB(255, 108, 108, 150),
                           items: widget.hotel.habitaciones.map((habitacion) {
                             return DropdownMenuItem(
                               value: habitacion.nombre,
@@ -247,17 +219,15 @@ class _ConsultarDisponibilidadState extends State<ConsultarDisponibilidad> {
                                   in widget.hotel.habitaciones) {
                                 if (habitacion.nombre ==
                                     selectedNombreHabitacion) {
-                                  // print("Hola");
                                   listaPrecios = habitacion.precios;
                                   selectedPrecioHabitacion =
                                       habitacion.precios[0].precio;
                                   selectedHorasHabitacion =
                                       habitacion.precios[0].hora;
                                   selectedNumeroHabitaciones =
-                                      habitacion.cantidad; //esto es nuevo
+                                      habitacion.cantidad;
                                 }
                               }
-                              //  = selectedHabitacion!.;
                             });
                           },
                           underline: Container(
@@ -266,7 +236,7 @@ class _ConsultarDisponibilidadState extends State<ConsultarDisponibilidad> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 20,
                       ),
                       Container(
@@ -277,12 +247,13 @@ class _ConsultarDisponibilidadState extends State<ConsultarDisponibilidad> {
                         child: DropdownButton<int>(
                           isExpanded: true,
                           borderRadius: BorderRadius.circular(20),
-                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
                           iconEnabledColor:
                               const Color.fromARGB(255, 255, 255, 255),
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: Color.fromARGB(255, 255, 255, 255)),
-                          dropdownColor: Color.fromARGB(255, 108, 108, 150),
+                          dropdownColor:
+                              const Color.fromARGB(255, 108, 108, 150),
                           value: selectedHorasHabitacion,
                           items: listaPrecios.map((precio) {
                             return DropdownMenuItem(
@@ -315,7 +286,7 @@ class _ConsultarDisponibilidadState extends State<ConsultarDisponibilidad> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Padding(
@@ -323,38 +294,8 @@ class _ConsultarDisponibilidadState extends State<ConsultarDisponibilidad> {
                 child: Container(
                   width: 400,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Column(
-                        children: [
-                          const Text(
-                            "Hora de reserva:",
-                            style: TextStyle(
-                                color: Color.fromARGB(255, 255, 255, 255),
-                                fontSize: 12),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            width: 120,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 10),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  color:
-                                      const Color.fromARGB(255, 255, 255, 255)),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Center(
-                              child: Text(
-                                calcularHoraActual(0),
-                                style: const TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
                       Column(
                         children: [
                           const Text(
@@ -368,18 +309,13 @@ class _ConsultarDisponibilidadState extends State<ConsultarDisponibilidad> {
                           ),
                           Container(
                             width: 120,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 10),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  color:
-                                      const Color.fromARGB(255, 255, 255, 255)),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
                             child: Center(
                               child: Text(
-                                calcularHoraActual(1),
-                                style: const TextStyle(color: Colors.white),
+                                calcularHoraActual(30),
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600),
                               ),
                             ),
                           )
@@ -389,68 +325,93 @@ class _ConsultarDisponibilidadState extends State<ConsultarDisponibilidad> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               ElevatedButton(
                   onPressed: () async {
-                    showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          content: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                child: CircularProgressIndicator(),
-                                width: 30,
-                                height: 30,
-                              ),
-                              const SizedBox(
-                                width: 30,
-                              ),
-                              const Flexible(
-                                  child: Text(
-                                "Comprobando Disp...",
-                                overflow: TextOverflow.clip,
-                              )),
-                            ],
-                          ),
-                        );
-                      },
-                    );
+                    final CollectionReference collection =
+                        FirebaseFirestore.instance.collection("Reservas");
 
-                    if (widget.hotel.tipoHorario == "24 Horas") {
-                      await ComprobarDisponibilidad2(
-                          widget.hotel.id, selectedNombreHabitacion);
-                    } else {
-                      if (isReservationWithinHours(
-                          duracionReserva: selectedHorasHabitacion,
-                          horaAbrir: widget.hotel.horaAbrir,
-                          minutoAbrir: widget.hotel.minutoAbrir,
-                          horaCerrar: widget.hotel.horaCerrar,
-                          minutoCerrar: widget.hotel.minutoCerrar)) {
+                    final QuerySnapshot querySnapshot = await collection
+                        .where('idUser',
+                            isEqualTo: controlleruser.usuario!.userName)
+                        .where('estado',
+                            whereIn: ["En espera", "En la Habitacion"]).get();
+
+                    final int count = querySnapshot.size;
+
+                    if (count < 2) {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            content: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: 30,
+                                  height: 30,
+                                  child: const CircularProgressIndicator(),
+                                ),
+                                const SizedBox(
+                                  width: 30,
+                                ),
+                                const Flexible(
+                                    child: Text(
+                                  "Comprobando Disp...",
+                                  overflow: TextOverflow.clip,
+                                )),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+
+                      if (widget.hotel.tipoHorario == "24 Horas") {
                         await ComprobarDisponibilidad2(
                             widget.hotel.id, selectedNombreHabitacion);
                       } else {
-                        Navigator.of(context).pop();
-                        mostrarAlerta(
-                          funcion: () {
-                            Navigator.of(context).pop();
-                          },
-                          color: Color.fromARGB(255, 218, 5, 5),
-                          icon: Icons.error,
-                          context: context,
-                          title: "No disponible",
-                          mensaje:
-                              "La reserva se encuentra fuera del horario del establecimiento",
-                        );
+                        if (isReservationWithinHours(
+                            duracionReserva: selectedHorasHabitacion,
+                            horaAbrir: widget.hotel.horaAbrir,
+                            minutoAbrir: widget.hotel.minutoAbrir,
+                            horaCerrar: widget.hotel.horaCerrar,
+                            minutoCerrar: widget.hotel.minutoCerrar)) {
+                          await ComprobarDisponibilidad2(
+                              widget.hotel.id, selectedNombreHabitacion);
+                        } else {
+                          Navigator.of(context).pop();
+                          mostrarAlerta(
+                            funcion: () {
+                              Navigator.of(context).pop();
+                            },
+                            color: const Color.fromARGB(255, 218, 5, 5),
+                            icon: Icons.error,
+                            context: context,
+                            title: "No disponible",
+                            mensaje:
+                                "La reserva se encuentra fuera del horario del establecimiento",
+                          );
+                        }
                       }
+                      return;
                     }
+
+                    mostrarAlerta(
+                      funcion: () {
+                        Navigator.of(context).pop();
+                      },
+                      color: const Color.fromARGB(255, 218, 5, 5),
+                      icon: Icons.error,
+                      context: context,
+                      title: "No disponible",
+                      mensaje: "Ya cuentas con 2 reservas activas",
+                    );
                   },
-                  child: Text("Consultar"))
+                  child: const Text("Comprobar Disponibilidad"))
             ],
           ),
         ),
@@ -476,16 +437,11 @@ class _ConsultarDisponibilidadState extends State<ConsultarDisponibilidad> {
           DateTime(now.year, now.month, now.day + 1, horaCerrar, minutoCerrar);
 
       if (now.hour >= 0 && now.hour <= horaCerrar) {
-        //falta validar el minuto
-
         abrirEstablecimiento =
             DateTime(now.year, now.month, now.day - 1, horaAbrir, minutoAbrir);
         cerrarEstablecimiento =
             DateTime(now.year, now.month, now.day, horaCerrar, minutoCerrar);
       }
-
-      print(abrirEstablecimiento);
-      print(cerrarEstablecimiento);
     } else {
       abrirEstablecimiento =
           DateTime(now.year, now.month, now.day, horaAbrir, minutoAbrir);
@@ -582,7 +538,7 @@ class _HoraMilitarWidgetState extends State<HoraMilitarWidget> {
       },
       child: IntrinsicWidth(
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           decoration: BoxDecoration(
             border: Border.all(color: const Color.fromARGB(255, 255, 255, 255)),
             borderRadius: BorderRadius.circular(20),
@@ -590,7 +546,7 @@ class _HoraMilitarWidgetState extends State<HoraMilitarWidget> {
           child: Row(
             children: [
               Container(
-                  child: Icon(
+                  child: const Icon(
                 Icons.access_time,
                 color: Colors.white,
               )),
@@ -599,7 +555,7 @@ class _HoraMilitarWidgetState extends State<HoraMilitarWidget> {
                 _selectedTime != null
                     ? '${_selectedTime!.hour.toString().padLeft(2, '0')}:${_selectedTime!.minute.toString().padLeft(2, '0')}'
                     : widget.typeHora,
-                style: TextStyle(fontSize: 16, color: Colors.white),
+                style: const TextStyle(fontSize: 16, color: Colors.white),
               ),
             ],
           ),
@@ -646,18 +602,19 @@ void mostrarAlerta(
                   ],
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Text(
                 mensaje,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                style:
+                    const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
               ),
             ],
           ),
         ),
         actions: [
           TextButton(
-            child: Text("Aceptar"),
+            child: const Text("Aceptar"),
             onPressed: () {
               funcion();
             },

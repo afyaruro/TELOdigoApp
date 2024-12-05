@@ -1,13 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
+import 'package:telodigo/data/controllers/controllerDisable.dart';
 import 'package:telodigo/ui/components/customcomponents/customalert.dart';
 import 'package:telodigo/ui/pages/sign_in/sign_in.dart';
 
 class PeticionesChangePassword {
   static final CollectionReference collection =
       FirebaseFirestore.instance.collection("Usuarios");
+
+  static final DisableController disableController = Get.find();
+
 
   static Future<void> EnviarCodigo(
       {required String destino, required String code}) async {
@@ -80,7 +85,7 @@ class PeticionesChangePassword {
                     Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const sign_in()),
+                        builder: (context) => sign_in(disableController: disableController,)),
                     (Route<dynamic> route) => false,
                   );
                   },

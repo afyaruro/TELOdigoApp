@@ -2,6 +2,98 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:telodigo/data/controllers/controllerDisable.dart';
+
+class CustomTextFieldSingUp extends StatefulWidget {
+  final String nombre;
+  final bool isPassword;
+  final TextEditingController controller;
+  final DisableController disableController;
+
+  const CustomTextFieldSingUp({
+    super.key,
+    required this.nombre,
+    required this.isPassword,
+    required this.controller,
+    required this.disableController,
+  });
+
+  @override
+  _CustomTextFieldSingUpState createState() => _CustomTextFieldSingUpState();
+}
+
+class _CustomTextFieldSingUpState extends State<CustomTextFieldSingUp> {
+  bool _obscureText = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      height: 50,
+      width: 400,
+      child: TextField(
+        onChanged: (value) {
+          value = value.trim();
+          if (widget.nombre == "Correo Electrónico") {
+            widget.disableController.setCorreo(value);
+            return;
+          }
+
+          if (widget.nombre == "Usuario") {
+            widget.disableController.setUsuario(value);
+            return;
+          }
+
+          if (widget.nombre == "Contraseña") {
+            widget.disableController.setPassword(value);
+            return;
+          }
+
+          if (widget.nombre == "Verificar Contraseña") {
+            widget.disableController.setPasswordConfirma(value);
+            return;
+          }
+        },
+        controller: widget.controller,
+        textAlignVertical: TextAlignVertical.top,
+        obscureText: widget.isPassword ? _obscureText : false,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20.0),
+            borderSide: const BorderSide(color: Colors.white),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20.0),
+            borderSide: const BorderSide(color: Colors.white),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20.0),
+            borderSide: const BorderSide(color: Colors.white),
+          ),
+          labelText: widget.nombre,
+          labelStyle: const TextStyle(color: Colors.white, fontSize: 13),
+          suffixIcon: widget.isPassword
+              ? IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _obscureText = !_obscureText;
+                    });
+                  },
+                  icon: Icon(
+                    _obscureText ? Icons.visibility : Icons.visibility_off,
+                    size: 20,
+                  ),
+                  color: Colors.white,
+                )
+              : null,
+        ),
+        style: const TextStyle(
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+}
 
 class CustomTextField1 extends StatefulWidget {
   final String nombre;
@@ -442,19 +534,20 @@ class CustomComboBoxbutton2 extends StatefulWidget {
       required this.initText,
       required this.height,
       required this.width,
-      required this.fontSize,required this.getDropDownIndex});
+      required this.fontSize,
+      required this.getDropDownIndex});
 
   @override
   State<CustomComboBoxbutton2> createState() => _CustomComboBoxbutton2State();
 }
 
 class _CustomComboBoxbutton2State extends State<CustomComboBoxbutton2> {
-  
   @override
   void initState() {
     super.initState();
     widget.initText = widget.data[0];
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -487,13 +580,11 @@ class _CustomComboBoxbutton2State extends State<CustomComboBoxbutton2> {
               ),
             );
           }).toList(),
-          onChanged:widget.getDropDownIndex,
+          onChanged: widget.getDropDownIndex,
         ),
       ),
     );
   }
-
-  
 }
 
 class CustomComboBoxbutton3 extends StatefulWidget {
@@ -510,19 +601,20 @@ class CustomComboBoxbutton3 extends StatefulWidget {
       required this.initText,
       required this.height,
       required this.width,
-      required this.fontSize,required this.getDropDownIndex});
+      required this.fontSize,
+      required this.getDropDownIndex});
 
   @override
   State<CustomComboBoxbutton3> createState() => _CustomComboBoxbutton3State();
 }
 
 class _CustomComboBoxbutton3State extends State<CustomComboBoxbutton3> {
-  
   @override
   void initState() {
     super.initState();
     widget.initText = widget.data[0];
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -533,22 +625,19 @@ class _CustomComboBoxbutton3State extends State<CustomComboBoxbutton3> {
           borderRadius: BorderRadius.circular(widget.height / 4),
           color: Colors.transparent),
       child: Center(
-        child: PopupMenuButton(itemBuilder: (BuildContext context) {
-        return widget.data.map((String value) {
-          return PopupMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList();
-      },
-      onSelected: widget.getDropDownIndex,
-      )
-      
-         ),
+          child: PopupMenuButton(
+        itemBuilder: (BuildContext context) {
+          return widget.data.map((String value) {
+            return PopupMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList();
+        },
+        onSelected: widget.getDropDownIndex,
+      )),
     );
   }
-
-  
 }
 // DropdownButton(
 //           style: TextStyle(color:Colors.black45 ),

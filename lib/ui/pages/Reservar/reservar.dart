@@ -545,7 +545,7 @@ class _ReservarHabitacionState extends State<ReservarHabitacion> {
                                   return AlertDialog(
                                     title: const Center(
                                         child: Text(
-                                      "TOLERANCIA DE 1 HORA",
+                                      "TOLERANCIA DE 30 MINUTOS",
                                       style: TextStyle(
                                           fontSize: 15,
                                           fontWeight: FontWeight.w500),
@@ -555,7 +555,7 @@ class _ReservarHabitacionState extends State<ReservarHabitacion> {
                                       child: Column(
                                         children: [
                                           const Text(
-                                              "Recuerda que tienes MÁXIMO 1 HORA PARA LLEGAR al establecimiento seleccionado, ¡DATE PRISA!"),
+                                              "Recuerda que tienes MÁXIMO 30 MINUTOS PARA LLEGAR al establecimiento seleccionado, ¡DATE PRISA!"),
                                           const SizedBox(
                                             height: 10,
                                           ),

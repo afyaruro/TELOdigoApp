@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:telodigo/data/controllers/usercontroller.dart';
+import 'package:telodigo/ui/components/customcomponents/customalert.dart';
 import 'package:telodigo/ui/components/customcomponents/customdatepicker.dart';
 import 'package:telodigo/ui/components/customcomponents/customimage.dart';
 import 'package:telodigo/ui/components/customcomponents/customtextfield.dart';
@@ -35,7 +36,7 @@ class _Datos_GeneralesState extends State<Datos_Generales> {
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Color.fromARGB(255, 255, 255, 255),
-        backgroundColor:  Color.fromARGB(255, 29, 7, 48),
+        backgroundColor: Color.fromARGB(255, 29, 7, 48),
         title: Text(
           "Datos Generales",
           style: TextStyle(
@@ -46,12 +47,10 @@ class _Datos_GeneralesState extends State<Datos_Generales> {
         centerTitle: true,
       ),
       backgroundColor: const Color.fromARGB(255, 29, 7, 48),
-
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         color: Color.fromARGB(255, 29, 7, 48),
-
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -102,6 +101,90 @@ class _Datos_GeneralesState extends State<Datos_Generales> {
               ),
               ElevatedButton(
                   onPressed: () async {
+                    if (controller_nombres.text.trim().isEmpty) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const CustomAlert(
+                            title: "Verifica tu Información",
+                            text: "Los nombres no pueden ser vacio",
+                          );
+                        },
+                      );
+                      return;
+                    }
+
+                    if (!RegExp(r"^[a-zA-ZÀ-ÿ\s'-]+$")
+                        .hasMatch(controller_nombres.text)) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const CustomAlert(
+                            title: "Verifica tu Información",
+                            text:
+                                "Los nombres solo pueden contener letras, espacios, guiones y apóstrofes.",
+                          );
+                        },
+                      );
+                      return;
+                    }
+
+                    if (controller_nombres.text.length < 3) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const CustomAlert(
+                            title: "Verifica tu Información",
+                            text:
+                                "Los nombres deben tener al menos 3 caracteres.",
+                          );
+                        },
+                      );
+                      return;
+                    }
+
+                    if (controller_apellidos.text.trim().isEmpty) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const CustomAlert(
+                            title: "Verifica tu Información",
+                            text: "Los apellidos no pueden ser vacio",
+                          );
+                        },
+                      );
+                      return;
+                    }
+
+                    if (!RegExp(r"^[a-zA-ZÀ-ÿ\s'-]+$")
+                        .hasMatch(controller_apellidos.text)) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const CustomAlert(
+                            title: "Verifica tu Información",
+                            text:
+                                "Los apellidos solo pueden contener letras, espacios, guiones y apóstrofes.",
+                          );
+                        },
+                      );
+                      return;
+                    }
+
+                    if (controller_apellidos.text.length < 3) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const CustomAlert(
+                            title: "Verifica tu Información",
+                            text:
+                                "Los apellidos deben tener al menos 3 caracteres.",
+                          );
+                        },
+                      );
+                      return;
+                    }
+
                     bool resp = await respuestaActualizarDatos(
                         nombres: controller_nombres.text,
                         apellidos: controller_apellidos.text,
@@ -114,7 +197,7 @@ class _Datos_GeneralesState extends State<Datos_Generales> {
                       FocusScope.of(context).requestFocus(FocusNode());
                     }
                   },
-                  child: Text("Guardar")),
+                  child: const Text("Guardar")),
               SizedBox(
                 height: 50,
               )

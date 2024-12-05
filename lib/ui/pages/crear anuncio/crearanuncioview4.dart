@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:telodigo/data/controllers/negociocontroller.dart';
 import 'package:telodigo/domain/models/habitaciones.dart';
+import 'package:telodigo/ui/components/customcomponents/customTextfielNegocio.dart';
 import 'package:telodigo/ui/components/customcomponents/customalert.dart';
 import 'package:telodigo/ui/pages/crear%20anuncio/crearanuncioview5.dart';
+
+//hay cosas por arreglar aca con la hora y la cantidad de caracteres minimo 3
 
 class CrearAnuncioView4 extends StatefulWidget {
   const CrearAnuncioView4({super.key});
@@ -28,10 +31,19 @@ class _CrearAnuncioView4State extends State<CrearAnuncioView4> {
 
   final TextEditingController minutoCerrar = TextEditingController(text: "");
 
-  // late int horaInicio = 0;
-  // late int horaCerrar = 0;
-  // late int minutoInicio = 0;
-  // late int minutoCerrar = 0;
+  @override
+  void initState() {
+    super.initState();
+
+    horaInicio.text = controllerhotel.horaAbrir.toString();
+    horaCerrar.text = controllerhotel.horaCerrar.toString();
+    minutoAbrir.text = controllerhotel.minutoAbrir.toString();
+    minutoCerrar.text = controllerhotel.minutoCerrar.toString();
+
+    if (controllerhotel.tipoHorario == "24 Horas") {
+      isChecked = true;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +91,8 @@ class _CrearAnuncioView4State extends State<CrearAnuncioView4> {
                   )),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: CustomTextField1(
+                child: CustomTextFieldNegocio(
+                    negocioController: controllerhotel,
                     dimension: 40,
                     nombre: "Ejem. Los Girasoles",
                     controller: controller_nombreNegocio),
@@ -120,7 +133,7 @@ class _CrearAnuncioView4State extends State<CrearAnuncioView4> {
               ),
               Container(
                 width: 400,
-                padding: EdgeInsets.only(left: 10),
+                padding: const EdgeInsets.only(left: 10),
                 child: Row(
                   children: [
                     Checkbox(
@@ -128,11 +141,17 @@ class _CrearAnuncioView4State extends State<CrearAnuncioView4> {
                       onChanged: (newbool) {
                         setState(() {
                           isChecked = newbool!;
+                          if (isChecked) {
+                            horaInicio.text = "";
+                            horaCerrar.text = "";
+                            minutoAbrir.text = "";
+                            minutoCerrar.text = "";
+                          }
                         });
                       },
-                      activeColor: Color.fromARGB(255, 76, 150, 211),
+                      activeColor: const Color.fromARGB(255, 76, 150, 211),
                       checkColor: Colors.white,
-                      hoverColor: Color.fromARGB(255, 76, 150, 211),
+                      hoverColor: const Color.fromARGB(255, 76, 150, 211),
                     ),
                     const Text(
                       "Horario de atencion 24 horas",
@@ -144,8 +163,8 @@ class _CrearAnuncioView4State extends State<CrearAnuncioView4> {
               ),
               Container(
                   width: 400,
-                  margin:
-                      EdgeInsets.only(top: 20, left: 30, right: 30, bottom: 0),
+                  margin: const EdgeInsets.only(
+                      top: 20, left: 30, right: 30, bottom: 0),
                   child: const Text(
                     "¿Tienes tipos de habitaciones?",
                     textAlign: TextAlign.start,
@@ -153,8 +172,8 @@ class _CrearAnuncioView4State extends State<CrearAnuncioView4> {
                   )),
               Container(
                   width: 400,
-                  margin:
-                      EdgeInsets.only(top: 0, left: 30, right: 30, bottom: 10),
+                  margin: const EdgeInsets.only(
+                      top: 0, left: 30, right: 30, bottom: 10),
                   child: const Text(
                     "Añade tus opciones",
                     textAlign: TextAlign.start,
@@ -166,13 +185,14 @@ class _CrearAnuncioView4State extends State<CrearAnuncioView4> {
                 child: Row(
                   children: [
                     Expanded(
-                      child: CustomTextField1(
+                      child: CustomTextFieldNegocio(
+                        negocioController: controllerhotel,
                         dimension: 25,
-                        nombre: "",
+                        nombre: "Habitación",
                         controller: controller_habitacion,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
                     Container(
@@ -183,11 +203,42 @@ class _CrearAnuncioView4State extends State<CrearAnuncioView4> {
                       ),
                       child: IconButton(
                         onPressed: () {
-                          if (!controller_habitacion.text.isEmpty) {
+                          if (controller_habitacion.text.trim().isNotEmpty) {
+                            if (!RegExp(r"^[a-zA-Z0-9\s]+$")
+                                .hasMatch(controller_habitacion.text)) {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return const CustomAlert(
+                                    title: "Verifica tu Información",
+                                    text:
+                                        "El nombre de la habitación solo puede contener letras, números y espacios.",
+                                  );
+                                },
+                              );
+                              setState(() {});
+                              return;
+                            }
+
+                            if (controller_habitacion.text.trim().length < 3) {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return const CustomAlert(
+                                    title: "Verifica tu Información",
+                                    text:
+                                        "El nombre de la habitación debe tener al menos 3 caracteres.",
+                                  );
+                                },
+                              );
+                              setState(() {});
+                              return;
+                            }
+
                             Habitaciones habitacion = Habitaciones(
                               precios: [],
                               cantidad: 0,
-                              nombre: controller_habitacion.text,
+                              nombre: controller_habitacion.text.trim(),
                             );
                             habitaciones.add(habitacion);
 
@@ -196,9 +247,25 @@ class _CrearAnuncioView4State extends State<CrearAnuncioView4> {
                             controller_habitacion.text = "";
 
                             setState(() {});
+                            return;
                           }
+
+                          controller_habitacion.text = "";
+
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return const CustomAlert(
+                                title: "Verifica tu Habitación",
+                                text:
+                                    "El nombre de la habitación no puede ser vacio",
+                              );
+                            },
+                          );
+                          setState(() {});
+                          return;
                         },
-                        icon: Icon(Icons.add),
+                        icon: const Icon(Icons.add),
                         color: Colors.white,
                       ),
                     )
@@ -212,11 +279,12 @@ class _CrearAnuncioView4State extends State<CrearAnuncioView4> {
                   for (var habitacion in habitaciones)
                     IntrinsicWidth(
                       child: Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 2),
                         decoration: BoxDecoration(
                             border: Border.all(
-                                color: Color.fromARGB(255, 202, 202, 202)),
+                                color:
+                                    const Color.fromARGB(255, 202, 202, 202)),
                             borderRadius: BorderRadius.circular(50)),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -259,86 +327,144 @@ class _CrearAnuncioView4State extends State<CrearAnuncioView4> {
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
         child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(vertical: 15),
-                backgroundColor: Color.fromARGB(255, 16, 152, 231)),
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                backgroundColor: const Color.fromARGB(255, 16, 152, 231)),
             onPressed: () async {
-              if (controller_nombreNegocio.text.isEmpty) {
+              if (controller_nombreNegocio.text.trim().isEmpty) {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return CustomAlert(
+                    return const CustomAlert(
                       title: "Validar Informacion",
                       text: "Por favor ingresar un nombre de hotel",
                     );
                   },
                 );
-              } else if (habitaciones.isEmpty) {
+                setState(() {});
+
+                return;
+              }
+
+              if (!RegExp(r"^[a-zA-Z0-9\s]+$")
+                  .hasMatch(controller_nombreNegocio.text)) {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return CustomAlert(
-                      title: "Validar Habitaciones",
-                      text: "Aun no has registrado ninguna habitación",
+                    return const CustomAlert(
+                      title: "Verifica tu Información",
+                      text:
+                          "El nombre del negocio solo puede contener letras, números y espacios.",
                     );
                   },
                 );
-              } else {
-                if (!isChecked) {
-                  if (horaInicio.text.isEmpty || minutoAbrir.text.isEmpty) {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return CustomAlert(
-                          title: "Verifica tu Horario de Atencion",
-                          text:
-                              "Por favor selecciona una hora para abrir tu negocio",
-                        );
-                      },
-                    );
-                  } else if (horaCerrar.text.isEmpty ||
-                      minutoCerrar.text.isEmpty) {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return CustomAlert(
-                          title: "Verifica tu Horario de Atencion",
-                          text:
-                              "Por favor selecciona una hora para cerrar tu negocio",
-                        );
-                      },
-                    );
-                  } else {
-                    print(horaInicio.text);
+                setState(() {});
 
-                    await controllerhotel.informacionBasica(
-                        nombreNegocio: controller_nombreNegocio.text,
-                        horaAbrir: int.parse(horaInicio.text),
-                        horaCerrar: int.parse(horaCerrar.text),
-                        minutoAbrir: int.parse(minutoAbrir.text),
-                        minutoCerrar: int.parse(minutoCerrar.text),
-                        tipoHorario: "Horario",
-                        habitaciones: habitaciones);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const CrearAnuncioView5()));
-                  }
-                } else {
-                  await controllerhotel.informacionBasica(
-                      nombreNegocio: controller_nombreNegocio.text,
-                      horaAbrir: 0,
-                      horaCerrar: 0,
-                      minutoAbrir: 0,
-                      minutoCerrar: 0,
-                      tipoHorario: "24 Horas",
-                      habitaciones: habitaciones);
-
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const CrearAnuncioView5()));
-                }
+                return;
               }
+
+              if (controller_nombreNegocio.text.length < 3) {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const CustomAlert(
+                      title: "Verifica tu Información",
+                      text:
+                          "El nombre del negocio debe tener al menos 3 caracteres.",
+                    );
+                  },
+                );
+                setState(() {});
+                return;
+              }
+
+              if (!isChecked) {
+                if (horaInicio.text.isEmpty || minutoAbrir.text.isEmpty) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const CustomAlert(
+                        title: "Verifica tu Horario de Atención",
+                        text:
+                            "Por favor selecciona una hora para abrir tu negocio",
+                      );
+                    },
+                  );
+                  setState(() {});
+                  return;
+                }
+                if (horaCerrar.text.isEmpty || minutoCerrar.text.isEmpty) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const CustomAlert(
+                        title: "Verifica tu Horario de Atención",
+                        text:
+                            "Por favor selecciona una hora para cerrar tu negocio",
+                      );
+                    },
+                  );
+                  setState(() {});
+                  return;
+                }
+
+                if (habitaciones.isEmpty) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const CustomAlert(
+                        title: "Verifica Habitaciones",
+                        text: "El número de habitaciones minimas es de uno",
+                      );
+                    },
+                  );
+                  setState(() {});
+                  return;
+                }
+
+                await controllerhotel.informacionBasica(
+                    nombreNegocio: controller_nombreNegocio.text.trim(),
+                    horaAbrir: int.parse(horaInicio.text),
+                    horaCerrar: int.parse(horaCerrar.text),
+                    minutoAbrir: int.parse(minutoAbrir.text),
+                    minutoCerrar: int.parse(minutoCerrar.text),
+                    tipoHorario: "Horario",
+                    habitaciones: habitaciones);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const CrearAnuncioView5()));
+                setState(() {});
+                return;
+              }
+
+              if (habitaciones.isEmpty) {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const CustomAlert(
+                      title: "Verifica Habitaciones",
+                      text: "El número de habitaciones minimas es de uno",
+                    );
+                  },
+                );
+                setState(() {});
+                return;
+              }
+
+              await controllerhotel.informacionBasica(
+                  nombreNegocio: controller_nombreNegocio.text.trim(),
+                  horaAbrir: 0,
+                  horaCerrar: 0,
+                  minutoAbrir: 0,
+                  minutoCerrar: 0,
+                  tipoHorario: "24 Horas",
+                  habitaciones: habitaciones);
+
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const CrearAnuncioView5()));
+              return;
             },
             child: const Text(
               "Siguiente",
@@ -363,7 +489,8 @@ class HoraMilitarWidget extends StatefulWidget {
     required this.horaInicio,
     required this.horaCerrar,
     required this.minutoInicio,
-    required this.minutoCerrar, required this.editar,
+    required this.minutoCerrar,
+    required this.editar,
   });
 
   @override
@@ -413,80 +540,23 @@ class _HoraMilitarWidgetState extends State<HoraMilitarWidget> {
                 color: Colors.white,
               )),
               const SizedBox(width: 8),
-              widget.editar ? Text(
-                widget.typeHora == "Hora Inicio"
-                        ? '${widget.horaInicio.text.toString().padLeft(2, '0')}:${widget.minutoInicio.text.toString().padLeft(2, '0')}'
-                        : '${widget.horaCerrar.text.toString().padLeft(2, '0')}:${widget.minutoCerrar.text.toString().padLeft(2, '0')}',
-                   
-                style: const TextStyle(fontSize: 16, color: Colors.white),
-              ) : Text(
-                _selectedTime != null
-                    ? widget.typeHora == "Hora Inicio"
-                        ? '${widget.horaInicio.text.toString().padLeft(2, '0')}:${widget.minutoInicio.text.toString().padLeft(2, '0')}'
-                        : '${widget.horaCerrar.text.toString().padLeft(2, '0')}:${widget.minutoCerrar.text.toString().padLeft(2, '0')}'
-                    : widget.typeHora,
-                style: const TextStyle(fontSize: 16, color: Colors.white),
-              ),
+              widget.editar
+                  ? Text(
+                      widget.typeHora == "Hora Inicio"
+                          ? '${widget.horaInicio.text.toString().padLeft(2, '0')}:${widget.minutoInicio.text.toString().padLeft(2, '0')}'
+                          : '${widget.horaCerrar.text.toString().padLeft(2, '0')}:${widget.minutoCerrar.text.toString().padLeft(2, '0')}',
+                      style: const TextStyle(fontSize: 16, color: Colors.white),
+                    )
+                  : Text(
+                      _selectedTime != null
+                          ? widget.typeHora == "Hora Inicio"
+                              ? '${widget.horaInicio.text.toString().padLeft(2, '0')}:${widget.minutoInicio.text.toString().padLeft(2, '0')}'
+                              : '${widget.horaCerrar.text.toString().padLeft(2, '0')}:${widget.minutoCerrar.text.toString().padLeft(2, '0')}'
+                          : widget.typeHora,
+                      style: const TextStyle(fontSize: 16, color: Colors.white),
+                    ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class CustomTextField1 extends StatefulWidget {
-  final String nombre;
-  final TextEditingController controller;
-  final int dimension;
-
-  const CustomTextField1({
-    required this.nombre,
-    required this.controller,
-    required this.dimension,
-  });
-
-  @override
-  _CustomTextField1State createState() => _CustomTextField1State();
-}
-
-class _CustomTextField1State extends State<CustomTextField1> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 5),
-      // padding: EdgeInsets.symmetric(vertical: 2),
-      width: 400,
-      // height: 70,
-      child: TextField(
-        maxLength: widget.dimension,
-        controller: widget.controller,
-        textAlignVertical: TextAlignVertical.top,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20.0),
-            borderSide:
-                const BorderSide(color: Color.fromARGB(255, 255, 255, 255)),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20.0),
-            borderSide:
-                const BorderSide(color: Color.fromARGB(255, 255, 255, 255)),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20.0),
-            borderSide:
-                const BorderSide(color: Color.fromARGB(255, 255, 255, 255)),
-          ),
-          labelText: widget.nombre,
-          labelStyle: const TextStyle(
-              color: Color.fromARGB(255, 255, 255, 255), fontSize: 13),
-          counterStyle: const TextStyle(
-            color: Color.fromARGB(255, 255, 255, 255),
-          ),
-        ),
-        style: const TextStyle(
-          color: Color.fromARGB(255, 255, 255, 255),
         ),
       ),
     );

@@ -49,19 +49,18 @@ dependencies:
   geolocator: 
   http: ^1.2.1
   uuid: ^4.4.0
-  mask_text_input_formatter: ^2.9.0
+  mask_text_input_formatter: ^2.9.0 
   intl: ^0.19.0
-  
+
   flutter_masked_text2: ^0.9.1
   
- 
-
 dev_dependencies:
   flutter_test:
     sdk: flutter 
   flutter_lints: ^3.0.0
   flutter_launcher_icons: ^0.11.0
   flutter_native_splash: ^1.2.0
+  mockito: ^5.4.4
 
 flutter_icons:
   android: true

@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:telodigo/data/controllers/controllerDisable.dart';
 import 'package:telodigo/data/controllers/mapcontroller.dart';
 import 'package:telodigo/data/service/apimercadopago.dart';
 import 'package:telodigo/ui/components/customcomponents/custombackgroundlogin.dart';
@@ -21,33 +22,31 @@ class Init_Page extends StatefulWidget {
 }
 
 class _Init_PageState extends State<Init_Page> {
+  static final MapController controller = Get.find();
+  final DisableController disableController = Get.find();
 
-   static final MapController controller = Get.find();
-
-  MercadoPago mercado =MercadoPago();
+  MercadoPago mercado = MercadoPago();
 
   @override
   void initState() {
     super.initState();
-
   }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-          // Mostrar la alerta y esperar la respuesta del usuario
-          bool exits = await showDialog(
-            context: context,
-            builder: (context) => ExitConfirmationDialog(),
-          );
-          if (exits) {
-            exit(0);
-          }
-          // Devolver false para evitar que la acción de retroceso continúe
-          return false;
-
-          
-        },
+        // Mostrar la alerta y esperar la respuesta del usuario
+        bool exits = await showDialog(
+          context: context,
+          builder: (context) => ExitConfirmationDialog(),
+        );
+        if (exits) {
+          exit(0);
+        }
+        // Devolver false para evitar que la acción de retroceso continúe
+        return false;
+      },
       child: Scaffold(
           body: CustomBackgroundLogin(
         child: SingleChildScrollView(
@@ -67,17 +66,24 @@ class _Init_PageState extends State<Init_Page> {
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.05,
               ),
-              CustomButtonsRadiusx(Colors.white,
-                  const Color(0xff3B2151), "CREAR CUENTA", () async {
-                   controller.getCurrentLocation();
+              CustomButtonsRadiusx(
+                  Colors.white, const Color(0xff3B2151), "CREAR CUENTA",
+                  () async {
+                controller.getCurrentLocation();
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => const sign_up()));
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            sign_up(disableController: disableController)));
               }),
               CustomButtonsRadiusx(const Color(0xff3B2151),
                   const Color(0xffffffff), "INICIAR SESION", () async {
-                   controller.getCurrentLocation();
+                controller.getCurrentLocation();
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => const sign_in()));
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            sign_in(disableController: disableController)));
               }),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.05,

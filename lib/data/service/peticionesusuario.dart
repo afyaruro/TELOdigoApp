@@ -44,7 +44,7 @@ class PeticionesUsuario {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return  CustomAlert(
+            return  const CustomAlert(
               title: "Usuario Existente",
               text: "El usuario ya se encuentra en uso",
             );
@@ -65,7 +65,7 @@ class PeticionesUsuario {
             showDialog(
               context: context,
               builder: (BuildContext context) {
-                return  CustomAlert(
+                return  const CustomAlert(
                   title: "Error de Conexion",
                   text: "La operación ha tardado demasiado en completarse",
                 );
@@ -94,7 +94,7 @@ class PeticionesUsuario {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return CustomAlert(
+            return const CustomAlert(
               title: "Error de Conexión",
               text: "Verifica tu conexión a internet",
             );

@@ -98,7 +98,7 @@ class _CrearAnuncioView6State extends State<CrearAnuncioView6> {
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w500,
-                                    color: Colors.white)),
+                                    color: Color.fromARGB(255, 193, 100, 216))),
                           ),
                           Row(
                             children: [
@@ -184,6 +184,7 @@ class _CrearAnuncioView6State extends State<CrearAnuncioView6> {
                                           context: context,
                                           builder: (context) {
                                             return AlertEdit(
+                                              precios: habitacion.precios,
                                               title: "Editar Precio",
                                               precio: precio,
                                               updatePrecio: (precio2) {
@@ -217,6 +218,7 @@ class _CrearAnuncioView6State extends State<CrearAnuncioView6> {
                               context: context,
                               builder: (context) {
                                 return AlertAgregar(
+                                  precios: habitacion.precios,
                                   title: "Nuevo Precio",
                                   updatePrecio: (precio2) {
                                     setState(() {
@@ -241,7 +243,7 @@ class _CrearAnuncioView6State extends State<CrearAnuncioView6> {
               int numero = 0;
 
               for (var habitacion in controllerhotel.habitaciones!) {
-                if (habitacion.precios.length == 0) {
+                if (habitacion.precios.isEmpty) {
                   numero = numero + 1;
                 }
               }
@@ -250,7 +252,7 @@ class _CrearAnuncioView6State extends State<CrearAnuncioView6> {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return CustomAlert(
+                    return const CustomAlert(
                       title: "Valida tus Precios",
                       text:
                           "Por favor verifica tus habitaciones parece ser que hay habitaciones sin establecer precios",
@@ -277,12 +279,14 @@ class AlertEdit extends StatefulWidget {
   final Precios precio;
   final Function(Precios) updatePrecio;
   final String title;
+  final List<Precios> precios;
 
   const AlertEdit(
       {super.key,
       required this.precio,
       required this.updatePrecio,
-      required this.title});
+      required this.title,
+      required this.precios});
 
   @override
   State<AlertEdit> createState() => _AlertEditState();
@@ -396,7 +400,7 @@ class _AlertEditState extends State<AlertEdit> {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return CustomAlert(
+                  return const CustomAlert(
                     title: "Agrega un precio",
                     text: "Por favor agrega un precio para continuar",
                   );
@@ -406,19 +410,19 @@ class _AlertEditState extends State<AlertEdit> {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return CustomAlert(
-                    title: "Valor Invalido",
-                    text: "El valor ingresado es invalido",
+                  return const CustomAlert(
+                    title: "Valor Inválido",
+                    text: "El valor ingresado es inválido.",
                   );
                 },
               );
-            } else if (double.parse(controller.text) == 0) {
+            } else if (double.parse(controller.text) <= 0) {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return CustomAlert(
-                    title: "Valor Invalido",
-                    text: "El valor ingresado debe ser mayor de 0",
+                  return const CustomAlert(
+                    title: "Valor Inválido",
+                    text: "El valor ingresado debe ser mayor a 0.",
                   );
                 },
               );
@@ -426,11 +430,27 @@ class _AlertEditState extends State<AlertEdit> {
               Precios precios = Precios(
                   precio: double.parse(controller.text), hora: selectedNumber);
 
+              for (Precios p in widget.precios) {
+                if (p.hora == selectedNumber && p.hora != widget.precio.hora) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const CustomAlert(
+                        title: "Valor Inválido",
+                        text: "Ya existe un precio registrado para esta hora.",
+                      );
+                    },
+                  );
+                  return;
+                }
+              }
+
               setState(() {
                 widget.updatePrecio(precios);
               });
+
+              Navigator.of(context).pop();
             }
-            Navigator.of(context).pop();
           },
           child: const Text("Guardar"),
         ),
@@ -442,9 +462,14 @@ class _AlertEditState extends State<AlertEdit> {
 class AlertAgregar extends StatefulWidget {
   final Function(Precios) updatePrecio;
   final String title;
+  final List<Precios> precios;
 
-  const AlertAgregar(
-      {super.key, required this.updatePrecio, required this.title});
+  const AlertAgregar({
+    super.key,
+    required this.updatePrecio,
+    required this.title,
+    required this.precios,
+  });
 
   @override
   State<AlertAgregar> createState() => _AlertAgregarState();
@@ -558,7 +583,7 @@ class _AlertAgregarState extends State<AlertAgregar> {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return CustomAlert(
+                  return const CustomAlert(
                     title: "Agrega un precio",
                     text: "Por favor agrega un precio para continuar",
                   );
@@ -568,19 +593,19 @@ class _AlertAgregarState extends State<AlertAgregar> {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return CustomAlert(
-                    title: "Valor Invalido",
-                    text: "El valor ingresado es invalido",
+                  return const CustomAlert(
+                    title: "Valor Inválido",
+                    text: "El valor ingresado es inválido.",
                   );
                 },
               );
-            } else if (double.parse(controller.text) == 0) {
+            } else if (double.parse(controller.text) <= 0) {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return CustomAlert(
-                    title: "Valor Invalido",
-                    text: "El valor ingresado debe ser mayor de 0",
+                  return const CustomAlert(
+                    title: "Valor Inválido",
+                    text: "El valor ingresado debe ser mayor a 0.",
                   );
                 },
               );
@@ -588,11 +613,26 @@ class _AlertAgregarState extends State<AlertAgregar> {
               Precios precios = Precios(
                   precio: double.parse(controller.text), hora: selectedNumber);
 
+              for (Precios p in widget.precios) {
+                if (p.hora == selectedNumber) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const CustomAlert(
+                        title: "Valor Inválido",
+                        text: "Ya existe un precio registrado para esta hora.",
+                      );
+                    },
+                  );
+                  return;
+                }
+              }
+
               setState(() {
                 widget.updatePrecio(precios);
               });
+              Navigator.of(context).pop();
             }
-            Navigator.of(context).pop();
           },
           child: const Text("Guardar"),
         ),

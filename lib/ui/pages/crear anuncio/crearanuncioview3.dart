@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:telodigo/data/controllers/negociocontroller.dart';
+import 'package:telodigo/ui/components/customcomponents/customTextfielNegocio.dart';
 import 'package:telodigo/ui/pages/crear%20anuncio/crearanunciomap.dart';
 import 'package:telodigo/ui/pages/crear%20anuncio/crearanuncioview4.dart';
 
@@ -64,9 +65,79 @@ class _CrearAnuncioView3State extends State<CrearAnuncioView3> {
                   )),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: CustomTextField1(
-                    dimension: 40, nombre: "", controller: controller),
+                child: CustomTextFieldNegocio(
+                  dimension: 40,
+                  nombre: "Dirección",
+                  controller: controller,
+                  negocioController: controllerhotel,
+                ),
               ),
+              Obx(
+                () => controllerhotel.direccion.isNotEmpty && !isValidPeruvianAddress(controller.text) ? Container(
+                  width: 400,
+                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                  child: const Row(
+                    crossAxisAlignment: CrossAxisAlignment
+                        .start,
+                    children: [
+                      Icon(
+                        Icons.warning_amber_rounded,
+                        color: Color.fromARGB(255, 255, 255, 255),
+                        size: 15,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        
+                        child: Text(
+                          "Solo se permiten letras (incluyendo con tildes y ñ), números, espacios, comas, puntos, guiones, diagonales y el símbolo #. No se permiten otros caracteres especiales como @, \$, %, &, etc., ni emojis.",
+                          textAlign: TextAlign.left,
+                          softWrap: true,
+                          overflow: TextOverflow.clip,
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 255, 255, 255),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ) : const SizedBox(),
+              ),
+              Obx(
+                () => controllerhotel.direccion.isNotEmpty && !isValidMinLength(controllerhotel.direccion, 5) ? Container(
+                  width: 400,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30),
+                  child: const Row(
+                    crossAxisAlignment: CrossAxisAlignment
+                        .start, // Alinea los elementos en la parte superior
+                    children: [
+                      Icon(
+                        Icons.warning_amber_rounded,
+                        color: Color.fromARGB(255, 255, 255, 255),
+                        size: 15,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: Text(
+                          "El minimo de caracteres permitidos para la dirección es de 5 caracteres",
+                          textAlign: TextAlign.left,
+                          softWrap: true,
+                          overflow: TextOverflow.clip,
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 255, 255, 255),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ):const SizedBox(),
+              )
             ],
           ),
         ),
@@ -80,10 +151,10 @@ class _CrearAnuncioView3State extends State<CrearAnuncioView3> {
               disabledBackgroundColor:
                   const Color.fromARGB(255, 200, 200, 200).withOpacity(0.12),
             ),
-            onPressed: controller.text != ""
+            onPressed: controllerhotel.direccion.isNotEmpty &&
+                    isValidPeruvianAddress(controller.text) &&
+                    isValidMinLength(controllerhotel.direccion, 5)
                 ? () {
-                    controllerhotel.NewDireccion(controller.text);
-
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -96,5 +167,15 @@ class _CrearAnuncioView3State extends State<CrearAnuncioView3> {
             )),
       ),
     );
+  }
+
+  bool isValidPeruvianAddress(String input) {
+    // Expresión regular para permitir caracteres válidos en direcciones peruanas, incluyendo '#'
+    final regex = RegExp(r'^[a-zA-Z0-9\s,.-/áéíóúÁÉÍÓÚñÑ#]+$');
+    return regex.hasMatch(input); // Retorna verdadero si es válida
+  }
+
+  bool isValidMinLength(String input, int minLength) {
+    return input.length >= minLength;
   }
 }
