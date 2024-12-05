@@ -705,6 +705,7 @@ class _EditarEstablecimientoState extends State<EditarEstablecimiento> {
                                             context: context,
                                             builder: (context) {
                                               return AlertEdit(
+                                                precios: habitacion.precios,
                                                 title: "Editar Precio",
                                                 precio: precio,
                                                 updatePrecio: (precio2) {
@@ -738,6 +739,7 @@ class _EditarEstablecimientoState extends State<EditarEstablecimiento> {
                                 context: context,
                                 builder: (context) {
                                   return AlertAgregar(
+                                    precios: habitacion.precios,
                                     title: "Nuevo Precio",
                                     updatePrecio: (precio2) {
                                       setState(() {

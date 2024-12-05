@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:telodigo/data/controllers/controllerDisable.dart';
 import 'package:telodigo/data/controllers/mapcontroller.dart';
 import 'package:telodigo/data/controllers/negociocontroller.dart';
 import 'package:telodigo/data/controllers/usercontroller.dart';
@@ -18,7 +19,7 @@ class MyAppWithSplash extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return const GetMaterialApp(
       debugShowCheckedModeBanner: false,
       home: SplashScreen(),
       title: "TELOdigo",
@@ -26,7 +27,6 @@ class MyAppWithSplash extends StatelessWidget {
   }
 }
 
-//falta editar, y arreglar las cuestiones de culminado las horas, horas mientras esta abierto un establecimiento, lo de no cancelar la reserva cuando es tarjeta de credito
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -67,6 +67,7 @@ class _SplashScreenState extends State<SplashScreen>
     Get.put(UserController());
     Get.put(NegocioController());
     Get.put(MapController());
+    Get.put(DisableController());
   }
 
   @override

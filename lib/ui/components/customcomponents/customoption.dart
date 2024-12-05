@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:telodigo/data/controllers/controllerDisable.dart';
 import 'package:telodigo/ui/pages/sign_in/sign_in.dart';
 import 'package:telodigo/ui/pages/sign_up/sign_up.dart';
 
-Widget CustomOption(bool isLogin, context) {
+Widget CustomOption(bool isLogin, context,
+    {required DisableController controllerDisable}) {
   Container IsLogin(bool isLogin) {
     if (isLogin == true) {
       return Container(
@@ -22,9 +24,12 @@ Widget CustomOption(bool isLogin, context) {
                   borderRadius: BorderRadius.circular(12),
                   splashColor: Color.fromARGB(255, 184, 184, 184),
                   onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => sign_in()));
-                   
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => sign_in(
+                                  disableController: controllerDisable,
+                                )));
                   },
                   child: Center(
                     child: Text(
@@ -51,10 +56,13 @@ Widget CustomOption(bool isLogin, context) {
                 child: InkWell(
                   borderRadius: BorderRadius.circular(12),
                   splashColor: Color.fromARGB(255, 0, 0, 0),
-                  onTap: (){
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => sign_up()));
-                  
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => sign_up(
+                                  disableController: controllerDisable,
+                                )));
                   },
                   child: Center(
                     child: Text(
@@ -94,10 +102,12 @@ Widget CustomOption(bool isLogin, context) {
                 child: InkWell(
                   borderRadius: BorderRadius.circular(12),
                   splashColor: Color.fromARGB(255, 0, 0, 0),
-                  onTap: ()  {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => sign_in()));
-                   
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                sign_in(disableController: controllerDisable)));
                   },
                   child: Center(
                     child: Text(
@@ -125,9 +135,12 @@ Widget CustomOption(bool isLogin, context) {
                   borderRadius: BorderRadius.circular(12),
                   splashColor: Color.fromARGB(255, 184, 184, 184),
                   onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => sign_up()));
-                  
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => sign_up(
+                                  disableController: controllerDisable,
+                                )));
                   },
                   child: Center(
                     child: Text(

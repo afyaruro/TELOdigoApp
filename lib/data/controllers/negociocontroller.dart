@@ -106,6 +106,10 @@ class NegocioController extends GetxController {
     _metodosPago.value = metodos;
   }
 
+  Future<void> NewNombreNegocio(String nombreNegocio) async {
+    _nombreNegocio.value = nombreNegocio;
+  }
+
   Future<void> RestartImagenes() async {
     _images.value = [];
   }

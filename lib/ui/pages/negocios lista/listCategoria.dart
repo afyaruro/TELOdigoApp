@@ -341,16 +341,6 @@ class _ListNegociosState extends State<ListNegocios> {
                                                   color: Colors.white)),
                                         ],
                                       )),
-                            // Container(
-                            //     width: MediaQuery.of(context).size.width - 170,
-                            //     child: hotel.tipoHorario == "24 Horas"
-                            //         ? Text(
-                            //             "Servicio: 24 Horas",
-                            //             style: TextStyle(color: Colors.white),
-                            //           )
-                            //         : Text(
-                            //             "Servicio: ${hotel.horaAbrir.toString().padLeft(2, '0')}:${hotel.minutoAbrir.toString().padLeft(2, '0')} - ${hotel.horaCerrar.toString().padLeft(2, '0')}:${hotel.minutoCerrar.toString().padLeft(2, '0')}",
-                            //             style: TextStyle(color: Colors.white))),
                             Container(
                               width: MediaQuery.of(context).size.width - 170,
                               child: Text(

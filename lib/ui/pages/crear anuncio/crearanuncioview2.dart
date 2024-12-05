@@ -158,6 +158,7 @@ class _CrearAnuncioView2State extends State<CrearAnuncioView2> {
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(255, 16, 152, 231),
+                    disabledBackgroundColor: Color.fromARGB(41, 231, 225, 235),
                     disabledForegroundColor:
                         const Color.fromARGB(255, 200, 200, 200)
                             .withOpacity(0.38),

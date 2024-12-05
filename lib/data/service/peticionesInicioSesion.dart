@@ -9,9 +9,9 @@ import 'package:telodigo/ui/components/customcomponents/customalert.dart';
 class PeticionesInicioSesion {
   static Usuario? usuario;
 
-  static final UserController controlleruser = Get.find();
+  static UserController controlleruser = Get.find();
 
-  static final CollectionReference collection =
+  static  CollectionReference collection =
       FirebaseFirestore.instance.collection("Usuarios");
 
   static Future<String> Login(
@@ -30,6 +30,8 @@ class PeticionesInicioSesion {
       return resp;
     }
   }
+
+
 
   static Future<String> buscarUsuario(
       String userName, BuildContext context) async {

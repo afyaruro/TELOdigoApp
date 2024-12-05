@@ -9,12 +9,14 @@ Future<bool> newUser(
     required String correo,
     required String fechaNacimiento,
     required BuildContext context,
+    required String corfirmPass,
     required bool isChecked}) async {
   RegExp emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
 
   correo = correo.trim();
   userName = userName.trim();
   password = password.trim();
+  corfirmPass = corfirmPass.trim();
 
   FocusScope.of(context).unfocus();
 
@@ -39,7 +41,7 @@ Future<bool> newUser(
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          return CustomAlert(
+          return const CustomAlert(
             title: "Validación de Edad",
             text: "Debes ser mayor de edad para registrarte",
           );
@@ -49,7 +51,7 @@ Future<bool> newUser(
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          return CustomAlert(
+          return const CustomAlert(
             title: "Validación de Correo",
             text: "Por favor digite un correo electrónico válido",
           );
@@ -60,7 +62,7 @@ Future<bool> newUser(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text(
+            title: const Text(
               "Contraseña Insegura",
               style: TextStyle(
                 fontSize: 15,
@@ -68,11 +70,10 @@ Future<bool> newUser(
                 color: Color.fromARGB(255, 0, 0, 0),
               ),
             ),
-            content: Column(
+            content: const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                
                 Text("Por favor, verifica que contenga al menos:"),
                 SizedBox(
                   height: 10,
@@ -94,6 +95,16 @@ Future<bool> newUser(
           );
         },
       );
+    } else if (password != corfirmPass) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return const CustomAlert(
+            title: "Validación tu contraseña",
+            text: "Las contraseñas no coinciden",
+          );
+        },
+      );
     } else {
       var usuario = <String, dynamic>{
         "userName": userName,
@@ -111,15 +122,6 @@ Future<bool> newUser(
           usuario, userName, context, correo);
       if (respuesta == "create") {
         Navigator.pop(context);
-        // showDialog(
-        //   context: context,
-        //   builder: (BuildContext context) {
-        //     return const CustomAlert(
-        //       title: "Usuario Creado",
-        //       text: "El usuario se ha creado exitosamente",
-        //     );
-        //   },
-        // );
 
         return true;
       } else if (respuesta == "correo-invalido") {
@@ -127,7 +129,7 @@ Future<bool> newUser(
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return CustomAlert(
+            return const CustomAlert(
               title: "Correo No Valido",
               text: "El correo que deseas usar ya se encuentra en uso",
             );
@@ -165,6 +167,10 @@ bool isPasswordSecure(String password) {
   return true;
 }
 
+bool contienePuntosComas(String valor) {
+  return valor.contains('.') || valor.contains(',');
+}
+
 void CamposVacios(
     {required String userName,
     required String password,
@@ -172,55 +178,105 @@ void CamposVacios(
     required String fechaNacimiento,
     required BuildContext context,
     required bool isChecked}) {
-  if (correo.isEmpty) {
+  if (correo.trim().isEmpty) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return CustomAlert(
+        return const CustomAlert(
           title: "Validación de Campos",
           text: "Por favor digite su correo electronico",
         );
       },
     );
-  } else if (fechaNacimiento == "Fecha de Nacimiento") {
+    return;
+  }
+
+  if (correo.contains(',')) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return CustomAlert(
+        return const CustomAlert(
+          title: "Validación de Campos",
+          text: "El correo electronico no puede contener comas",
+        );
+      },
+    );
+    return;
+  }
+
+  if (correo.contains(' ')) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const CustomAlert(
+          title: "Validación de Campos",
+          text: "El correo electronico no puede contener espacios",
+        );
+      },
+    );
+    return;
+  }
+
+  if (fechaNacimiento == "Fecha de Nacimiento") {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const CustomAlert(
           title: "Validación de Campos",
           text: "Por favor seleccione la fecha de nacimiento",
         );
       },
     );
-  } else if (userName.isEmpty) {
+    return;
+  }
+
+  if (userName.isEmpty) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return CustomAlert(
+        return const CustomAlert(
           title: "Validación de Campos",
           text: "Por favor verifique el usuario",
         );
       },
     );
-  } else if (password.isEmpty) {
+    return;
+  }
+
+  if (contienePuntosComas(userName) || userName.contains(' ')) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return CustomAlert(
+        return const CustomAlert(
+          title: "Validación de Campos",
+          text: "El nombre de usuario no puede contener puntos, ni comas, ni espacios",
+        );
+      },
+    );
+    return;
+  }
+  if (password.isEmpty) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const CustomAlert(
           title: "Validación de Campos",
           text: "Por favor verifique la contraseña",
         );
       },
     );
-  } else if (isChecked == false) {
+    return;
+  }
+  if (isChecked == false) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return CustomAlert(
+        return const CustomAlert(
           title: "Terminos y Condiciones",
           text: "Por favor acepta los terminos y condiciones",
         );
       },
     );
+    return;
   }
 }

@@ -414,7 +414,7 @@ class _ViewHotelClienteState extends State<ViewHotelCliente> {
                                     )));
                       }
                     },
-                    child: Text("Comprobar Disponibilidad")),
+                    child: Text("Ver Precios")),
                 SizedBox(
                   height: 20,
                 ),
